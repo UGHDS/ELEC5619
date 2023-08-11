@@ -1,4 +1,4 @@
-package com.usyd.group08.elec5619;
+package com.usyd.group08.ELEC5619;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
