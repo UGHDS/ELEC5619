@@ -1,0 +1,26 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: head">&nbsp;</head>
+<body>
+<div class="container-fluid">
+    <nav th:replace="fragments/header :: navbar"></nav>
+    <div id="contents-main">
+        <div class="lead">
+            <strong>Name of Events:</strong>
+            <span th:text="${eventName}"></span>
+        </div>
+        <div id="contents">
+            {{ testValue }}
+            {{ helloWorldTest }}
+            <ul>
+                <li style="list-style-type:none" v-for="player in players">
+                    <player-card v-bind:player="player" v-bind:key="player.id" />
+                </li>
+            </ul>
+        </div>9999943214321//ctrl+f9
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+<script type="text/babel" src="js/index.js"></script>
+</body>
+</html>
