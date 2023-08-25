@@ -22,12 +22,10 @@ var app = new Vue({
             {id: "1", name: "Lionel Messi", description: "Argentina's superstar"},
             {id: "2", name: "Christiano Ronaldo", description: "Portugal top-ranked player"}
         ],
-        testValue:  '',
         helloWorldTest:'',
     },
     mounted(){
         console.log('fetch data');
-        this.testValue = 'data';
         axios.get('hello').then(response  => this.helloWorldTest = response.data);
     },
 });
