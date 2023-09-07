@@ -1,4 +1,4 @@
-package com.usyd.group08.ELEC5619.models;
+package com.usyd.group08.elec5619.models;
 
 import jakarta.persistence.*;
 

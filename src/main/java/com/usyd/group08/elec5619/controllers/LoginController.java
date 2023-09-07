@@ -1,7 +1,7 @@
-package com.usyd.group08.ELEC5619.controllers;
+package com.usyd.group08.elec5619.controllers;
 
-import com.usyd.group08.ELEC5619.models.User;
-import com.usyd.group08.ELEC5619.repositries.UserRepository;
+import com.usyd.group08.elec5619.models.User;
+import com.usyd.group08.elec5619.repositries.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;

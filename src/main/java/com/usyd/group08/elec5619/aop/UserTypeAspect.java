@@ -1,6 +1,6 @@
-package com.usyd.group08.ELEC5619.aop;
+package com.usyd.group08.elec5619.aop;
 
-import com.usyd.group08.ELEC5619.models.User;
+import com.usyd.group08.elec5619.models.User;
 import jakarta.servlet.http.HttpSession;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

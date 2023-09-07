@@ -1,4 +1,4 @@
-package com.usyd.group08.ELEC5619.aop;
+package com.usyd.group08.elec5619.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,9 +1,9 @@
-package com.usyd.group08.ELEC5619.rest;
+package com.usyd.group08.elec5619.rest;
 
 
-import com.usyd.group08.ELEC5619.aop.ValidateUserType;
-import com.usyd.group08.ELEC5619.models.User;
-import com.usyd.group08.ELEC5619.repositries.UserRepository;
+import com.usyd.group08.elec5619.aop.ValidateUserType;
+import com.usyd.group08.elec5619.models.User;
+import com.usyd.group08.elec5619.repositries.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
