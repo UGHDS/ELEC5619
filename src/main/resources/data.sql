@@ -8,9 +8,27 @@ INSERT INTO user (id, email, first_name, last_name, password, phone, type, statu
 INSERT INTO user (id, email, first_name, last_name, password, phone, type, status) VALUES (8, 'ownertest@qq.com', 'ownerrrrr', 'test', '12345678', '04242222', 'owner', 'active');
 INSERT INTO user (id, email, first_name, last_name, password, phone, type, status) VALUES (9, 'organisertest@qq.com', 'organiserrrrr', 'test', '12345678', '042433333', 'organiser', 'active');
 
-/*Venue Data*/
+/*Venue*/
 INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state, street, suburb) VALUES (1,9,'test description',-33.8785839,151.2014858,'ChinaTown1.png','state1','street1','2007');
 INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state, street, suburb) VALUES (2,3,'test description2',-33.8785839,151.2014858,'ChinaTown2.png','state2','street2','2008');
+
+/*Venue Date*/
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-12', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-13', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-14', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-15', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-22', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-23', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-24', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-26', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-28', 1);
+
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-14', 2);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-15', 2);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-22', 2);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-26', 2);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-28', 2);
+
 
 /*Stall Data*/
 INSERT INTO stall (venue_id, id, price) VALUES (1,'C_01','100');
