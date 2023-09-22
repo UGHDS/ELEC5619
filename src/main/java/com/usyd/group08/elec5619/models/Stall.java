@@ -14,10 +14,9 @@ public class Stall {
     private String id;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name ="venue_id", nullable = false)
-    private Venue venue;
-    private String price;
+    @Column(name="venue_id")
+    private int venueId;
+    private Double price;
 
     public String getId() {
         return id;
@@ -27,30 +26,30 @@ public class Stall {
         this.id = id;
     }
 
-    public Venue getVenue() {
-        return venue;
+    public int getVenueId() {
+        return venueId;
     }
 
-    public void setVenue(Venue venue) {
-        this.venue = venue;
+    public void setVenueId(int venueId) {
+        this.venueId = venueId;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
     public static class CompositeKey implements Serializable {
         private String id;
-        private Venue venue;
+        private int venueId;
 
         public CompositeKey(){}
-        public CompositeKey(String id, Venue venue) {
+        public CompositeKey(String id, int venueId) {
             this.id = id;
-            this.venue = venue;
+            this.venueId = venueId;
         }
 
         @Override
@@ -58,12 +57,12 @@ public class Stall {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             CompositeKey that = (CompositeKey) o;
-            return Objects.equals(id, that.id) && Objects.equals(venue, that.venue);
+            return venueId == that.venueId && Objects.equals(id, that.id);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, venue);
+            return Objects.hash(id, venueId);
         }
     }
 }

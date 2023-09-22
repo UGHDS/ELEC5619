@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateUserType {
-    String type() default "any";
+    String type() default "owner,admin,organiser";
 }

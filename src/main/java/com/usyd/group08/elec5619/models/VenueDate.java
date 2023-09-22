@@ -11,20 +11,19 @@ import java.util.Objects;
 @IdClass(VenueDate.CompositeKey.class)
 public class VenueDate {
     @Id
-    @ManyToOne
-    @JoinColumn(name = "venue_id", nullable = false)
-    private Venue venue;
+    @Column(name = "venue_id", nullable = false)
+    private int venueId;
 
     @Id
     @Column(name = "date_slot")
     private java.sql.Date dateSlot;
 
-    public Venue getVenue() {
-        return venue;
+    public int getVenueId() {
+        return venueId;
     }
 
-    public void setVenue(Venue venue) {
-        this.venue = venue;
+    public void setVenueId(int venueId) {
+        this.venueId = venueId;
     }
 
     public Date getDateSlot() {
@@ -36,12 +35,11 @@ public class VenueDate {
     }
 
     public static class CompositeKey implements Serializable{
-        private Venue venue;
+        private int venueId;
         private java.sql.Date dateSlot;
-
         public CompositeKey(){}
-        public CompositeKey(Venue venue, Date dateSlot) {
-            this.venue = venue;
+        public CompositeKey(int venueId, Date dateSlot) {
+            this.venueId = venueId;
             this.dateSlot = dateSlot;
         }
 
@@ -50,12 +48,12 @@ public class VenueDate {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             CompositeKey that = (CompositeKey) o;
-            return Objects.equals(venue, that.venue) && Objects.equals(dateSlot, that.dateSlot);
+            return venueId == that.venueId && Objects.equals(dateSlot, that.dateSlot);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(venue, dateSlot);
+            return Objects.hash(venueId, dateSlot);
         }
     }
 

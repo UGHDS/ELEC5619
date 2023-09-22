@@ -41,13 +41,24 @@ public class VenueController {
 
     /**
      * Create Stall Venue
-     * @param venue
+     * @param addVenueWrapper
      * @return
      */
     @PostMapping
-//    @ValidateUserType(type = "admin") // 允许 admin 和 organizer
+    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add a new venue",description = "Pass in a venue without venueID")
-    public Venue addVenue(@RequestBody Venue venue) {
+    public Venue addVenue(@RequestBody VenueWrapper addVenueWrapper) {
+        User user = (User) httpSession.getAttribute("currentUser");
+        Venue venue = new Venue();
+        venue.setState(addVenueWrapper.getState());
+        venue.setStreet(addVenueWrapper.getStreet());
+        venue.setSuburb(addVenueWrapper.getSuburb());
+        venue.setDescription(addVenueWrapper.getDescription());
+        venue.setPicture(addVenueWrapper.getPicture());
+        venue.setLongitude(addVenueWrapper.getLongitude());
+        venue.setLatitude(addVenueWrapper.getLatitude());
+
+        venue.setUser(user);
         return venueRepository.save(venue);
     }
 
@@ -57,43 +68,125 @@ public class VenueController {
      * @return
      */
     @DeleteMapping
-//    @ValidateUserType(types = {"admin", "organizer"}) // 允许 admin 和 organizer
+    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Delete venue by venueID", description = "Pass in venueID, and will return true(delete success) or false(delete not success)")
     public boolean deleteVenue(@RequestParam String venueID){
-        Optional<Venue> optionalVenue = venueRepository.findById(venueID);
+        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> optionalVenue = venueRepository.findById(Integer.parseInt(venueID));
         if(optionalVenue.isPresent()){
             Venue venue = optionalVenue.get();
-            venueRepository.delete(venue);
-            return true;
+            //判断当前得到的VenueID 是否是属于当前的organiser的，如果是的话删除不是的话返还false, admin可以删除所有的venue
+            if(venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")){
+                venueRepository.delete(venue);
+                return true;
+            }
         }
         return false;
     }
 
     /**
      * Update venue information
-     * @param pendingUpdateVenue
+     * @param venueWrapper
      * @return
      */
     @PutMapping
-//    @ValidateUserType(types = {"admin", "organizer"}) // 允许 admin 和 organizer
+    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Update venue info", description = "Pass the updated venue object, and will return the updated venue object.")
-    public Venue updateVenue(@RequestParam Venue pendingUpdateVenue){
-        Optional<Venue> optionalVenue = venueRepository.findById(String.valueOf(pendingUpdateVenue.getId()));
+    public Venue updateVenue(@RequestBody VenueWrapper venueWrapper){
+        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueWrapper.getVenueId()));
         if(optionalVenue.isPresent()){
             Venue venue = optionalVenue.get();
-            venue.setUser(pendingUpdateVenue.getUser());
-            venue.setStreet(pendingUpdateVenue.getStreet());
-            venue.setSuburb(pendingUpdateVenue.getSuburb());
-            venue.setState(pendingUpdateVenue.getState());
-            venue.setDescription(pendingUpdateVenue.getDescription());
-            venue.setPicture(pendingUpdateVenue.getPicture());
-            venue.setLongitude(pendingUpdateVenue.getLongitude());
-            venue.setLatitude(pendingUpdateVenue.getLatitude());
-            return venue;
+            if(venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")){
+                venue.setStreet(venueWrapper.getStreet());
+                venue.setSuburb(venueWrapper.getSuburb());
+                venue.setState(venueWrapper.getState());
+                venue.setDescription(venueWrapper.getDescription());
+                venue.setPicture(venueWrapper.getPicture());
+                venue.setLongitude(venueWrapper.getLongitude());
+                venue.setLatitude(venueWrapper.getLatitude());
+                return venueRepository.save(venue);
+            }
         }
         return null;
     }
 
+
+    //自制一个只有我需要的  venue信息  的class
+    private static class VenueWrapper{
+        private int venueId;
+        private String street;
+        private String suburb;
+        private String state;
+        private String description;
+        private String picture;
+        private double longitude;
+        private double latitude;
+
+        public int getVenueId() {
+            return venueId;
+        }
+
+        public void setVenueId(int venueId) {
+            this.venueId = venueId;
+        }
+
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
+        public String getSuburb() {
+            return suburb;
+        }
+
+        public void setSuburb(String suburb) {
+            this.suburb = suburb;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+    }
 
 
 
