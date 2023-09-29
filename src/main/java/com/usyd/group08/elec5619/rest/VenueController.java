@@ -25,10 +25,11 @@ public class VenueController {
 
     /**
      * Find all Venue
+     *
      * @return
      */
     @GetMapping
-    @Operation(summary = "Find all venues",description = "Pass venues list, and will return venues list")
+    @Operation(summary = "Find all venues", description = "Pass venues list, and will return venues list")
     public List<Venue> getVenues(@RequestParam String userID) {
         Venue venue = new Venue();
         User user = new User();
@@ -41,12 +42,13 @@ public class VenueController {
 
     /**
      * Create Stall Venue
+     *
      * @param addVenueWrapper
      * @return
      */
     @PostMapping
     @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
-    @Operation(summary = "Add a new venue",description = "Pass in a venue without venueID")
+    @Operation(summary = "Add a new venue", description = "Pass in a venue without venueID")
     public Venue addVenue(@RequestBody VenueWrapper addVenueWrapper) {
         User user = (User) httpSession.getAttribute("currentUser");
         Venue venue = new Venue();
@@ -64,19 +66,20 @@ public class VenueController {
 
     /**
      * Delete venue
+     *
      * @param venueID
      * @return
      */
     @DeleteMapping
     @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Delete venue by venueID", description = "Pass in venueID, and will return true(delete success) or false(delete not success)")
-    public boolean deleteVenue(@RequestParam String venueID){
+    public boolean deleteVenue(@RequestParam String venueID) {
         User user = (User) httpSession.getAttribute("currentUser");
         Optional<Venue> optionalVenue = venueRepository.findById(Integer.parseInt(venueID));
-        if(optionalVenue.isPresent()){
+        if (optionalVenue.isPresent()) {
             Venue venue = optionalVenue.get();
             //判断当前得到的VenueID 是否是属于当前的organiser的，如果是的话删除不是的话返还false, admin可以删除所有的venue
-            if(venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")){
+            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
                 venueRepository.delete(venue);
                 return true;
             }
@@ -86,18 +89,19 @@ public class VenueController {
 
     /**
      * Update venue information
+     *
      * @param venueWrapper
      * @return
      */
     @PutMapping
     @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Update venue info", description = "Pass the updated venue object, and will return the updated venue object.")
-    public Venue updateVenue(@RequestBody VenueWrapper venueWrapper){
+    public Venue updateVenue(@RequestBody VenueWrapper venueWrapper) {
         User user = (User) httpSession.getAttribute("currentUser");
         Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueWrapper.getVenueId()));
-        if(optionalVenue.isPresent()){
+        if (optionalVenue.isPresent()) {
             Venue venue = optionalVenue.get();
-            if(venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")){
+            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
                 venue.setStreet(venueWrapper.getStreet());
                 venue.setSuburb(venueWrapper.getSuburb());
                 venue.setState(venueWrapper.getState());
@@ -113,7 +117,7 @@ public class VenueController {
 
 
     //自制一个只有我需要的  venue信息  的class
-    private static class VenueWrapper{
+    private static class VenueWrapper {
         private int venueId;
         private String street;
         private String suburb;
@@ -187,7 +191,6 @@ public class VenueController {
             this.latitude = latitude;
         }
     }
-
 
 
 }

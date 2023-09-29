@@ -11,9 +11,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "booking_id", nullable = false)
-    private Booking booking;
+    @Column(name = "booking_id")
+    private int bookingId;
     private String paymentItem;
     private double amount;
     private java.sql.Timestamp paymentDate;
@@ -26,12 +25,12 @@ public class Payment {
         this.id = id;
     }
 
-    public Booking getBooking() {
-        return booking;
+    public int getBookingId() {
+        return bookingId;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
     }
 
     public String getPaymentItem() {

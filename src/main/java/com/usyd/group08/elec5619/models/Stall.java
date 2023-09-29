@@ -3,27 +3,36 @@ package com.usyd.group08.elec5619.models;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "stall")
-@IdClass(Stall.CompositeKey.class)
 public class Stall {
-
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    @Id
+    private String stallId;
     @Column(name="venue_id")
     private int venueId;
     private Double price;
 
-    public String getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getStallId() {
+        return stallId;
+    }
+
+    public void setStallId(String stallId) {
+        this.stallId = stallId;
     }
 
     public int getVenueId() {
@@ -40,30 +49,6 @@ public class Stall {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public static class CompositeKey implements Serializable {
-        private String id;
-        private int venueId;
-
-        public CompositeKey(){}
-        public CompositeKey(String id, int venueId) {
-            this.id = id;
-            this.venueId = venueId;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CompositeKey that = (CompositeKey) o;
-            return venueId == that.venueId && Objects.equals(id, that.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, venueId);
-        }
     }
 }
 

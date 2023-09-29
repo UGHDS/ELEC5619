@@ -3,6 +3,7 @@ package com.usyd.group08.elec5619.models;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "booking")
@@ -21,7 +22,14 @@ public class Booking {
     @JoinColumn(name="stall_date_id", nullable = false)
     private StallDate stallDate;
 
+    @OneToMany
+    @JoinColumn(name="booking_id")
+    private List<Payment> payments;
+
     private java.sql.Timestamp bookingTime;
+
+    private String status;
+
     public int getId() {
         return id;
     }
@@ -54,4 +62,19 @@ public class Booking {
         this.bookingTime = bookingTime;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
 }
