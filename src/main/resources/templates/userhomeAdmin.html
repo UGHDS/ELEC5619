@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Userhome Admin</title>
+</head>
+<body>
+<!--引入 templates/fragments/header.html中的navbar-->
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+
+<!--这部分是你要写的部分-->
+<span class="userHomeTitle">Welcome back, <b style="color: #9A9A9A">usergroup</b> FirstName </span>
+
+
+<div class="frameContainer">
+
+    <div class="tab">
+        <button class="tablinks" onclick="openTabs(event, 'RegistrationReview')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Registration Review</button>
+        <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" style="width:33.3%">Active Booking</button>
+        <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking History</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="RegistrationReview" class="tabcontent">
+        <div class="bookingItem">
+            <div class="orderNum">Order #CV0325</div>
+            <div class="marketStall">Surry Hills Market, Stall #62</div>
+            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+            <button type="button" id="review" class="reviewBtn" onclick="openREForm()">View Registration Detail</button>
+            <button type="button" id="approve" class="approveBtn" onclick="approveClick()">Approve</button>
+            <button type="button" id="deny" class="denyBtn" onclick="denyClick()">Deny</button>
+            <button type="button" id="review2" class="reviewBtn2" onclick="openREForm()">View Registration Detail</button>
+            <button type="button" id="deny2" class="denyBtn2" onclick="denyClick()">Denied</button>
+            <br><div class="userline"></div>
+        </div>
+
+    </div>
+
+    <div id="ActiveBooking" class="tabcontent">
+        <div class="bookingItem">
+            <div class="orderNum">Order #CV0325</div>
+            <div class="marketStall">Surry Hills Market, Stall #62</div>
+            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+            <div class="price">$00</div>
+            <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
+            <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+            <br><div class="userline"></div>
+        </div>
+    </div>
+
+    <div id="BookingHistory" class="tabcontent" style="display: none">
+        <div class="bookingHistoryItem">
+            <div class="orderNum">Order #CV0325</div>
+            <div class="marketStall">Surry Hills Market, Stall #62</div>
+            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+            <div class="priceHistory">$00</div>
+            <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
+            <br><div class="userline"></div>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="blackLayer" id="layer"></div>
+<div class="review-popup" id="reForm">
+    <button type="button" class="btn cancel" onclick="closeREForm()">x</button>
+    <form action="#" class="form-container">
+        <!--    need to modify-->
+
+        <h2 style="text-align: center">Registration Review</h2>
+
+        <label><b>First Name</b></label>
+        <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+        <label style="margin-left: 25px"><b>Last Name</b></label>
+        <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+        <label><b>Business Name</b></label>
+        <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+        <label><b>ABN Number</b></label>
+        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+        <label><b>Phone number</b></label>
+        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter your email address" name="email" required>
+
+        <button type="button" id="approve1" class="approveFormBtn" onclick="approveFormClick()">Approve</button>
+        <button type="button" id="deny2" class="denyFormBtn" onclick="denyFormClick()">Deny</button>
+
+        <!--    need to modify-->
+    </form>
+</div>
+<!--从templates/fragments/footer.html 引入的footer-->
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+
+<!--你可以在下面添加自己想添加的JavaScript-->
+<script>
+    function openTabs(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("defaultOpen").click();
+
+    function openREForm() {
+        document.getElementById("reForm").style.display = "block";
+        document.getElementById("layer").style.display = "block";
+    }
+    function closeREForm() {
+        document.getElementById("reForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+    }
+
+    function approveClick() {
+        document.getElementById("review2").style.display = "block";
+        document.getElementById("review").style.display = "none";
+        document.getElementById("approve").style.display = "none";
+        document.getElementById("deny").style.display = "none";
+    }
+
+    function denyClick() {
+        document.getElementById("deny2").style.display = "block";
+        document.getElementById("review").style.display = "none";
+        document.getElementById("approve").style.display = "none";
+        document.getElementById("deny").style.display = "none";
+    }
+
+    function approveFormClick() {
+        document.getElementById("reForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+        document.getElementById("review2").style.display = "block";
+        document.getElementById("review").style.display = "none";
+        document.getElementById("approve").style.display = "none";
+        document.getElementById("deny").style.display = "none";
+    }
+
+    function denyFormClick() {
+        document.getElementById("reForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+        document.getElementById("deny2").style.display = "block";
+        document.getElementById("review").style.display = "none";
+        document.getElementById("approve").style.display = "none";
+        document.getElementById("deny").style.display = "none";
+    }
+
+
+</script>
+
+</body>
+</html>

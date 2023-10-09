@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Account Setting Page</title>
+</head>
+<body>
+<!--引入 templates/fragments/header.html中的navbar-->
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+
+<!--这部分是你要写的部分-->
+<span class="title">Profile Detail</span>
+<div class="frameContainer">
+    <div class="topSetting">
+        <span class="userName">Name</span>
+        <span class="userGroup">group</span>
+        <span class="userID">Account#123456</span>
+    </div>
+    <div class="line"></div>
+    <div class="settingForm">
+        <form action="#" class="setting-form">
+            <!--    need to modify-->
+            <label>First Name</label>
+            <input type="text" placeholder="first name" name="firstName" required>
+
+            <label style="margin-left: 25px">Last Name</label>
+            <input type="text" placeholder="last name" name="lastName" required>
+
+            <label>Business Name</label>
+            <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+            <label>ABN Number</label>
+            <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+            <label>Phone number</label>
+            <input type="text" placeholder="phone number" name="phoneNum" required>
+
+            <label>Email</label>
+            <input type="text" placeholder="email address" name="email" required>
+
+            <!--        <label><b>Confirmed Email</b></label>-->
+            <!--        <input type="text" placeholder="Confirm your email address" name="email2" required>-->
+
+            <!--        <label><b>Password</b></label>-->
+            <!--        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>-->
+
+            <!--        <label><b>Confirmed Password</b></label>-->
+            <!--        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>-->
+
+            <!--    need to modify-->
+        </form>
+    </div>
+    <div class="pswForm-setting" id="pswForm">
+        <form action="#" class="psw-form">
+            <label><b>Old Password</b></label>
+            <input type="password" placeholder="Enter your old password" name="oldPsw" required>
+
+            <label><b>New Password</b></label>
+            <input type="password" placeholder="Enter your new password" name="psw" onChange="onChange()" required>
+
+            <label><b>Confirmed Password</b></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+            <button class="confirmPsw" onclick="closePswForm()">Confirm</button>
+        </form>
+    </div>
+
+    <button class="pswChangeBtn" onclick="openPswForm()">Change Password</button>
+    <button type="submit" class="updateButton" onclick="">UPDATE</button>
+</div>
+<!--从templates/fragments/footer.html 引入的footer-->
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+
+<!--你可以在下面添加自己想添加的JavaScript-->
+<script>
+    function onChange() {
+        const password = document.querySelector('input[name=psw]');
+        const confirm = document.querySelector('input[name=psw2]');
+        if (confirm.value === password.value) {
+            confirm.setCustomValidity('');
+        } else {
+            confirm.setCustomValidity('Passwords do not match');
+        }
+    }
+
+    function openPswForm() {
+        document.getElementById("pswForm").style.display = "block";
+    }
+    function closePswForm() {
+        document.getElementById("pswForm").style.display = "none";
+    }
+
+</script>
+
+</body>
+</html>

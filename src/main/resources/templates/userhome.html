@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Userhome Stallholder</title>
+</head>
+<body>
+<!--引入 templates/fragments/header.html中的navbar-->
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+
+<!--这部分是你要写的部分-->
+<span class="userHomeTitle">Welcome back, <b style="color: #9A9A9A">usergroup</b> FirstName </span>
+<div class="frameContainer">
+
+    <div class="tab">
+        <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >Active Booking</button>
+        <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="border-radius: 0px 20px 0px 0px">Booking History</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="ActiveBooking" class="tabcontent">
+        <div class="bookingItem">
+            <div class="orderNum">Order #CV0325</div>
+            <div class="marketStall">Surry Hills Market, Stall #62</div>
+            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+            <div class="price">$00</div>
+            <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
+            <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+            <br><div class="userline"></div>
+        </div>
+    </div>
+
+    <div id="BookingHistory" class="tabcontent" style="display: none">
+        <div class="bookingHistoryItem">
+            <div class="orderNum">Order #CV0325</div>
+            <div class="marketStall">Surry Hills Market, Stall #62</div>
+            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+            <div class="priceHistory">$00</div>
+            <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
+            <br><div class="userline"></div>
+        </div>
+    </div>
+
+
+
+</div>
+<!--从templates/fragments/footer.html 引入的footer-->
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+
+<!--你可以在下面添加自己想添加的JavaScript-->
+<script>
+    function openTabs(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("defaultOpen").click();
+
+</script>
+
+</body>
+</html>

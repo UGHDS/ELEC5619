@@ -1,34 +1,179 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: head">
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<nav th:replace="fragments/header :: navbar"></nav>
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
 
 <!--这部分是你要写的部分-->
-<div class="container-fluid">
-    <div id="contents-main">
-        <div class="lead">
-            <strong>Name of Events:</strong>
-            <span th:text="${eventName}"></span>
-        </div>
-        <div id="contents">
-            {{ helloWorldTest }}
-            <ul>
-                <li style="list-style-type:none" v-for="player in players">
-                    <player-card v-bind:player="player" v-bind:key="player.id" />
-                </li>
-            </ul>
-        </div>
+<div class="slideshow-container">
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market1.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market2.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market3.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market4.jpg" style="width:100%">
     </div>
 </div>
+<div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+</div>
+<div class="indexContent">
+    <span class="welcomeM">Confused about booking a market stall? Our website provides the simple and secure way to help you book a market stall. Besides that, the market organizers can also efficiently manage and optimize stall arrangemens with our website.</span>
+    <span class="welcomeM2">Join us today to experience the simplest way to book and organize market stalls!</span>
+</div>
+<button class="signupSH" onclick="openSHForm()">Register as STALL HOLDER</button>
+<button class="signupMO" onclick="openMOForm()">Register as MARKET ORGANIZER</button>
 
+<div class="blackLayer" id="layer"></div>
+<div class="SHform-popup" id="SHForm">
+    <button type="button" class="btn cancel" onclick="closeSHForm()">x</button>
+    <form action="#" class="form-container">
+        <!--    need to modify-->
+
+        <h2 style="text-align: center">Registration for stall holder</h2>
+
+        <label><b>First Name</b></label>
+        <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+        <label style="margin-left: 25px"><b>Last Name</b></label>
+        <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+        <label><b>Business Name</b></label>
+        <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+        <label><b>ABN Number</b></label>
+        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+        <label><b>Phone number</b></label>
+        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter your email address" name="email" required>
+
+        <label><b>Confirmed Email</b></label>
+        <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+        <label><b>Confirmed Password</b></label>
+        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+        <button type="submit" class="btn" onclick="">Register</button>
+        <!--    need to modify-->
+    </form>
+</div>
+<div class="MOform-popup" id="MOForm">
+    <button type="button" class="btn cancel" onclick="closeMOForm()">x</button>
+    <form action="#" class="form-container">
+<!--    need to modify-->
+        <h2 style="text-align: center">Registration for stall holder</h2>
+
+        <label><b>First Name</b></label>
+        <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+        <label style="margin-left: 25px"><b>Last Name</b></label>
+        <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+        <label><b>Business Name</b></label>
+        <input type="text" placeholder="Enter your business name" name="businessName" required>
+
+        <label><b>ABN Number</b></label>
+        <input type="text" placeholder="Enter your ABN number" name="abn" required>
+
+        <label><b>Phone number</b></label>
+        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter your email address" name="email" required>
+
+        <label><b>Confirmed Email</b></label>
+        <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+        <label><b>Confirmed Password</b></label>
+        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+        <button type="submit" class="btn" onclick="">Register</button>
+<!--        need to modify-->
+
+    </form>
+</div>
 <!--从templates/fragments/footer.html 引入的footer-->
-<div th:replace="fragments/footer :: footer"></div>
+<!--<div th:replace="fragments/footer :: footer"></div>-->
 
 <!--你可以在下面添加自己想添加的JavaScript-->
-<script type="text/babel" src="js/index.js"></script>
+<script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].className += " active";
+        setTimeout(showSlides, 8000); // Change image every 2 seconds
+    }
+
+    function onChange() {
+        const password = document.querySelector('input[name=psw]');
+        const confirm = document.querySelector('input[name=psw2]');
+        if (confirm.value === password.value) {
+            confirm.setCustomValidity('');
+        } else {
+            confirm.setCustomValidity('Passwords do not match');
+        }
+    }
+
+    function openSHForm() {
+        document.getElementById("SHForm").style.display = "block";
+        document.getElementById("layer").style.display = "block";
+
+    }
+    function closeSHForm() {
+        document.getElementById("SHForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+
+    }
+    function openMOForm() {
+        document.getElementById("MOForm").style.display = "block";
+        document.getElementById("layer").style.display = "block";
+
+    }
+    function closeMOForm() {
+        document.getElementById("MOForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+
+    }
+</script>
 
 </body>
 </html>
