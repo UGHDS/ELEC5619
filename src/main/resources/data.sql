@@ -13,31 +13,35 @@ INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state
 INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state, street, suburb) VALUES (2,3,'test description2',-33.8785839,151.2014858,'ChinaTown2.png','state2','street2','2008');
 
 /*Venue Date*/
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-12', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-13', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-14', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-15', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-22', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-23', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-24', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-26', 1);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-28', 1);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-25', 1);
 
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-14', 2);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-15', 2);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-22', 2);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-26', 2);
-INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-28', 2);
+INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-24', 2);
 
 
-/*Stall Data*/
-INSERT INTO stall (venue_id, id, price) VALUES (1,'C_01','100');
-INSERT INTO stall (venue_id, id, price) VALUES (1,'C_02','200');
-INSERT INTO stall (venue_id, id, price) VALUES (1,'C_03','300');
-INSERT INTO stall (venue_id, id, price) VALUES (1,'C_04','400');
-INSERT INTO stall (venue_id, id, price) VALUES (1,'C_05','500');
+/*Stall*/
+INSERT INTO stall (venue_id, stall_id, price) VALUES (1,'C_01','100');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (1,'C_02','200');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (1,'C_03','300');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (1,'C_04','400');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (1,'C_05','500');
 
-INSERT INTO stall (venue_id, id, price) VALUES (2,'B_01','500');
-INSERT INTO stall (venue_id, id, price) VALUES (2,'B_02','100');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (2,'B_01','500');
+INSERT INTO stall (venue_id, stall_id, price) VALUES (2,'B_02','100');
+
+
+/*Stall Date*/
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 1, 1, 6, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 2, 1, 7, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 3, 1, 8, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 4, 1, 9, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 5, 1, 10, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-24', 6, 2, 11, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-24', 7, 2, 12, 'Available');
+
+
+/*Booking*/
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (1, '2023-09-25 12:35:47.011265', 8, 9, 'Booked');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (2, '2023-09-25 12:35:50.743700', 7, 9, 'Cancelled');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (3, '2023-09-25 12:36:09.904322', 9, 9, 'Booked');
 
 

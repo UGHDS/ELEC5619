@@ -9,6 +9,7 @@ import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class VenueDateController {
 
     @Autowired
     VenueDateRepository venueDateRepository;
+
+    @Autowired
+    StallDateRepository stallDateRepository;
 
     @Autowired
     HttpSession httpSession;
@@ -49,11 +53,43 @@ public class VenueDateController {
                 vd.setVenueId(venueId);
                 vd.setDateSlot(date);
                 venueDateRepository.save(vd);
+                for(Stall stall : venue.get().getStalls()){
+                    StallDate stallDate = new StallDate();
+                    stallDate.setVenueDate(vd);
+                    stallDate.setStatus("Available");
+                    stallDate.setStall(stall);
+                    stallDateRepository.save(stallDate);
+                }
             }
             return true;
         }
         return false;
     }
+
+    @PostMapping("/delete")
+    @ValidateUserType(type = "admin,organiser")
+    @Operation(summary = "delete venue dates from venue",description = "Pass venue id and venue date list")
+    public boolean deleteVenueDate(@RequestBody List<java.sql.Date> dates, @RequestParam int venueId){
+        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> venue = venueRepository.findById(venueId);
+        if(user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())){
+            for(java.sql.Date date : dates){
+                for(VenueDate venueDate : venue.get().getVenueDates()){
+                    if(venueDate.getDateSlot().toString().equals(date.toString())){
+                        StallDate example = new StallDate();
+                        example.setVenueDate(venueDate);
+                        stallDateRepository.deleteAll(stallDateRepository.findAll(Example.of(example)));
+                        venueDateRepository.delete(venueDate);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
+
+
 
 
 

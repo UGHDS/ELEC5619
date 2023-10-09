@@ -11,20 +11,24 @@ public class StallDate {
     private Long id;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(insertable=false, updatable=false, name="stall_id", referencedColumnName = "id"),
-            @JoinColumn(insertable=false, updatable=false, name="venue_id", referencedColumnName = "venue_id")
-    })
+    @JoinColumn(name="stall_id")
     private Stall stall;
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(insertable=false, updatable=false, name="date_slot", referencedColumnName = "date_slot"),
-            @JoinColumn(insertable=false, updatable=false, name="venue_id", referencedColumnName = "venue_id")
+            @JoinColumn(name="date_slot", referencedColumnName = "date_slot"),
+            @JoinColumn(name="venue_id", referencedColumnName = "venue_id")
     })
     private VenueDate venueDate;
     private String status;
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Stall getStall() {
         return stall;
