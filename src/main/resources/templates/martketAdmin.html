@@ -3,64 +3,26 @@
 <head>
     <link href="../static/css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Userhome Admin</title>
+    <title>Market Admin</title>
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
 <!--<nav th:replace="fragments/header :: navbar"></nav>-->
 
 <!--这部分是你要写的部分-->
-<span class="userHomeTitle">Welcome back, <b style="color: #9A9A9A">usergroup</b> FirstName </span>
+<span class="userHomeTitle">Market list</span>
 
 
-<div class="frameContainer">
+<div class="frameContainerR">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'RegistrationReview')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Registration Review</button>
-        <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" style="width:33.3%">Active Booking</button>
-        <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking History</button>
+    <div class="marketItem">
+        <div class="orderNum">Account#CV0325</div>
+        <div class="marketStall">Surry Hills Market, Stall #62</div>
+        <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
+        <button type="button" id="marketReview" class="marketReview" onclick="">View or Edit Market Detail</button>
+
+        <br><div class="userline"></div>
     </div>
-
-    <!-- Tab content -->
-    <div id="RegistrationReview" class="tabcontent">
-        <div class="bookingItem">
-            <div class="orderNum">Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
-            <button type="button" id="review" class="reviewBtn" onclick="openREForm()">View Registration Detail</button>
-            <button type="button" id="approve" class="approveBtn" onclick="approveClick()">Approve</button>
-            <button type="button" id="deny" class="denyBtn" onclick="denyClick()">Deny</button>
-            <button type="button" id="review2" class="reviewBtn2" onclick="openREForm()">View Registration Detail</button>
-            <button type="button" id="deny2" class="denyBtn2" onclick="denyClick()">Denied</button>
-            <br><div class="userline"></div>
-        </div>
-
-    </div>
-
-    <div id="ActiveBooking" class="tabcontent">
-        <div class="bookingItem">
-            <div class="orderNum">Order#CV0325, Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-            <div class="price">$45</div>
-            <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
-            <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
-            <br><div class="userline"></div>
-        </div>
-    </div>
-
-    <div id="BookingHistory" class="tabcontent" style="display: none">
-        <div class="bookingHistoryItem">
-            <div class="orderNum">Order#CV0325, Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-            <div class="priceHistory">$45</div>
-            <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
-            <br><div class="userline"></div>
-        </div>
-    </div>
-
-
 
 </div>
 <div class="blackLayer" id="layer"></div>

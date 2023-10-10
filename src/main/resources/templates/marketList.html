@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Market List</title>
+</head>
+<body>
+<!--引入 templates/fragments/header.html中的navbar-->
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+
+<!--这部分是你要写的部分-->
+<span class="userHomeTitle">Market list</span>
+<div class="frameContainer">
+
+    <div class="tab">
+        <button class="tablinks" onclick="openTabs(event, 'listView')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >View by List</button>
+        <button class="tablinks" onclick="openTabs(event, 'mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="listView" class="tabcontent">
+        <form action="/search" method="GET" >
+            <input type="text" id="search" class="searchBox" name="search" placeholder="Search suburb..">
+<!--            <input type="submit" value="Search">-->
+        </form>
+        <div class="marketItemDiv">
+            <div class="marketListItem">
+                <div class="marketListName">Blacktown Markets</div>
+                <div class="marketListSuburb">Suburb: Prospect</div>
+                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
+                <div class="marketListStall">Total stall: 120</div>
+                <img class="marketListImage" src="../static/image/blacktownImg.png" alt="market photo">
+            </div>
+            <div class="marketListItem">
+                <div class="marketListName">Blacktown Markets</div>
+                <div class="marketListSuburb">Suburb: Prospect</div>
+                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
+                <div class="marketListStall">Total stall: 120</div>
+                <img class="marketListImage" src="../static/image/blacktownImg.png" alt="market photo">
+            </div>
+        </div>
+    </div>
+
+    <div id="mapView" class="tabcontent" style="display: none">
+        <form action="/search" method="GET" >
+            <input type="text" id="search" class="searchBox" name="search" placeholder="Search suburb..">
+            <!--            <input type="submit" value="Search">-->
+        </form>
+
+    </div>
+
+
+
+</div>
+<!--从templates/fragments/footer.html 引入的footer-->
+<!--<div th:replace="fragments/footer :: footer"></div>-->
+
+<!--你可以在下面添加自己想添加的JavaScript-->
+<script>
+    function openTabs(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("defaultOpen").click();
+
+
+</script>
+
+</body>
+</html>
