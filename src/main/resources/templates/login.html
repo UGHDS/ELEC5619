@@ -1,40 +1,181 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <head th:include="fragments/header :: head"></head>
-    <title>Login</title>
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<nav th:replace="fragments/header :: navbar"></nav>
+<!--<nav th:replace="fragments/header :: navbar"></nav>-->
 
 <!--这部分是你要写的部分-->
-<div class="container-fluid">
-    <div id="contents-main">
-        <form method="post" action="/login">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" name="email">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+<div class="slideshow-container">
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market1.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market2.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market3.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides fade">
+        <img class="image" src="../static/image/market4.jpg" style="width:100%">
     </div>
 </div>
+<div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+</div>
+<div class="indexContent">
+    <span class="welcomeM" style="font-size: 50px; top:18%">Welcome Back</span>
+</div>
+<form action="#" class="loginForm">
+    <!--    need to modify-->
 
+    <input type="email" placeholder="Enter your email address" name="email" required>
+
+    <input type="password" placeholder="Enter your password" name="psw"  required>
+
+    <button type="submit" class="btn" onclick="">LOGIN</button>
+
+    <span class="noAccountMsg">Doesn't have an account yet?</span>
+
+    <button class="signupSHLogin" onclick="openSHForm()">Register as STALL HOLDER</button>
+    <button class="signupMOLogin" onclick="openMOForm()">Register as MARKET ORGANIZER</button>
+</form>
+
+<div class="blackLayer" id="layer"></div>
+<div class="SHform-popup" id="SHForm">
+    <button type="button" class="btn cancel" onclick="closeSHForm()">x</button>
+    <form action="#" class="form-container">
+        <!--    need to modify-->
+
+        <h2 style="text-align: center">Registration for stall holder</h2>
+
+        <label><b>First Name</b></label>
+        <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+        <label style="margin-left: 25px"><b>Last Name</b></label>
+        <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+        <label><b>Business Name</b></label>
+        <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+        <label><b>ABN Number</b></label>
+        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+        <label><b>Phone number</b></label>
+        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter your email address" name="email" required>
+
+        <label><b>Confirmed Email</b></label>
+        <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+        <label><b>Confirmed Password</b></label>
+        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+        <button type="submit" class="btn" onclick="">Register</button>
+        <!--    need to modify-->
+    </form>
+</div>
+<div class="MOform-popup" id="MOForm">
+    <button type="button" class="btn cancel" onclick="closeMOForm()">x</button>
+    <form action="#" class="form-container">
+<!--    need to modify-->
+        <h2 style="text-align: center">Registration for stall holder</h2>
+
+        <label><b>First Name</b></label>
+        <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+        <label style="margin-left: 25px"><b>Last Name</b></label>
+        <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+        <label><b>Business Name</b></label>
+        <input type="text" placeholder="Enter your business name" name="businessName" required>
+
+        <label><b>ABN Number</b></label>
+        <input type="text" placeholder="Enter your ABN number" name="abn" required>
+
+        <label><b>Phone number</b></label>
+        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+        <label><b>Email</b></label>
+        <input type="text" placeholder="Enter your email address" name="email" required>
+
+        <label><b>Confirmed Email</b></label>
+        <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+        <label><b>Password</b></label>
+        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+        <label><b>Confirmed Password</b></label>
+        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+        <button type="submit" class="btn" onclick="">Register</button>
+<!--        need to modify-->
+
+    </form>
+</div>
 <!--从templates/fragments/footer.html 引入的footer-->
-<div th:replace="fragments/footer :: footer"></div>
+<!--<div th:replace="fragments/footer :: footer"></div>-->
 
 <!--你可以在下面添加自己想添加的JavaScript-->
-<script type="text/babel" src="js/index.js"></script>
+<script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].className += " active";
+        setTimeout(showSlides, 8000); // Change image every 2 seconds
+    }
+
+
+    function openSHForm() {
+        document.getElementById("SHForm").style.display = "block";
+        document.getElementById("layer").style.display = "block";
+
+    }
+    function closeSHForm() {
+        document.getElementById("SHForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+
+    }
+    function openMOForm() {
+        document.getElementById("MOForm").style.display = "block";
+        document.getElementById("layer").style.display = "block";
+
+    }
+    function closeMOForm() {
+        document.getElementById("MOForm").style.display = "none";
+        document.getElementById("layer").style.display = "none";
+
+    }
+</script>
 
 </body>
 </html>
