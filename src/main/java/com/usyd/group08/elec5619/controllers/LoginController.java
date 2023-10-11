@@ -28,7 +28,16 @@ public class LoginController {
         Optional<User> currentUser = userRepository.findOne(Example.of(user));
         if(currentUser.isPresent()){
             model.addAttribute("currentUser", currentUser.get());
-            return "index";
+            if(currentUser.get().getType().equals("owner")){
+                return "redirect:/uhome";
+            }
+            else if(currentUser.get().getType().equals("organiser")){
+                return "redirect:/ohome";
+            }
+            else if(currentUser.get().getType().equals("admin")){
+                return "redirect:/ahome";
+            }
+
         }
         return "login";
     }

@@ -1,31 +1,31 @@
 <!doctype html>
 <html>
 <head>
-    <link href="../static/css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/header :: head"></head>
+    <link href="../css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home Page</title>
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
 
 <!--这部分是你要写的部分-->
 <div class="slideshow-container">
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market1.jpg" style="width:100%">
+        <img class="image" src="../image/market1.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market2.jpg" style="width:100%">
+        <img class="image" src="../image/market2.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market3.jpg" style="width:100%">
+        <img class="image" src="../image/market3.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market4.jpg" style="width:100%">
+        <img class="image" src="../image/market4.jpg" style="width:100%">
     </div>
 </div>
 <div style="text-align:center">
@@ -119,7 +119,7 @@
     </form>
 </div>
 <!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
+<div th:replace="fragments/footer :: footer"></div>
 
 <!--你可以在下面添加自己想添加的JavaScript-->
 <script>

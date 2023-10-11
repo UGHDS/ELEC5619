@@ -1,6 +1,5 @@
 package com.usyd.group08.elec5619.rest;
 
-
 import com.usyd.group08.elec5619.aop.ValidateUserType;
 import com.usyd.group08.elec5619.models.Booking;
 import com.usyd.group08.elec5619.models.StallDate;

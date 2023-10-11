@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <link href="../static/css/styles.css" rel="stylesheet" />
+    <link href="../css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Page</title>
 </head>
@@ -13,19 +13,19 @@
 <div class="slideshow-container">
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market1.jpg" style="width:100%">
+        <img class="image" src="../image/market1.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market2.jpg" style="width:100%">
+        <img class="image" src="../image/market2.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market3.jpg" style="width:100%">
+        <img class="image" src="../image/market3.jpg" style="width:100%">
     </div>
 
     <div class="mySlides fade">
-        <img class="image" src="../static/image/market4.jpg" style="width:100%">
+        <img class="image" src="../image/market4.jpg" style="width:100%">
     </div>
 </div>
 <div style="text-align:center">
@@ -37,12 +37,12 @@
 <div class="indexContent">
     <span class="welcomeM" style="font-size: 50px; top:18%">Welcome Back</span>
 </div>
-<form action="#" class="loginForm">
+<form action="/login" class="loginForm" method="post">
     <!--    need to modify-->
 
     <input type="email" placeholder="Enter your email address" name="email" required>
 
-    <input type="password" placeholder="Enter your password" name="psw"  required>
+    <input type="password" placeholder="Enter your password" name="password"  required>
 
     <button type="submit" class="btn" onclick="">LOGIN</button>
 
