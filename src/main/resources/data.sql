@@ -9,8 +9,8 @@ INSERT INTO user (id, email, first_name, last_name, password, phone, type, statu
 INSERT INTO user (id, email, first_name, last_name, password, phone, type, status) VALUES (9, 'organisertest@qq.com', 'organiserrrrr', 'test', '12345678', '042433333', 'organiser', 'active');
 
 /*Venue*/
-INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state, street, suburb) VALUES (1,9,'test description',-33.8785839,151.2014858,'ChinaTown1.png','state1','street1','2007');
-INSERT INTO venue (id, user_id, description, latitude, longitude, picture, state, street, suburb) VALUES (2,3,'test description2',-33.8785839,151.2014858,'ChinaTown2.png','state2','street2','2008');
+INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (1, -33.8785839, 151.2014858, 9, 'test description', 'ChinaTown1.png', 'state1', 'street1', '2007', 'test venue 1');
+INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (2, -33.8785839, 151.2014858, 3, 'test description2', 'ChinaTown2.png', 'state2', 'street2', '2008', 'test venue 2');
 
 /*Venue Date*/
 INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-25', 1);

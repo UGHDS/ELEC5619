@@ -23,22 +23,19 @@ public class VenueController {
     HttpSession httpSession;
 
 
+
     /**
      * Find all Venue
      *
-     * @return
+     * @return List of all venues
      */
     @GetMapping
-    @Operation(summary = "Find all venues", description = "Pass venues list, and will return venues list")
-    public List<Venue> getVenues(@RequestParam String userID) {
-        Venue venue = new Venue();
-        User user = new User();
-        user.setId(Long.valueOf(userID));
-        venue.setUser(user);
-//        venue.setUser();
-        return venueRepository.findAll(Example.of(venue));
-
+    @Operation(summary = "Find all venues", description = "Returns a list of all venues")
+    public List<Venue> getVenues() {
+        return venueRepository.findAll();
     }
+
+
 
     /**
      * Create Stall Venue
