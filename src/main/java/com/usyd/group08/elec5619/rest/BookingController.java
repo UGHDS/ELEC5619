@@ -2,6 +2,7 @@ package com.usyd.group08.elec5619.rest;
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
 import com.usyd.group08.elec5619.models.Booking;
+import com.usyd.group08.elec5619.models.Result;
 import com.usyd.group08.elec5619.models.StallDate;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.repositries.BookingRepository;
@@ -86,10 +87,12 @@ public class BookingController {
 
     @GetMapping("/own")
     @ValidateUserType
+    @ResponseBody
     @Operation(summary = "Find all booking history from current user", description = "user check his booking history")
-    public List<Booking> ownBookingHistory() {
+    public Result ownBookingHistory() {
         User user = (User) httpSession.getAttribute("currentUser");
-        return bookingRepository.getBookingByUser(user.getId());
+
+        return Result.success(bookingRepository.getBookingByUser(user.getId()));
     }
 
     //payment的账单查询

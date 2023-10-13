@@ -1,5 +1,6 @@
 package com.usyd.group08.elec5619.controllers;
 
+import com.usyd.group08.elec5619.models.Result;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.repositries.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -21,25 +25,32 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password, Model model) {
+    @ResponseBody
+    public Result login(@RequestParam String email, @RequestParam String password, Model model) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         Optional<User> currentUser = userRepository.findOne(Example.of(user));
+        Map<String, Integer> result = new HashMap<>();
         if(currentUser.isPresent()){
             model.addAttribute("currentUser", currentUser.get());
-            if(currentUser.get().getType().equals("owner")){
-                return "redirect:/uhome";
-            }
-            else if(currentUser.get().getType().equals("organiser")){
-                return "redirect:/ohome";
-            }
-            else if(currentUser.get().getType().equals("admin")){
-                return "redirect:/ahome";
-            }
+            String userType = currentUser.get().getType();
+            int tyoeNum = -1;
 
+            if(userType.equals("owner")){
+                tyoeNum = 0;
+            }
+            else if(userType.equals("organiser")){
+                tyoeNum = 1;
+            }
+            else if(userType.equals("admin")){
+                tyoeNum = 2;
+            }
+//            List<Dept> deptList = deptService.list();
+            result.put("tyoeNum", tyoeNum);
+            return Result.success(result);
         }
-        return "login";
+        return Result.error("Fail to log in");
     }
 
 }
