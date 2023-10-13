@@ -1,51 +1,56 @@
 <!doctype html>
 <html>
 <head>
-    <head th:include="fragments/header :: head"></head>
+
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Userhome Stallholder</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<nav th:replace="fragments/header :: navbar"></nav>
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-<div class="container-md">
-    <div id="contents-main">
-        <div>Welcome back, <b style="color: #9A9A9A">usergroup</b> FirstName </div>
-        <div class="frameContainer">
-            <div class="tab">
-                <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >Active Booking</button>
-                <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="border-radius: 0px 20px 0px 0px">Booking History</button>
-            </div>
-
-            <!-- Tab content -->
-            <div id="ActiveBooking" class="tabcontent">
-                <div class="bookingItem">
-                    <div class="orderNum">Order #CV0325</div>
-                    <div class="marketStall">Surry Hills Market, Stall #62</div>
-                    <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-                    <div class="price">$00</div>
-                    <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
-                    <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
-                    <br><div class="userline"></div>
+    <div class="container-md">
+        <div id="contents-main">
+            <div class="title">{{ welcome }}</div>
+            <div class="frameContainer">
+                <div class="tab">
+                    <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >Active Booking</button>
+                    <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="border-radius: 0px 20px 0px 0px">Booking History</button>
                 </div>
-            </div>
 
-            <div id="BookingHistory" class="tabcontent" style="display: none">
-                <div class="bookingHistoryItem">
-                    <div class="orderNum">Order #CV0325</div>
-                    <div class="marketStall">Surry Hills Market, Stall #62</div>
-                    <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-                    <div class="priceHistory">$00</div>
-                    <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
-                    <br><div class="userline"></div>
+                <!-- Tab content -->
+                <div id="ActiveBooking" class="tabcontent">
+                    <div class="bookingItem">
+                        <div class="orderNum">Order #CV0325</div>
+                        <div class="marketStall">Surry Hills Market, Stall #62</div>
+                        <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+                        <div class="price">$00</div>
+                        <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
+                        <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+                        <br><div class="userline"></div>
+                    </div>
                 </div>
+
+<!--                <div id="BookingHistory" class="tabcontent" style="display: none">-->
+<!--                    <div class="bookingHistoryItem" v-for="booking in bookings" :key="booking.id">-->
+<!--                        <div class="orderNum">Order #{{ booking.orderNumber? }}</div>-->
+<!--                        <div class="marketStall">{{ VenueName? }}, Stall #{{ booking.stallDate.stall.stallId }}</div>-->
+<!--                        <div class="dateAddress">{{ formatDate(booking.bookingTime) }} - {{ VenueAddress?}} </div>-->
+<!--                        <div class="priceHistory">${{ booking.payments.amount }}</div>-->
+<!--                        <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>-->
+<!--                        <br><div class="userline"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
-</div>
+
 
 <!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
@@ -68,6 +73,46 @@
 
     document.getElementById("defaultOpen").click();
 
+    new Vue({
+        el: '#contents-main',
+        data: {
+            welcome:'',
+            bookings: [],
+            error: null
+        },
+        methods: {
+            getBookings() {
+                axios.post('/api/bookings/own') // Make sure the URL is correct
+                    .then(response => {
+                        this.bookings = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching booking data.";
+                        console.error("Error fetching data:", error);
+                    });
+            },
+
+            welcomeMsg(){
+                axios.get('/api/users/hello') // Make sure the URL is correct
+                    .then(response => {
+                        this.welcome = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching welcome message.";
+                        console.error("Error fetching welcome message:", error);
+                    });
+            },
+
+            viewOrderDetail(bookingId) {
+                // Implement your viewOrderDetail logic here
+            }
+        },
+        mounted() {
+            this.getBookings();
+            this.welcomeMsg();
+            document.getElementById("defaultOpen").click();
+        }
+    });
 </script>
 
 </body>

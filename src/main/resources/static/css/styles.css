@@ -10,47 +10,66 @@ body {
 
 }
 
+.border-top{
+    position: absolute;
+    bottom: 0%;
+    width:100%;
+    height:70px;
+    background-color: black;
+    z-index: 1;
+    border: black;
+}
+
+.container{
+    height: auto;
+    border: black;
+
+}
+
+.rowFooter{
+    border: black;
+
+    color: white;
+
+}
+.nav-item a:hover{
+    color: coral;
+}
 /*index.html*/
-.mySlides {
+.mySlides1 {
     display: none;
     background-color: black;
 }
-.mySlides img {
+.mySlides1 img {
     vertical-align: middle;
     width: 1200px;
     height: 815px;
     opacity: .6;
-
 }
+
+
 /* Slideshow container */
-.slideshow-container {
+.slideshow-container1 {
     width: 100%;
     height: 100%;
     top: 10%;
     bottom:10%;
     position: absolute;
     margin: auto;
+    z-index: 0;
 }
 
 
-/* Number text (1/3 etc) */
-.numbertext {
-    color: #f2f2f2;
-    font-size: 12px;
-    padding: 8px 12px;
-    position: absolute;
-    top: 0;
-}
 
 /* The dots/bullets/indicators */
-.dot {
+.dot1 {
     height: 15px;
     width: 15px;
     margin: 0 2px;
     background-color: #bbb;
     border-radius: 50%;
     display: none;
-    transition: background-color 0.6s ease;
+    transition: background-color 1s ease;
 }
 
 .active {
@@ -60,12 +79,12 @@ body {
 /* Fading animation */
 .fade {
     animation-name: fade;
-    animation-duration: 1.5s;
+    animation-duration: 8s;
 }
 
 @keyframes fade {
-    from {opacity: .4}
-    to {opacity: 1}
+    from {opacity: .6}
+    to {opacity: .8}
 }
 
 /* On smaller screens, decrease text size */
@@ -141,10 +160,10 @@ body {
 
 .SHform-popup {
     width:70%;
-    height:80%;
+    height:75%;
     display: none;
     position: absolute;
-    top:10%;
+    top:12%;
     left:15%;
     right: 15px;
     background-color: white;
@@ -152,6 +171,19 @@ body {
 }
 
 .MOform-popup {
+    width:70%;
+    height:75%;
+    display: none;
+    position: absolute;
+    top:12%;
+    left:15%;
+    right: 15px;
+    background-color: white;
+    border: none;
+}
+/* Add styles to the form container */
+
+.popup {
     width:70%;
     height:80%;
     display: none;
@@ -162,10 +194,11 @@ body {
     background-color: white;
     border: none;
 }
-/* Add styles to the form container */
+
 .form-container {
     padding-top: 10px;
     width:80%;
+    font-size:15px;
     left: 10%;
     position: absolute;
     background-color: white;
@@ -175,13 +208,13 @@ body {
 .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 5px;
-    margin: 5px 0 15px 0;
+    margin: 5px 0 5px 0;
     border: none;
     background: #f1f1f1;
 }
 
 .form-container input[name=firstName], .form-container input[name=lastName]{
-    width:35%;
+    width:36%;
 }
 
 
@@ -195,7 +228,7 @@ body {
 .form-container .btn {
     background-color: #04AA6D;
     color: white;
-    padding: 16px 20px;
+    /*padding: 16px 20px;*/
     border: none;
     cursor: pointer;
     width: 20%;
@@ -248,7 +281,7 @@ body {
     text-align: left;
     position: absolute;
     left: 5%;
-    top: 15%;
+    top: 12%;
 }
 .frameContainer{
     border:none;
@@ -257,7 +290,7 @@ body {
     box-shadow: 0px 0px 5px grey;
     width:90%;
     height:65%;
-    bottom:10%;
+    bottom:12%;
     left:5%;
 }
 
@@ -1010,7 +1043,7 @@ body {
 }
 
 /*login.html*/
-.loginForm {
+.loginFormDiv {
     top:30%;
     width:60%;
     height: 60%;

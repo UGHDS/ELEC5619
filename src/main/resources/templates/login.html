@@ -1,61 +1,64 @@
 <!doctype html>
 <html>
 <head>
+    <head th:include="fragments/header :: head"></head>
     <link href="../css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Page</title>
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/header :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-<div class="slideshow-container">
+<div class="slideshow-container1">
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market1.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market2.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market3.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market4.jpg" style="width:100%">
     </div>
 </div>
 <div style="text-align:center">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
 </div>
 <div class="indexContent">
-    <span class="welcomeM" style="font-size: 50px; top:18%">Welcome Back</span>
+    <span class="welcomeM" style="font-size: 50px; top:15%">Welcome Back</span>
 </div>
-<form action="/login" class="loginForm" method="post">
-    <!--    need to modify-->
+<div class="loginFormDiv" style="top:28%">
+    <form action="/login" class="loginForm" method="post">
+        <!--    need to modify-->
 
-    <input type="email" placeholder="Enter your email address" name="email" required>
+        <input type="email" placeholder="Enter your email address" name="email" required>
 
-    <input type="password" placeholder="Enter your password" name="password"  required>
+        <input type="password" placeholder="Enter your password" name="password"  required>
 
-    <button type="submit" class="btn" onclick="">LOGIN</button>
-
+        <button type="submit" class="btn" onclick="">LOGIN</button>
+    </form>
     <span class="noAccountMsg">Doesn't have an account yet?</span>
 
     <button class="signupSHLogin" onclick="openSHForm()">Register as STALL HOLDER</button>
     <button class="signupMOLogin" onclick="openMOForm()">Register as MARKET ORGANIZER</button>
-</form>
+</div>
+
 
 <div class="blackLayer" id="layer"></div>
 <div class="SHform-popup" id="SHForm">
     <button type="button" class="btn cancel" onclick="closeSHForm()">x</button>
-    <form action="#" class="form-container">
+    <form action="/api/users/register" method="post" class="form-container">
         <!--    need to modify-->
 
         <h2 style="text-align: center">Registration for Stall Holder</h2>
@@ -93,7 +96,7 @@
 </div>
 <div class="MOform-popup" id="MOForm">
     <button type="button" class="btn cancel" onclick="closeMOForm()">x</button>
-    <form action="#" class="form-container">
+    <form action="/api/users/register" method="post" class="form-container">
 <!--    need to modify-->
         <h2 style="text-align: center">Registration for Market Organizer</h2>
 
@@ -130,7 +133,7 @@
     </form>
 </div>
 <!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
+<div th:replace="fragments/footer :: footer"></div>
 
 <!--你可以在下面添加自己想添加的JavaScript-->
 <script>
@@ -139,8 +142,8 @@
 
     function showSlides() {
         let i;
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
+        let slides = document.getElementsByClassName("mySlides1");
+        let dots = document.getElementsByClassName("dot1");
         for (i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }

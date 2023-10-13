@@ -8,31 +8,33 @@
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
+<nav th:replace="fragments/header :: navbar"></nav>
+
 
 <!--这部分是你要写的部分-->
-<div class="slideshow-container">
+<div class="slideshow-container1">
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market1.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market2.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market3.jpg" style="width:100%">
     </div>
 
-    <div class="mySlides fade">
+    <div class="mySlides1 fade">
         <img class="image" src="../image/market4.jpg" style="width:100%">
     </div>
 </div>
 <div style="text-align:center">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
+    <span class="dot1"></span>
 </div>
 <div class="indexContent">
     <span class="welcomeM">Confused about booking a market stall? Our website provides the simple and secure way to help you book a market stall. Besides that, the market organizers can also efficiently manage and optimize stall arrangemens with our website.</span>
@@ -128,8 +130,8 @@
 
     function showSlides() {
         let i;
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
+        let slides = document.getElementsByClassName("mySlides1");
+        let dots = document.getElementsByClassName("dot1");
         for (i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }
