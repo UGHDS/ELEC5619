@@ -8,17 +8,15 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import jakarta.servlet.http.HttpSession;
+import java.util.*;
 
 @Controller
 @SessionAttributes({"currentUser"})
 public class LoginController {
     @Autowired
     UserRepository userRepository;
+
     @GetMapping("/login")
     public String index(Model model) {
         return "login";
@@ -26,31 +24,40 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Result login(@RequestParam String email, @RequestParam String password, Model model) {
+    public Result login(@RequestParam String email, @RequestParam String password, Model model, HttpSession httpSession) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         Optional<User> currentUser = userRepository.findOne(Example.of(user));
-        Map<String, Integer> result = new HashMap<>();
-        if(currentUser.isPresent()){
-            model.addAttribute("currentUser", currentUser.get());
-            String userType = currentUser.get().getType();
-            int tyoeNum = -1;
 
-            if(userType.equals("owner")){
-                tyoeNum = 0;
-            }
-            else if(userType.equals("organiser")){
-                tyoeNum = 1;
-            }
-            else if(userType.equals("admin")){
-                tyoeNum = 2;
-            }
-//            List<Dept> deptList = deptService.list();
-            result.put("tyoeNum", tyoeNum);
-            return Result.success(result);
+        Map<String, Object> response = new HashMap<>();
+        if(currentUser.isPresent()){//用户名，密码正确
+            User curUser = currentUser.get();
+
+            model.addAttribute("currentUser", curUser);
+            // 使用HttpSession来设置属性
+            httpSession.setAttribute("currentUser", curUser);
+
+            response.put("userType", curUser.getType());
+            response.put("status", curUser.getStatus());
+            response.put("firstName", curUser.getFirstName());
+            response.put("lastName", curUser.getLastName());
+            return Result.success(response);
+
+        } else {//用户名，密码错误
+            return Result.error("Invalid username or password");
         }
-        return Result.error("Fail to log in");
     }
 
+    @DeleteMapping("/logout")
+    @ResponseBody
+    public Result logout(Model model, HttpSession httpSession) {
+            model.addAttribute("currentUser", null);
+
+            // 使用HttpSession来设置属性
+            httpSession.setAttribute("currentUser", null);
+//            httpSession.invalidate();
+
+            return Result.success();
+    }
 }
