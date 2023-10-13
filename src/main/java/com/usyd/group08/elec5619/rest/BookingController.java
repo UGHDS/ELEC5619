@@ -73,7 +73,7 @@ public class BookingController {
         return false;
     }
 
-    @PostMapping("/user/{userId}")
+    @GetMapping("/user/{userId}")
     @ValidateUserType(type = "admin")
     @Operation(summary = "Find all booking history by user Id (admin only)", description = "pass user id will return his booking history")
     public List<Booking> bookingHistory(@PathVariable String userId) {
@@ -84,7 +84,7 @@ public class BookingController {
         return null;
     }
 
-    @PostMapping("/own")
+    @GetMapping("/own")
     @ValidateUserType
     @Operation(summary = "Find all booking history from current user", description = "user check his booking history")
     public List<Booking> ownBookingHistory() {
@@ -93,7 +93,7 @@ public class BookingController {
     }
 
     //payment的账单查询
-    @PostMapping("/{bookingId}")
+    @GetMapping("/{bookingId}")
     @ValidateUserType
     @Operation(summary = "Get booking details by bookingId from current user", description = "pass bookingId will return booking details")
     public Booking bookingDetails(@PathVariable int bookingId) {

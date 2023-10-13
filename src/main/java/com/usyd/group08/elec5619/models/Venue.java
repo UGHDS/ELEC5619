@@ -28,7 +28,7 @@ public class Venue {
     @OnDelete(action = OnDeleteAction.CASCADE )
     private List<VenueDate> venueDates;
 
-
+    private String venueName;
     private String street;
     private String suburb;
     private String state;
@@ -123,5 +123,13 @@ public class Venue {
 
     public void setStalls(List<Stall> stalls) {
         this.stalls = stalls;
+    }
+
+    public String getVenueName() {
+        return venueName;
+    }
+
+    public void setVenueName(String venueName) {
+        this.venueName = venueName;
     }
 }

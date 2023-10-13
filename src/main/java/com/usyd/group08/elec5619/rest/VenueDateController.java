@@ -66,7 +66,7 @@ public class VenueDateController {
         return false;
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     @ValidateUserType(type = "admin,organiser")
     @Operation(summary = "delete venue dates from venue",description = "Pass venue id and venue date list")
     public boolean deleteVenueDate(@RequestBody List<java.sql.Date> dates, @RequestParam int venueId){
