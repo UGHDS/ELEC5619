@@ -1,6 +1,6 @@
 package com.usyd.group08.elec5619.controllers;
 
-import com.usyd.group08.elec5619.models.Result;
+//import com.usyd.group08.elec5619.models.Result;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.repositries.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Result login(@RequestParam String email, @RequestParam String password, Model model, HttpSession httpSession) {
+    public Map<String, Object> login(@RequestParam String email, @RequestParam String password, Model model, HttpSession httpSession) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
@@ -42,22 +42,24 @@ public class LoginController {
             response.put("status", curUser.getStatus());
             response.put("firstName", curUser.getFirstName());
             response.put("lastName", curUser.getLastName());
-            return Result.success(response);
+            return response;
 
         } else {//用户名，密码错误
-            return Result.error("Invalid username or password");
+//            return Result.error("Invalid username or password");
+            response.put("status", "error");
+            return response;
         }
     }
 
-    @DeleteMapping("/logout")
-    @ResponseBody
-    public Result logout(Model model, HttpSession httpSession) {
-            model.addAttribute("currentUser", null);
-
-            // 使用HttpSession来设置属性
-            httpSession.setAttribute("currentUser", null);
-//            httpSession.invalidate();
-
-            return Result.success();
-    }
+//    @DeleteMapping("/logout")
+//    @ResponseBody
+//    public Result logout(Model model, HttpSession httpSession) {
+//            model.addAttribute("currentUser", null);
+//
+//            // 使用HttpSession来设置属性
+//            httpSession.setAttribute("currentUser", null);
+////            httpSession.invalidate();
+//
+//            return Result.success();
+//    }
 }
