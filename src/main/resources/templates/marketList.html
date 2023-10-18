@@ -2,79 +2,82 @@
 <html>
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Market List</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
-<span class="userHomeTitle">Market list</span>
-<div class="frameContainer">
+<div id="app">
+    <span class="userHomeTitle">Market list</span>
+    <div class="frameContainer">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'listView')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >View by List</button>
-        <button class="tablinks" onclick="openTabs(event, 'mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
-    </div>
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'listView' }" @click="changeTab('listView')" style="border-radius: 20px 0px 0px 0px">View by List</button>
+            <button class="tablinks" :class="{ active: currentTab === 'mapView' }" @click="changeTab('mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
+        </div>
 
-    <!-- Tab content -->
-    <div id="listView" class="tabcontent">
-        <form action="/search" method="GET" >
-            <input type="text" id="search" class="searchBox" name="search" placeholder="Search suburb..">
-<!--            <input type="submit" value="Search">-->
-        </form>
-        <div class="marketItemDiv">
-            <div class="marketListItem">
-                <div class="marketListName">Blacktown Markets</div>
-                <div class="marketListSuburb">Suburb: Prospect</div>
-                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
-                <div class="marketListStall">Total stall: 120</div>
-                <img class="marketListImage" src="../image/blacktownImg.png" alt="market photo">
-            </div>
-            <div class="marketListItem">
-                <div class="marketListName">Blacktown Markets</div>
-                <div class="marketListSuburb">Suburb: Prospect</div>
-                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
-                <div class="marketListStall">Total stall: 120</div>
-                <img class="marketListImage" src="../image/blacktownImg.png" alt="market photo">
+        <!-- Tab content -->
+        <div v-show="currentTab === 'listView'" class="tabcontent">
+            <form @submit.prevent="searchMarkets">
+                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
+            </form>
+            <div class="marketItemDiv">
+                <div class="marketListItem" v-for="market in markets" :key="market.id">
+                    <div class="marketListName">{{ market.name }}</div>
+                    <div class="marketListSuburb">{{ market.suburb }}</div>
+                    <div class="marketListAddress">{{ market.address }}</div>
+                    <div class="marketListStall">{{ market.stall }}</div>
+                    <img class="marketListImage" :src="market.image" :alt="market.name">
+                </div>
             </div>
         </div>
+
+        <div v-show="currentTab === 'mapView'" class="tabcontent">
+            <form @submit.prevent="searchMarkets">
+                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
+            </form>
+        </div>
     </div>
-
-    <div id="mapView" class="tabcontent" style="display: none">
-        <form action="/search" method="GET" >
-            <input type="text" id="search2" class="searchBox" name="search" placeholder="Search suburb..">
-            <!--            <input type="submit" value="Search">-->
-        </form>
-
-    </div>
-
-
-
 </div>
-<!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
 
-<!--你可以在下面添加自己想添加的JavaScript-->
+<div th:replace="fragments/footer :: footer"></div>
+
+
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    new Vue({
+        el: '#app',
+        data: {
+            currentTab: 'listView',
+            searchQuery: '',
+            markets: [
+                {
+                    id: 1,
+                    name: 'Blacktown Markets',
+                    suburb: 'Suburb: Prospect',
+                    address: 'Address: Cricketers Arms Rd, Prospect NSW 2148',
+                    stall: 'Total stall: 120',
+                    image: '../image/blacktownImg.png'
+                },
+                // Add other market data as needed
+            ]
+        },
+        methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
+            searchMarkets() {
+                // Implement the search logic or API call here
+            }
+        },
+        mounted() {
+            // Initialization or API call if needed
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    document.getElementById("defaultOpen").click();
-
-
+    });
 </script>
 
 </body>

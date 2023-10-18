@@ -15,41 +15,40 @@
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-    <div class="container-md">
-        <div id="contents-main">
-            <div class="title">{{ welcome }}</div>
-            <div class="frameContainer">
-                <div class="tab">
-                    <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >Active Booking</button>
-                    <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="border-radius: 0px 20px 0px 0px">Booking History</button>
-                </div>
+<div id="app">
+        <span class="title">{{ welcome }}</span>
 
-                <!-- Tab content -->
-                <div id="ActiveBooking" class="tabcontent">
-                    <div class="bookingItem">
-                        <div class="orderNum">Order #CV0325</div>
-                        <div class="marketStall">Surry Hills Market, Stall #62</div>
-                        <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-                        <div class="price">$00</div>
-                        <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
-                        <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
-                        <br><div class="userline"></div>
-                    </div>
-                </div>
+        <div class="frameContainer">
+            <div class="tab">
+                <button class="tablinks" :class="{ active: currentTab === 'ActiveBooking' }" @click="changeTab('ActiveBooking')" style="border-radius: 20px 0px 0px 0px" >Active Booking</button>
+                <button class="tablinks" :class="{ active: currentTab === 'BookingHistory' }" @click="changeTab('BookingHistory')" style="border-radius: 0px 20px 0px 0px">Booking History</button>
+            </div>
 
-<!--                <div id="BookingHistory" class="tabcontent" style="display: none">-->
-<!--                    <div class="bookingHistoryItem" v-for="booking in bookings" :key="booking.id">-->
-<!--                        <div class="orderNum">Order #{{ booking.orderNumber? }}</div>-->
-<!--                        <div class="marketStall">{{ VenueName? }}, Stall #{{ booking.stallDate.stall.stallId }}</div>-->
-<!--                        <div class="dateAddress">{{ formatDate(booking.bookingTime) }} - {{ VenueAddress?}} </div>-->
-<!--                        <div class="priceHistory">${{ booking.payments.amount }}</div>-->
-<!--                        <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>-->
-<!--                        <br><div class="userline"></div>-->
-<!--                    </div>-->
+            <!-- Tab content -->
+            <div v-show="currentTab === 'ActiveBooking'" class="tabcontent">
+                <div class="bookingItem">
+                    <div class="orderNum">Order #CV0325</div>
+                    <div class="marketStall">Surry Hills Market, Stall #62</div>
+                    <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
+                    <div class="price">$00</div>
+                    <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
+                    <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+                    <br><div class="userline"></div>
+                </div>
+            </div>
+
+            <div v-show="currentTab === 'BookingHistory'" class="tabcontent">
+<!--                <div class="bookingHistoryItem">-->
+<!--                    <div class="orderNum">Order #{{ booking.orderNumber? }}</div>-->
+<!--                    <div class="marketStall">{{ VenueName? }}, Stall #{{ booking.stallDate.stall.stallId }}</div>-->
+<!--                    <div class="dateAddress">{{ formatDate(booking.bookingTime) }} - {{ VenueAddress?}} </div>-->
+<!--                    <div class="priceHistory">${{ booking.payments.amount }}</div>-->
+<!--                    <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>-->
+<!--                    <br><div class="userline"></div>-->
 <!--                </div>-->
             </div>
         </div>
-    </div>
+</div>
 
 
 <!--从templates/fragments/footer.html 引入的footer-->
@@ -57,30 +56,18 @@
 
 <!--你可以在下面添加自己想添加的JavaScript-->
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    document.getElementById("defaultOpen").click();
-
     new Vue({
-        el: '#contents-main',
+        el: '#app',
         data: {
             welcome:'',
             bookings: [],
-            error: null
+            error: null,
+            currentTab: 'ActiveBooking'
         },
         methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
             getBookings() {
                 axios.post('/api/bookings/own') // Make sure the URL is correct
                     .then(response => {

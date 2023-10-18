@@ -12,7 +12,7 @@
 <!--<nav th:replace="fragments/header :: navbar"></nav>-->
 
 <!--这部分是你要写的部分-->
-<span class="userHomeTitle"><a href="marketList.html" class="backBtn"><</a>Fairfield Markets</span>
+<span class="userHomeTitle"><a href="marketList.html" class="backBtn"></a>venueName</span>
 
 
 <div class="frameContainer">
@@ -25,58 +25,26 @@
 
     <!-- Tab content -->
     <div id="MarketInformation" class="tabcontent">
-
-<!--        <form action="#" class="marketForm">-->
-<!--            <label>Venue Name:</label>-->
-<!--            <input type="text" value="Fairfield Markets" name="venueName" style="width:87.8%; margin-left: 10px" required>-->
-
-<!--            <label>Address: </label>-->
-<!--            <input type="text" value="443 Smithfield Rd, Prairiewood NSW 2176" name="addressM" style="width:91.55%; margin-left: 10px" required>-->
-
-<!--            <label>Start Date:</label>-->
-<!--            <input type="date" id="datePickerS" name="datePickerS" value="2023-10-10" style="width:12%; margin-left: 10px" required>-->
-
-<!--            <label>- End Date:</label>-->
-<!--            <input type="date" id="datePickerE" name="datePickerE" value="2023-12-10" style="width:12%; margin-left: 10px" required>-->
-
-<!--            <label style="margin-left: 50px"><input type="checkbox" name="weekday" value="Monday"> Mon</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Tuesday"> Tue</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Wednesday"> Wed</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Thursday"> Thu</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Friday"> Fri</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Saturday" checked> Sat</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Sunday"> Sun</label>-->
-
-<!--            <br><label>Open hours:</label>-->
-<!--            <input type="time" id="timePickerS" name="timePickerS" value="10:00" style="width:12%; margin-left: 10px" required>-->
-<!--            <label>-</label>-->
-<!--            <input type="time" id="timePickerE" name="timePickerE" value="16:00" style="width:12%; margin-left: 10px" required>-->
-
-<!--            <br><label>Brief introduction of the Venue:</label>-->
-<!--            <textarea name="venueInfo"  style="height:120px;white-space: pre-wrap;" required>A Favourite Community Attraction since the Seventies. Fairfield Showground is renowned as the venue of the Fairfield Markets which have been attracting many thousands of shoppers each weekend since the Seventies. Our markets are the largest in Sydney's West. Friendly Family Fun is the motto of these markets and the fun is guaranteed. Every Saturday from 9AM to 4PM up to 600 undercover stalls are filled with everything from childrens' toys to clothes, sporting gear to jewellery, household items to car accessories, workshop tools to pool products and grocery items to fresh fruit and vege's. While the adults look for the bargains the kids can use up their energy on the jumping castle, carnival rides, merry go round or pony rides. And, when it is time for a relaxing break there are plenty of places to pick up mouth watering kebabs, burgers, Asian delicacies, ice creams, donuts, cold drinks or coffee.-->
-<!--                      </textarea>-->
-<!--        </form>-->
-
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
+        <div class="venueDescription">description</div>
+        <div class="venueAddress">street, state, suburb</div>
+        <div class="openHour">openHour</div>
+        <div class="stallNumber">Total stall: stall number</div>
     </div>
 
     <div id="PhotoGallery" class="tabcontent">
-<!--        <span class="photoText">Add photos of Venue to let others have a better knowledge of the Venue:</span>-->
-<!--        <input type="file" id="fileInput" accept="image/*" class="photoInput" multiple>-->
-<!--        <div id="imageContainer" class="photoDiv"></div>-->
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
+        <div class="photoVenue">photo Venue</div>
     </div>
 
     <div id="StallBooking" class="tabcontent" style="display: none; font-size: 18px">
-<!--        <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>-->
-<!--        <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">-->
-<!--        <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
-<!--        <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
-<!--        <div id="imageContainer2" class="photoDiv2">-->
-<!--            <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">-->
-<!--            <button id="deleteButton" class="delete-button2" style="display: none;">X</button>-->
-<!--        </div>-->
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
+        <!--        <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>-->
+        <!--        <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">-->
+        <!--        <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
+        <!--        <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
+        <!--        <div id="imageContainer2" class="photoDiv2">-->
+        <!--            <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">-->
+        <!--            <button id="deleteButton" class="delete-button2" style="display: none;">X</button>-->
+        <!--        </div>-->
+        <!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
     </div>
 
 

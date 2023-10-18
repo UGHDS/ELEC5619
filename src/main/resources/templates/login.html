@@ -5,180 +5,170 @@
     <link href="../css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
+    <style>
+        /* Adding gray background */
+        body {
+            background-color: gray;
+        }
+    </style>
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/header :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
-<div class="slideshow-container1">
+<div id="app">
+    <div class="indexContent">
+        <span class="welcomeM" style="font-size: 50px; top:15%">Welcome Back</span>
+    </div>
+    <div class="loginFormDiv" style="top:28%">
+        <form @submit.prevent="handleLogin" class="loginForm">
 
-    <div class="mySlides1 fade">
-        <img class="image" src="../image/market1.jpg" style="width:100%">
+            <input type="email" placeholder="Enter your email address" name="email" required>
+
+            <input type="password" placeholder="Enter your password" name="password" required>
+
+            <button type="submit" class="btn" onclick="">LOGIN</button>
+        </form>
+        <span class="noAccountMsg">Doesn't have an account yet?</span>
+
+        <button class="signupSHLogin" id="formSh" @click="openSHForm">Register as STALL HOLDER</button>
+        <button class="signupMOLogin" id="formMo" @click="openMOForm">Register as MARKET ORGANIZER</button>
     </div>
 
-    <div class="mySlides1 fade">
-        <img class="image" src="../image/market2.jpg" style="width:100%">
+    <div class="blackLayer" id="layer"></div>
+    <div class="SHform-popup" v-show="showSHForm">
+        <button type="button" class="btn cancel" @click="closeSHForm">x</button>
+        <form action="/api/users/register" method="post" class="form-container">
+            <h2 style="text-align: center">Registration for Stall Holder</h2>
+
+            <label><b>First Name</b></label>
+            <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+            <label style="margin-left: 25px"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+            <label><b>Business Name</b></label>
+            <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+            <label><b>ABN Number</b></label>
+            <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+            <label><b>Phone number</b></label>
+            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+            <label><b>Email</b></label>
+            <input type="text" placeholder="Enter your email address" name="email" required>
+
+            <label><b>Confirmed Email</b></label>
+            <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+            <label><b>Confirmed Password</b></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+            <button type="submit" class="btn" onclick="">Register</button>
+
+        </form>
     </div>
+    <div class="MOform-popup" v-show="showMOForm">
+        <button type="button" class="btn cancel" @click="closeMOForm">x</button>
+        <form action="/api/users/register" method="post" class="form-container">
 
-    <div class="mySlides1 fade">
-        <img class="image" src="../image/market3.jpg" style="width:100%">
+            <h2 style="text-align: center">Registration for Market Organizer</h2>
+
+            <label><b>First Name</b></label>
+            <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+            <label style="margin-left: 25px"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+            <label><b>Business Name</b></label>
+            <input type="text" placeholder="Enter your business name" name="businessName" required>
+
+            <label><b>ABN Number</b></label>
+            <input type="text" placeholder="Enter your ABN number" name="abn" required>
+
+            <label><b>Phone number</b></label>
+            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+            <label><b>Email</b></label>
+            <input type="text" placeholder="Enter your email address" name="email" required>
+
+            <label><b>Confirmed Email</b></label>
+            <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+            <label><b>Confirmed Password</b></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+            <button type="submit" class="btn" onclick="">Register</button>
+        </form>
     </div>
-
-    <div class="mySlides1 fade">
-        <img class="image" src="../image/market4.jpg" style="width:100%">
-    </div>
 </div>
-<div style="text-align:center">
-    <span class="dot1"></span>
-    <span class="dot1"></span>
-    <span class="dot1"></span>
-    <span class="dot1"></span>
-</div>
-<div class="indexContent">
-    <span class="welcomeM" style="font-size: 50px; top:15%">Welcome Back</span>
-</div>
-<div class="loginFormDiv" style="top:28%">
-    <form action="/login" class="loginForm" method="post">
-        <!--    need to modify-->
-
-        <input type="email" placeholder="Enter your email address" name="email" required>
-
-        <input type="password" placeholder="Enter your password" name="password"  required>
-
-        <button type="submit" class="btn" onclick="">LOGIN</button>
-    </form>
-    <span class="noAccountMsg">Doesn't have an account yet?</span>
-
-    <button class="signupSHLogin" onclick="openSHForm()">Register as STALL HOLDER</button>
-    <button class="signupMOLogin" onclick="openMOForm()">Register as MARKET ORGANIZER</button>
-</div>
-
-
-<div class="blackLayer" id="layer"></div>
-<div class="SHform-popup" id="SHForm">
-    <button type="button" class="btn cancel" onclick="closeSHForm()">x</button>
-    <form action="/api/users/register" method="post" class="form-container">
-        <!--    need to modify-->
-
-        <h2 style="text-align: center">Registration for Stall Holder</h2>
-
-        <label><b>First Name</b></label>
-        <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-        <label style="margin-left: 25px"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-        <label><b>Business Name</b></label>
-        <input type="text" placeholder="Enter your business name, optional" name="businessName">
-
-        <label><b>ABN Number</b></label>
-        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
-
-        <label><b>Phone number</b></label>
-        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter your email address" name="email" required>
-
-        <label><b>Confirmed Email</b></label>
-        <input type="text" placeholder="Confirm your email address" name="email2" required>
-
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
-
-        <label><b>Confirmed Password</b></label>
-        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
-
-        <button type="submit" class="btn" onclick="">Register</button>
-        <!--    need to modify-->
-    </form>
-</div>
-<div class="MOform-popup" id="MOForm">
-    <button type="button" class="btn cancel" onclick="closeMOForm()">x</button>
-    <form action="/api/users/register" method="post" class="form-container">
-<!--    need to modify-->
-        <h2 style="text-align: center">Registration for Market Organizer</h2>
-
-        <label><b>First Name</b></label>
-        <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-        <label style="margin-left: 25px"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-        <label><b>Business Name</b></label>
-        <input type="text" placeholder="Enter your business name" name="businessName" required>
-
-        <label><b>ABN Number</b></label>
-        <input type="text" placeholder="Enter your ABN number" name="abn" required>
-
-        <label><b>Phone number</b></label>
-        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter your email address" name="email" required>
-
-        <label><b>Confirmed Email</b></label>
-        <input type="text" placeholder="Confirm your email address" name="email2" required>
-
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
-
-        <label><b>Confirmed Password</b></label>
-        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
-
-        <button type="submit" class="btn" onclick="">Register</button>
-<!--        need to modify-->
-
-    </form>
-</div>
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!--你可以在下面添加自己想添加的JavaScript-->
+
 <script>
-    let slideIndex = 0;
-    showSlides();
+    new Vue({
+        el: '#app',
+        data: {
+            showSHForm: false,
+            showMOForm: false,
 
-    function showSlides() {
-        let i;
-        let slides = document.getElementsByClassName("mySlides1");
-        let dots = document.getElementsByClassName("dot1");
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
+        },
+        methods: {
+            handleLogin: function() {
+                let formData = new FormData(document.querySelector('.loginForm'));
+
+                axios.post('/login', formData)
+                    .then((response) => {
+                        let data = response.data;
+                        if (data.status && data.status === "error") {
+                            alert("Invalid username or password");
+                            return;
+                        }
+
+                        switch(data.userType) {
+                            case "owner":
+                                window.location.href = "/uhome";
+                                break;
+                            case "organiser":
+                                window.location.href = "/ohome";
+                                break;
+                            case "admin":
+                                window.location.href = "/ahome";
+                                break;
+                            default:
+                                alert("Unknown user type");
+                                break;
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error during login:", error);
+                        alert("There was an error during login");
+                    });
+            },
+            openSHForm: function() {
+                this.showSHForm = true;
+
+            },
+            closeSHForm: function() {
+                this.showSHForm = false;
+            },
+            openMOForm: function() {
+                this.showMOForm = true;
+            },
+            closeMOForm: function() {
+                this.showMOForm = false;
+            }
         }
-        slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}
-        for (i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 8000); // Change image every 2 seconds
-    }
-
-
-    function openSHForm() {
-        document.getElementById("SHForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-
-    }
-    function closeSHForm() {
-        document.getElementById("SHForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-
-    }
-    function openMOForm() {
-        document.getElementById("MOForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-
-    }
-    function closeMOForm() {
-        document.getElementById("MOForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-
-    }
+    });
 </script>
-
 </body>
 </html>
