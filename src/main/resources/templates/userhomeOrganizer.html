@@ -17,7 +17,7 @@
 
 <!--这部分是你要写的部分-->
 <div id="app">
-    <span class="userHomeTitle">{{ welcome }}</span>
+    <span class="userHomeTitle">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
 
     <div class="frameContainer">
 
@@ -107,7 +107,7 @@
                 this.currentTab = tabName;
             },
             welcomeMsg() {
-                axios.get('/api/users/hello') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
                     .then(response => {
                         this.welcome = response.data;
                     })
