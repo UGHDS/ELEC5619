@@ -743,11 +743,42 @@ body {
     background-color: rgba(0,0,0, 0.7);
     border: none;
 }
+.reviewM-popup {
+    width:50%;
+    height:30%;
+    /*display: none;*/
+    position: absolute;
+    top:35%;
+    left:25%;
+    background-color: white;
+    border: none;
+}
+
+.reviewM-popup span{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 18px;
+}
+
+.reviewM-popup .cancel {
+    color: black;
+    font-size: 50px;
+    background-color: white;
+    width: 30px;
+    right: 3%;
+    top: 0%;
+    position: absolute;
+    border: none;
+}
+
+.reviewM-popup .cancel:hover{
+    color:red;
+}
 
 .review-popup {
     width:70%;
     height:60%;
-    display: none;
+    /*display: none;*/
     position: absolute;
     top:15%;
     left:15%;
@@ -930,7 +961,7 @@ body {
 /*marketAdmin.html*/
 .marketItem{
     border: none;
-    position: absolute;
+    /*position: absolute;*/
     margin-top: 20px;
     width:100%;
     height:20%;
@@ -940,7 +971,7 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
-    position: absolute;
+    /*position: absolute;*/
     top:20%;
     right:5%;
     width:15%;

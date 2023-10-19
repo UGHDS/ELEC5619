@@ -18,11 +18,11 @@
     <span class="userHomeTitle">Market list</span>
 
     <div class="frameContainerR">
-        <div class="marketItem">
-            <div class="orderNum">Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
-            <button type="button" class="marketReview" @click="openREForm">View or Edit Market Detail</button>
+        <div class="marketItem" v-for="market in markets" :key="market.id">
+            <div class="orderNum">Venue #{{ market.id }}</div>
+            <div class="marketStall">{{ market.name }}</div>
+<!--            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>-->
+            <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
             <br>
             <div class="userline"></div>
         </div>
@@ -30,32 +30,13 @@
 
     <div class="blackLayer" v-show="showFormLayer"></div>
 
-    <div class="review-popup" v-show="showReviewForm">
+    <div class="reviewM-popup" v-show="showReviewForm">
         <button type="button" class="btn cancel" @click="closeREForm">x</button>
-        <form action="#" class="form-container">
-            <h2 style="text-align: center">Registration Review</h2>
-            <!-- Add v-model to each input to bind the values to Vue data properties if needed -->
-            <label><b>First Name</b></label>
-            <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-            <label style="margin-left: 25px"><b>Last Name</b></label>
-            <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-            <label><b>Business Name</b></label>
-            <input type="text" placeholder="Enter your business name, optional" name="businessName">
-
-            <label><b>ABN Number</b></label>
-            <input type="text" placeholder="Enter your ABN number, optional" name="abn">
-
-            <label><b>Phone number</b></label>
-            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-            <label><b>Email</b></label>
-            <input type="text" placeholder="Enter your email address" name="email" required>
-
-            <button type="button" class="approveFormBtn" @click="approveFormClick">Approve</button>
-            <button type="button" class="denyFormBtn" @click="denyFormClick">Deny</button>
-        </form>
+        <br><span>Venue #{{ currentMarket.id }}</span><br>
+        <span>Venue name: {{ currentMarket.name }}</span><br>
+        <span>Venue address: {{ currentMarket.address }}</span><br>
+        <span>Venue suburb: {{ currentMarket.suburb }}</span><br>
+        <span>Total Stall: {{ currentMarket.stall }}</span>
     </div>
 </div>
 
@@ -65,28 +46,36 @@
     new Vue({
         el: '#app',
         data: {
+            markets:[],
+            currentMarket: {},
             showReviewForm: false,
             showFormLayer: false,
         },
         methods: {
-            openREForm() {
+            getMarkets() {
+                axios.get('/api/venues') // Make sure the URL is correct
+                    .then(response => {
+                        this.markets = response.data;
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            console.error("Error Data:", error.response.data);
+                        }
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            openREForm: function(market) {  // 添加参数
+                this.currentMarket = market;  // 保存当前的market
                 this.showReviewForm = true;
                 this.showFormLayer = true;
             },
-            closeREForm() {
+            closeREForm: function() {
                 this.showReviewForm = false;
                 this.showFormLayer = false;
-            },
-            approveFormClick() {
-                this.showReviewForm = false;
-                this.showFormLayer = false;
-                // Add any other logic needed on approval
-            },
-            denyFormClick() {
-                this.showReviewForm = false;
-                this.showFormLayer = false;
-                // Add any other logic needed on denial
-            },
+            }
+        },
+        mounted() {
+            this.getMarkets();
         }
     });
 </script>
