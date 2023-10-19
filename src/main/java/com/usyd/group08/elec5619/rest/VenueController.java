@@ -1,6 +1,7 @@
 package com.usyd.group08.elec5619.rest;
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
+import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
 import com.usyd.group08.elec5619.repositries.VenueRepository;
@@ -54,9 +55,55 @@ public class VenueController {
             response.put("image", image);
             responses.add(response);
         }
-
-
         return responses;
+    }
+
+    /**
+     * Find venue by id
+     *
+     * @return that venue
+     */
+    @GetMapping("/venue")
+    @Operation(summary = "Find venue by Id", description = "Returns that venue")
+    public Map<String, Object> getVenueById(@RequestParam String venueID) {
+        Optional<Venue> optionalVenue = venueRepository.findById(Integer.parseInt(venueID));
+        Map<String, Object> response = new HashMap<>();
+
+        if (optionalVenue.isPresent()) {
+            Venue venue = optionalVenue.get();
+            //判断当前得到的VenueID 是否是属于当前的organiser的，如果是的话删除不是的话返还false, admin可以删除所有的venue
+            int venueId = venue.getId();
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+            int stallNum = venue.getStalls().size();
+            String image = venue.getPicture();
+            String description = venue.getDescription();
+            List<Stall> stalls = venue.getStalls();
+
+            int sum = 0;
+            for (Stall stall: stalls) {
+                sum+=stall.getPrice();
+            }
+            int stallPrice = sum/ stalls.size();
+
+            response.put("id", venueId);
+            response.put("name", venueName);
+            response.put("suburb", suburb);
+            response.put("address", address);
+            response.put("stall", stallNum);
+            response.put("image", image);
+            response.put("description", description);
+            response.put("stall_price", stallPrice);
+            response.put("stalls", stalls);
+
+        }else{
+            response.put("code", 404);
+            response.put("msg", "Can not find venue by Id");
+        }
+        return response;
     }
 
 
