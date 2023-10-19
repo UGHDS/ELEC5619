@@ -46,20 +46,23 @@ public class LoginController {
 
         } else {//用户名，密码错误
 //            return Result.error("Invalid username or password");
-            response.put("status", "error");
+            response.put("error", "login error");
             return response;
         }
     }
 
-//    @DeleteMapping("/logout")
-//    @ResponseBody
-//    public Result logout(Model model, HttpSession httpSession) {
-//            model.addAttribute("currentUser", null);
-//
-//            // 使用HttpSession来设置属性
-//            httpSession.setAttribute("currentUser", null);
-////            httpSession.invalidate();
-//
-//            return Result.success();
-//    }
+    @DeleteMapping("/logout")
+    @ResponseBody
+    public Map<String, Object> logout(Model model, HttpSession httpSession) {
+        Map<String, Object> response = new HashMap<>();
+        model.addAttribute("currentUser", null);
+
+        // 使用HttpSession来设置属性
+        httpSession.setAttribute("currentUser", null);
+//            httpSession.invalidate();
+        response.put("msg", "login out success");
+        response.put("code", 200);
+
+        return response;
+    }
 }
