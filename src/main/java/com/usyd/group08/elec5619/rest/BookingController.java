@@ -70,15 +70,62 @@ public class BookingController {
         return false;
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/allBookingHistory")
     @ValidateUserType(type = "admin")
-    @Operation(summary = "Find all booking history by user Id (admin only)", description = "pass user id will return his booking history")
-    public List<Booking> bookingHistory(@PathVariable String userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return bookingRepository.getBookingByUser(user.get().getId());
+    @Operation(summary = "Find all booking history", description = "get all booking history")
+    public List<List<Map<String, Object>>> bookingHistory() {
+        List<Booking> bookingList = bookingRepository.findAll();
+        List<List<Map<String, Object>>> responses = new ArrayList<>();
+        List<Map<String, Object>> responseBooked = new ArrayList<>();
+        List<Map<String, Object>> responseElse = new ArrayList<>();
+
+        for (Booking booking: bookingList) {
+            Map<String, Object> response = new HashMap<>();
+            int bookingId = booking.getId();
+            String stallId = booking.getStallDate().getStall().getStallId();
+            int venueId = booking.getStallDate().getVenueDate().getVenueId();
+            Venue venue = venueRepository.findById(venueId).get();
+
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+
+            Date dateSlot= booking.getStallDate().getVenueDate().getDateSlot();
+            String status = booking.getStatus();
+            double totalPrice = booking.getStallDate().getStall().getPrice();
+
+            List<Payment> paymentList= booking.getPayments();
+            for (Payment payment: paymentList) {
+                double itemPrice = payment.getAmount();
+                totalPrice += itemPrice;
+            }
+
+            User user = booking.getUser();
+            String userEmail = user.getEmail();
+
+            String bookingTime= booking.getBookingTime().toString().split("\\.")[0];
+
+            response.put("id", bookingId);
+            response.put("stallId", stallId);
+            response.put("venueName", venueName);
+            response.put("address", address);
+            response.put("dateSlot", dateSlot);
+            response.put("totalPrice", totalPrice);
+            response.put("bookingTime", bookingTime);
+            response.put("status", status);
+            response.put("userEmail", userEmail);
+
+            if(status.equals("Booked")){
+                responseBooked.add(response);
+            }else {
+                responseElse.add(response);
+            }
         }
-        return null;
+        responses.add(responseBooked);
+        responses.add(responseElse);
+        return responses;
     }
 
     @GetMapping("/own")
