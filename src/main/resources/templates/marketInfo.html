@@ -2,205 +2,237 @@
 <html>
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Market Information</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-<span class="userHomeTitle"><a href="marketList.html" class="backBtn"></a>venueName</span>
+<div id="app">
+    <span class="userHomeTitle"><a href="/marketList" class="backBtn"><</a>venueName</span>
+    <div class="frameContainer">
+
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>
+            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>
+            <button class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>
+        </div>
+
+        <!-- Tab content -->
+        <div v-show="currentTab === 'MarketInformation'"  class="tabcontent">
+            <div class="venueDescription">description</div>
+            <div class="venueAddress">Address: street, state, suburb</div>
+            <div class="openHour">Open Hours: openHour</div>
+            <div class="venuePrice">Estimated Stall Fee: $70</div>
+            <div class="stallNumber">Total stall: stall number</div>
+        </div>
+
+        <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
+            <div class="photoVenue" style='background-image: url("../image/market1.jpg")'></div>
+        </div>
+
+        <div v-show="currentTab === 'StallBooking'"  class="tabcontent" >
+            <div class="selectorDate">Selected a date:
+                <select v-model="selectedOptionDate">
+                    <option v-for="option in optionsDate" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="selectorStall">Selected a stall:
+                <select v-model="selectedOptionStall">
+                    <option v-for="option in optionsStall" :value="option.value">
+                        {{ option.text }}
+                    </option>
+                </select>
+            </div>
+
+            <button class="bookingConfirm" @click="openBookingForm">Confirm</button>
+<!--            <button v-else class="directLogin" @click="redirectToLogin">Login to Continue</button>-->
 
 
-<div class="frameContainer">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'MarketInformation')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Market Information</button>
-        <button class="tablinks" onclick="openTabs(event, 'PhotoGallery')" style="width:33.3%">Photo Gallery</button>
-        <button class="tablinks" onclick="openTabs(event, 'StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>
+        </div>
+
+    </div>
+    <div class="blackLayer" v-show="showLayer"></div>
+    <div class="booking-popup" v-show="showBookingForm">
+        <button type="button" class="btn cancel" @click="closeBookingForm">x</button>
+<!--        <form action="" method="" class="bookingContainer">-->
+        <form class="bookingContainer">
+
+            <h2>Order detail</h2>
+
+            <table class="bookingTable">
+                <tr>
+                    <th>Quality</th>
+                    <th>Stall number</th>
+                    <th>Market name</th>
+                    <th>Booking date</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>01</td>
+                    <td>Fairfield Markets</td>
+                    <td>09/09/2023</td>
+                    <td>$70</td>
+                </tr>
+            </table>
+
+            <h3>Stallholder contact information</h3>
+            <label class="label" for="name">Name:</label>
+            <input type="text" id="name" value="Stephen Strange">
+
+            <label class="label" for="email">Email:</label>
+            <input type="text" id="email" value="asdf@gmail.com">
+
+            <label class="label" for="phone">Phone number:</label>
+            <input type="text" id="phone" value="0498682233">
+
+            <label class="label" for="description">Description on the product you will be selling (max 300 words)</label>
+            <input type="text" id="description">
+
+            <button type="button" class="btn" @click="openPaymentForm">Book Now</button>
+
+        </form>
     </div>
 
-    <!-- Tab content -->
-    <div id="MarketInformation" class="tabcontent">
-        <div class="venueDescription">description</div>
-        <div class="venueAddress">street, state, suburb</div>
-        <div class="openHour">openHour</div>
-        <div class="stallNumber">Total stall: stall number</div>
+    <div class="payment-popup" v-show="showPaymentForm">
+        <button type="button" class="btn cancel" @click="backBookingForm"><</button>
+        <button type="button" class="btn cancel" @click="closePaymentForm">x</button>
+        <form action="" method="" class="paymentContainer">
+            <h2>Payment</h2>
+
+            <table>
+                <tr>
+                    <th>Fee option (Check if needed, can be provided by the venue organizer)</th>
+                    <th>Quality</th>
+                    <th>Fee name</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" @change="updateAdditionalFees" checked disabled></td>
+                    <td>1</td>
+                    <td>Basic stall booking fee</td>
+                    <td>$70</td>
+                    <td rowspan="2" class="totalPrice">${{ totalPrice }}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" @change="updateAdditionalFees"></td>
+                    <td>1</td>
+                    <td>Basic stall facilities rent fee</td>
+                    <td>$10</td>
+                </tr>
+            </table>
+
+            <p>*Basic stall facilities include one stall tent, two tables, and four chairs.</p>
+
+            <h3>Card details</h3>
+            <label class="label" for="card-number">Card number</label>
+            <input type="text" id="card-number" placeholder="Card number" style="width: 60%;">
+
+            <br><label class="label" for="expiry">Expiry Date</label>
+            <input type="text" id="expiry" placeholder="Month/Year" style="width: 20%;">
+
+            <label class="label" for="cvv" style="margin-left: 20px;">CVV</label>
+            <input type="text" id="cvv" placeholder="3 digital #" style="width: 20%;">
+
+            <br><label class="label" for="name-card">Name on Card</label>
+            <input type="text" id="name-card" placeholder="Full name" style="width: 60%;">
+
+
+            <br><button type="submit" class="btn" @click="closePaymentForm">Place Order</button>
+
+        </form>
     </div>
-
-    <div id="PhotoGallery" class="tabcontent">
-        <div class="photoVenue">photo Venue</div>
-    </div>
-
-    <div id="StallBooking" class="tabcontent" style="display: none; font-size: 18px">
-        <!--        <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>-->
-        <!--        <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">-->
-        <!--        <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
-        <!--        <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
-        <!--        <div id="imageContainer2" class="photoDiv2">-->
-        <!--            <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">-->
-        <!--            <button id="deleteButton" class="delete-button2" style="display: none;">X</button>-->
-        <!--        </div>-->
-        <!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
-    </div>
-
-
 
 </div>
-<div class="blackLayer" id="layer"></div>
 
 
 <!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
+<div th:replace="fragments/footer :: footer"></div>
 
 <!--你可以在下面添加自己想添加的JavaScript-->
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    document.getElementById("defaultOpen").click();
-
-
-    const fileInput = document.getElementById('fileInput');
-    const imageContainer = document.getElementById('imageContainer');
-
-    fileInput.addEventListener('change', (e) => {
-        const files = e.target.files;
-        let imageCount = imageContainer.querySelectorAll('.displayed-image').length;
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            if (imageCount >= 8) {
-                alert('Maximum of 8 photos reached.');
-                break;
+    new Vue({
+        el: '#app',
+        data: {
+            currentTab: 'MarketInformation',
+            // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
+            // userType: localStorage.getItem('userType'),
+            selectedOptionDate: '',  // This will hold the selected option value
+            optionsDate: [
+                { value: 'date1', text: 'date1' },
+                { value: 'date2', text: 'date2' },
+                { value: 'date3', text: 'date3' }
+            ],
+            selectedOptionStall: '',  // This will hold the selected option value
+            optionsStall: [
+                { value: 'stall1', text: 'stall1' },
+                { value: 'stall2', text: 'stall2' },
+                { value: 'stall3', text: 'stall3' }
+            ],
+            showLayer: false,
+            showBookingForm: false,
+            showPaymentForm: false,
+            additionalFees: 0,
+            baseFee: 70,
+            facilityFee: 10,
+        },
+        computed: {
+            totalPrice: function() {
+                return this.baseFee + this.additionalFees;
             }
-
-            const imageElement = document.createElement('div');
-            imageElement.classList.add('image-wrapper');
-
-            const img = document.createElement('img');
-            img.classList.add('displayed-image');
-
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
-            deleteButton.textContent = 'X';
-
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-                img.src = event.target.result;
-            };
-
-            reader.readAsDataURL(file);
-
-            // Add a click event listener to the delete button
-            deleteButton.addEventListener('click', () => {
-                imageContainer.removeChild(imageElement);
-                imageCount--;
-            });
-
-            imageElement.appendChild(img);
-            imageElement.appendChild(deleteButton);
-
-            // Append the new photo to the container
-            imageContainer.appendChild(imageElement);
-
-            imageCount++;
-        }
-
-        // Clear the file input to allow adding more files
-        fileInput.value = '';
-    });
-
-    const fileInput2 = document.getElementById('fileInput2');
-    const imageContainer2 = document.getElementById('imageContainer2');
-    const displayImage = document.getElementById('displayImage2');
-    const deleteButton = document.getElementById('deleteButton');
-
-    fileInput2.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-                displayImage.src = event.target.result;
-                displayImage.style.display = 'block';
-                deleteButton.style.display = 'inline-block';
-            };
-
-            reader.readAsDataURL(file);
+        },
+        methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
+            openBookingForm: function() {
+                this.showBookingForm = true;
+                this.showLayer = true;
+            },
+            closeBookingForm: function() {
+                this.showBookingForm = false;
+                this.showLayer = false;
+            },
+            openPaymentForm: function() {
+                this.showBookingForm = false;
+                this.showPaymentForm = true;
+            },
+            backBookingForm: function() {
+                this.showBookingForm = true;
+                this.showPaymentForm = false;
+            },
+            closePaymentForm: function() {
+                this.showPaymentForm = false;
+                this.showLayer = false;
+            },
+            updateAdditionalFees: function(event) {
+                if (event.target.checked) {
+                    this.additionalFees += this.facilityFee;
+                } else {
+                    this.additionalFees -= this.facilityFee;
+                }
+            }
+            // redirectToLogin() {
+            //     window.location.href = "/login";
+            // }
+        },
+        mounted() {
         }
     });
-
-    deleteButton.addEventListener('click', () => {
-        displayImage.src = '';
-        fileInput2.value = '';
-        deleteButton.style.display = 'none';
-        displayImage.style.display ='none';
-    });
-
-
-
-
-
-
-    function openREForm() {
-        document.getElementById("reForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-    }
-    function closeREForm() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-    }
-
-    function approveClick() {
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyClick() {
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function approveFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
 
 </script>
 

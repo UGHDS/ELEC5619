@@ -37,7 +37,6 @@
         <button class="signupMOLogin" id="formMo" @click="openMOForm">Register as MARKET ORGANIZER</button>
     </div>
 
-    <div class="blackLayer" id="layer"></div>
     <div class="SHform-popup" v-show="showSHForm">
         <button type="button" class="btn cancel" @click="closeSHForm">x</button>
         <form action="/api/users/register" method="post" class="form-container">
@@ -132,6 +131,13 @@
                         if (data.status && data.status === "error") {
                             alert("Invalid username or password");
                             return;
+                        }
+
+                        if (data.status !== 'error') {
+                            localStorage.setItem('isLoggedIn', 'true');
+                            localStorage.setItem('userType', data.userType);
+                        } else {
+                            localStorage.setItem('isLoggedIn', 'false');
                         }
 
                         switch(data.userType) {
