@@ -2,6 +2,8 @@ package com.usyd.group08.elec5619.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -17,6 +19,9 @@ public class User {
     private String password;
 
     private String status;
+
+    @OneToMany(mappedBy = "user")
+    private List<Venue> venues;
 
     public void setId(Long id) {
         this.id = id;
@@ -80,5 +85,13 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Venue> getVenues() {
+        return venues;
+    }
+
+    public void setVenues(List<Venue> venues) {
+        this.venues = venues;
     }
 }

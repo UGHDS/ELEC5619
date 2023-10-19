@@ -4,6 +4,7 @@ import com.usyd.group08.elec5619.aop.ValidateUserType;
 import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
+import com.usyd.group08.elec5619.repositries.UserRepository;
 import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +23,8 @@ public class VenueController {
     @Autowired
     HttpSession httpSession;
 
+    @Autowired
+    UserRepository userRepository;
 
 
     /**
@@ -59,14 +62,15 @@ public class VenueController {
     }
 
     /**
-     * Find venue by id
+     * Find venue by Venueid
      *
      * @return that venue
      */
-    @GetMapping("/venue")
-    @Operation(summary = "Find venue by Id", description = "Returns that venue")
+    @GetMapping("/venueByVenueId")
+    @Operation(summary = "Find venue by VenueId", description = "Returns that venue")
     public Map<String, Object> getVenueById(@RequestParam String venueID) {
         Optional<Venue> optionalVenue = venueRepository.findById(Integer.parseInt(venueID));
+
         Map<String, Object> response = new HashMap<>();
 
         if (optionalVenue.isPresent()) {
@@ -106,6 +110,44 @@ public class VenueController {
         return response;
     }
 
+
+    /**
+     * Find all venues for currentUser
+     *
+     * @return currentUser's venues
+     */
+    @GetMapping("/venueByCurrentUser")
+    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
+    @Operation(summary = "Find all venues for currentUser", description = "Returns currentUser's venues")
+    public List<Map<String, Object>> getVenueByCurrentUser() {
+
+        User user = (User) httpSession.getAttribute("currentUser");
+
+        List<Venue> venuesList = user.getVenues();
+
+        List<Map<String, Object>> responses = new ArrayList<>();
+
+        for (Venue venue: venuesList) {
+            Map<String, Object> response = new HashMap<>();
+            int venueId = venue.getId();
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+            int stallNum = venue.getStalls().size();
+            String image = venue.getPicture();
+
+            response.put("id", venueId);
+            response.put("name", venueName);
+            response.put("suburb", suburb);
+            response.put("address", address);
+            response.put("stall", stallNum);
+            response.put("image", image);
+            responses.add(response);
+        }
+        return responses;
+    }
 
 
     /**
