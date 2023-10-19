@@ -1,13 +1,8 @@
 package com.usyd.group08.elec5619.rest;
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
-import com.usyd.group08.elec5619.models.Booking;
-import com.usyd.group08.elec5619.models.StallDate;
-import com.usyd.group08.elec5619.models.User;
-import com.usyd.group08.elec5619.repositries.BookingRepository;
-import com.usyd.group08.elec5619.repositries.PaymentRepository;
-import com.usyd.group08.elec5619.repositries.StallDateRepository;
-import com.usyd.group08.elec5619.repositries.UserRepository;
+import com.usyd.group08.elec5619.models.*;
+import com.usyd.group08.elec5619.repositries.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -26,6 +20,9 @@ public class BookingController {
 
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    VenueRepository venueRepository;
 
     @Autowired
     PaymentRepository paymentRepository;
@@ -88,10 +85,57 @@ public class BookingController {
     @ValidateUserType
     @ResponseBody
     @Operation(summary = "Find all booking history from current user", description = "user check his booking history")
-    public List<Booking> ownBookingHistory() {
+    public List<List<Map<String, Object>>> ownBookingHistory() {
         User user = (User) httpSession.getAttribute("currentUser");
 
-        return bookingRepository.getBookingByUser(user.getId());
+        List<Booking> bookingList = bookingRepository.getBookingByUser(user.getId());
+        List<List<Map<String, Object>>> responses = new ArrayList<>();
+        List<Map<String, Object>> responseBooked = new ArrayList<>();
+        List<Map<String, Object>> responseElse = new ArrayList<>();
+
+        for (Booking booking: bookingList) {
+            Map<String, Object> response = new HashMap<>();
+            int bookingId = booking.getId();
+            String stallId = booking.getStallDate().getStall().getStallId();
+            int venueId = booking.getStallDate().getVenueDate().getVenueId();
+            Venue venue = venueRepository.findById(venueId).get();
+
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+
+            Date dateSlot= booking.getStallDate().getVenueDate().getDateSlot();
+            String status = booking.getStatus();
+            double totalPrice = booking.getStallDate().getStall().getPrice();
+
+            List<Payment> paymentList= booking.getPayments();
+            for (Payment payment: paymentList) {
+                double itemPrice = payment.getAmount();
+                totalPrice += itemPrice;
+            }
+
+            String bookingTime= booking.getBookingTime().toString().split("\\.")[0];
+
+            response.put("id", bookingId);
+            response.put("stallId", stallId);
+            response.put("venueName", venueName);
+            response.put("address", address);
+            response.put("dateSlot", dateSlot);
+            response.put("totalPrice", totalPrice);
+            response.put("bookingTime", bookingTime);
+            response.put("status", status);
+
+            if(status.equals("Booked")){
+                responseBooked.add(response);
+            }else {
+                responseElse.add(response);
+            }
+        }
+        responses.add(responseBooked);
+        responses.add(responseElse);
+        return responses;
     }
 
     //payment的账单查询
