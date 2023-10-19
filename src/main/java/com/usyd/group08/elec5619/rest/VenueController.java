@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/venues")
@@ -31,8 +30,33 @@ public class VenueController {
      */
     @GetMapping
     @Operation(summary = "Find all venues", description = "Returns a list of all venues")
-    public List<Venue> getVenues() {
-        return venueRepository.findAll();
+    public List<Map<String, Object>> getVenues() {
+        List<Venue> venuesList = venueRepository.findAll();
+
+        List<Map<String, Object>> responses = new ArrayList<>();
+
+        for (Venue venue: venuesList) {
+            Map<String, Object> response = new HashMap<>();
+            int venueId = venue.getId();
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+            int stallNum = venue.getStalls().size();
+            String image = venue.getPicture();
+
+            response.put("id", venueId);
+            response.put("name", venueName);
+            response.put("suburb", suburb);
+            response.put("address", address);
+            response.put("stall", stallNum);
+            response.put("image", image);
+            responses.add(response);
+        }
+
+
+        return responses;
     }
 
 
