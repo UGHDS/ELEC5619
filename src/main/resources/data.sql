@@ -40,8 +40,8 @@ INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023
 
 
 /*Booking*/
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (1, '2023-09-25 12:35:47.011265', 8, 9, 'Booked');
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (2, '2023-09-25 12:35:50.743700', 7, 9, 'Cancelled');
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (3, '2023-09-25 12:36:09.904322', 9, 9, 'Booked');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (1, '2023-09-25 12:35:47.011265', 8, 1, 'Booked');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (2, '2023-09-25 12:35:50.743700', 7, 1, 'Cancelled');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (3, '2023-09-25 12:36:09.904322', 9, 1, 'Booked');
 
 

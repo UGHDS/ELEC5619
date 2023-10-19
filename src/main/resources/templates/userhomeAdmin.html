@@ -20,19 +20,19 @@
 
     <!-- Main Content -->
     <div class="container-md">
-        <span class="userHomeTitle">{{ welcome }}</span>
+        <span class="userHomeTitle">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
 
         <!-- ... Rest of your content ... -->
         <div class="frameContainer">
 
             <div class="tab">
-                <button class="tablinks" @click="openTabs(event, 'RegistrationReview')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Registration Review</button>
-                <button class="tablinks" @click="openTabs(event, 'ActiveBooking')" style="width:33.3%">Active Booking</button>
-                <button class="tablinks" @click="openTabs(event, 'BookingHistory')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking History</button>
+                <button class="tablinks" :class="{ active: currentTab === 'RegistrationReview' }" @click="changeTab('RegistrationReview')" style="width:33.3%;border-radius: 20px 0px 0px 0px">Registration Review</button>
+                <button class="tablinks" :class="{ active: currentTab === 'ActiveBooking' }" @click="changeTab('ActiveBooking')" style="width:33.3%">Active Booking</button>
+                <button class="tablinks" :class="{ active: currentTab === 'BookingHistory' }" @click="changeTab('BookingHistory')" style="width:33.4%;border-radius: 0px 20px 0px 0px">Booking History</button>
             </div>
 
             <!-- Tab content -->
-            <div id="RegistrationReview" class="tabcontent">
+            <div v-show="currentTab === 'RegistrationReview'" class="tabcontent">
                 <div class="bookingItem">
                     <div class="orderNum">Account#CV0325</div>
                     <div class="marketStall">Surry Hills Market, Stall #62</div>
@@ -47,7 +47,7 @@
 
             </div>
 
-            <div id="ActiveBooking" class="tabcontent">
+            <div v-show="currentTab === 'ActiveBooking'" class="tabcontent">
                 <div class="bookingItem">
                     <div class="orderNum">Order#CV0325, Account#CV0325</div>
                     <div class="marketStall">Surry Hills Market, Stall #62</div>
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div id="BookingHistory" class="tabcontent" style="display: none">
+            <div v-show="currentTab === 'BookingHistory'" class="tabcontent" style="display: none">
                 <div class="bookingHistoryItem">
                     <div class="orderNum">Order#CV0325, Account#CV0325</div>
                     <div class="marketStall">Surry Hills Market, Stall #62</div>
@@ -73,7 +73,7 @@
 
 
         </div>
-        <div class="blackLayer" id="layer"></div>
+<!--        <div class="blackLayer" id="layer"></div>-->
         <div class="review-popup" id="reForm">
             <button type="button" class="btn cancel" onclick="closeREForm()">x</button>
             <form action="#" class="form-container">
@@ -115,27 +115,14 @@
         el: '#vueApp',
         data: {
             welcome:'',
-            isReviewVisible: false,
-            isLayerVisible: false,
-            isApproveVisible: true,
-            isDenyVisible: true
+            currentTab: 'RegistrationReview'
         },
         methods: {
-            openTabs: function(event, tabName) {
-                var i, tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-                document.getElementById(tabName).style.display = "block";
-                event.currentTarget.className += " active";
+            changeTab(tabName) {
+                this.currentTab = tabName;
             },
             welcomeMsg(){
-                axios.get('/api/users/hello') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
                     .then(response => {
                         this.welcome = response.data;
                     })

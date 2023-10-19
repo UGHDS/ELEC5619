@@ -17,7 +17,7 @@
 
 <!--这部分是你要写的部分-->
 <div id="app">
-    <span class="userHomeTitle"><a href="/marketList" class="backBtn"><</a>venueName</span>
+    <span class="userHomeTitle"><a href="/marketList" class="backBtn"><</a>{{marketInfo.name}}</span>
     <div class="frameContainer">
 
         <div class="tab">
@@ -28,31 +28,28 @@
 
         <!-- Tab content -->
         <div v-show="currentTab === 'MarketInformation'"  class="tabcontent">
-            <div class="venueDescription">description</div>
-            <div class="venueAddress">Address: street, state, suburb</div>
-            <div class="openHour">Open Hours: openHour</div>
-            <div class="venuePrice">Estimated Stall Fee: $70</div>
-            <div class="stallNumber">Total stall: stall number</div>
+            <div class="venueDescription">{{marketInfo.description}}</div>
+            <div class="venueAddress">{{marketInfo.address}}</div>
+<!--            <div class="openHour">Open Hours: openHour</div>-->
+            <div class="venuePrice">Estimated Stall Fee: ${{marketInfo.stall_price}}</div>
+            <div class="stallNumber">Total stall: {{marketInfo.stall}}</div>
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
             <div class="photoVenue" style='background-image: url("../image/market1.jpg")'></div>
+<!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
         </div>
 
         <div v-show="currentTab === 'StallBooking'"  class="tabcontent" >
             <div class="selectorDate">Selected a date:
-                <select v-model="selectedOptionDate">
-                    <option v-for="option in optionsDate" :value="option.value">
-                        {{ option.text }}
-                    </option>
+                <select v-model="selectedOptionDate.value">
+                    <option v-for="option in optionsDate" :value="option.value">{{ option.text }}</option>
                 </select>
             </div>
 
             <div class="selectorStall">Selected a stall:
-                <select v-model="selectedOptionStall">
-                    <option v-for="option in optionsStall" :value="option.value">
-                        {{ option.text }}
-                    </option>
+                <select v-model="selectedOptionStall.value">
+                    <option v-for="option in optionsStall" :value="option.value">{{ option.text }}</option>
                 </select>
             </div>
 
@@ -82,10 +79,10 @@
                 </tr>
                 <tr>
                     <td>1</td>
-                    <td>01</td>
-                    <td>Fairfield Markets</td>
-                    <td>09/09/2023</td>
-                    <td>$70</td>
+                    <td>{{ selectedOptionStall.text }}</td>
+                    <td>{{ marketInfo.name }}</td>
+                    <td>{{ selectedOptionDate.text }}</td>
+                    <td>${{ selectedStallPrice }}</td>
                 </tr>
             </table>
 
@@ -125,14 +122,14 @@
                     <td><input type="checkbox" @change="updateAdditionalFees" checked disabled></td>
                     <td>1</td>
                     <td>Basic stall booking fee</td>
-                    <td>$70</td>
+                    <td>${{ selectedStallPrice }}</td>
                     <td rowspan="2" class="totalPrice">${{ totalPrice }}</td>
                 </tr>
                 <tr>
                     <td><input type="checkbox" @change="updateAdditionalFees"></td>
                     <td>1</td>
                     <td>Basic stall facilities rent fee</td>
-                    <td>$10</td>
+                    <td>$50</td>
                 </tr>
             </table>
 
@@ -169,35 +166,61 @@
         el: '#app',
         data: {
             currentTab: 'MarketInformation',
+            marketInfo: '',
+            optionsStall: [],
             // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
             // userType: localStorage.getItem('userType'),
-            selectedOptionDate: '',  // This will hold the selected option value
+            selectedOptionDate: {
+                text: '',  // Default initial value
+                value: ''
+            },
+            selectedOptionStall: {
+                text: '',  // Default initial value
+                value: ''
+            },
             optionsDate: [
                 { value: 'date1', text: 'date1' },
                 { value: 'date2', text: 'date2' },
                 { value: 'date3', text: 'date3' }
             ],
-            selectedOptionStall: '',  // This will hold the selected option value
-            optionsStall: [
-                { value: 'stall1', text: 'stall1' },
-                { value: 'stall2', text: 'stall2' },
-                { value: 'stall3', text: 'stall3' }
-            ],
             showLayer: false,
             showBookingForm: false,
             showPaymentForm: false,
             additionalFees: 0,
-            baseFee: 70,
-            facilityFee: 10,
+            facilityFee: 50,
         },
         computed: {
+            baseFee() {
+                return this.selectedStallPrice;
+            },
             totalPrice: function() {
                 return this.baseFee + this.additionalFees;
+            },
+            selectedStallPrice() {
+                if (this.marketInfo.stalls) {
+                    const selectedStall = this.marketInfo.stalls.find(stall => stall.id === this.selectedOptionStall.value);
+                    return selectedStall ? selectedStall.price : 0;
+                }
+                return 0;
             }
         },
         methods: {
             changeTab(tabName) {
                 this.currentTab = tabName;
+            },
+            fetchMarketData(marketId) {
+                axios.get(`/api/venues/venue?venueID=${marketId}`)
+                    .then(response => {
+                        // 使用响应数据来更新Vue实例的数据
+                        this.marketInfo = response.data;
+                        this.optionsStall = this.marketInfo.stalls.map(stall => ({
+                            value: stall.id,
+                            text: stall.stallId
+                        }));
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                    });
             },
             openBookingForm: function() {
                 this.showBookingForm = true;
@@ -230,7 +253,25 @@
             //     window.location.href = "/login";
             // }
         },
+        watch: {
+            'selectedOptionStall.value': function(newVal) {
+                const selected = this.optionsStall.find(option => option.value === newVal);
+                if (selected) {
+                    this.selectedOptionStall.text = selected.text;
+                }
+            },
+            'selectedOptionDate.value': function(newVal) {
+                const selected = this.optionsDate.find(option => option.value === newVal);
+                if (selected) {
+                    this.selectedOptionDate.text = selected.text;
+                }
+            }
+        },
         mounted() {
+            let params = new URLSearchParams(window.location.search);
+            let marketId = params.get('id');
+
+            this.fetchMarketData(marketId);
         }
     });
 
