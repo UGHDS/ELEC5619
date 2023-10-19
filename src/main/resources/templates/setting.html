@@ -27,10 +27,10 @@
             <form action="#" class="setting-form">
                 <!--    need to modify-->
                 <label>First Name</label>
-                <input type="text" placeholder="first name" name="firstName" value="{{userInfo.first_name}}" required>
+                <input type="text" placeholder="first name" name="firstName" :value="userInfo.first_name" required>
 
                 <label style="margin-left: 25px">Last Name</label>
-                <input type="text" placeholder="{{userInfo.last_name}}" name="lastName" required>
+                <input type="text" placeholder="last name" name="lastName" :value="userInfo.last_name" required>
 
                 <label>Business Name</label>
                 <input type="text" placeholder="Enter your business name, optional" name="businessName">
@@ -39,10 +39,10 @@
                 <input type="text" placeholder="Enter your ABN number, optional" name="abn">
 
                 <label>Phone number</label>
-                <input type="text" placeholder="phone number" name="phoneNum" required>
+                <input type="text" placeholder="phone number" name="phoneNum" :value="userInfo.phone" required>
 
                 <label>Email</label>
-                <input type="text" placeholder="email address" name="email" required>
+                <input type="text" placeholder="email address" name="email" :value="userInfo.userEmail" required>
 
                 <!--        <label><b>Confirmed Email</b></label>-->
                 <!--        <input type="text" placeholder="Confirm your email address" name="email2" required>-->
@@ -58,9 +58,6 @@
         </div>
         <div class="pswForm-setting" v-show="pswForm">
             <form action="#" class="psw-form">
-                <label><b>Old Password</b></label>
-                <input type="password" placeholder="Enter your old password" name="oldPsw" required>
-
                 <label><b>New Password</b></label>
                 <input type="password" placeholder="Enter your new password" name="psw" onChange="onChange()" required>
 
