@@ -44,7 +44,6 @@
     <button class="signupSH" @click="openSHForm">Register as STALL HOLDER</button>
     <button class="signupMO" @click="openMOForm">Register as MARKET ORGANIZER</button>
 
-    <div class="blackLayer" id="layer"></div>
     <div class="SHform-popup" v-show="showSHForm">
         <button type="button" class="btn cancel" @click="closeSHForm">x</button>
         <form action="/api/users/register" method="post" class="form-container">
