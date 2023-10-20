@@ -78,14 +78,14 @@ class UserControllerTest {
     void getOwners() throws Exception {
         // Given
         User userExample = new User();
-        userExample.setType("organiser");
+        userExample.setType("owner");
 
-        List<User> organisers = Arrays.asList(
+        List<User> owners = Arrays.asList(
                 new User(),
                 new User()
         );
 
-        when(userRepository.findAll(any(Example.class))).thenReturn(organisers);
+        when(userRepository.findAll(any(Example.class))).thenReturn(owners);
 
         mockMvc.perform(get("/api/users/owners"))
                 .andExpect(status().isOk())

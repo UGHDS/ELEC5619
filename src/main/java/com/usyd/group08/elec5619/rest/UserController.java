@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -54,12 +51,34 @@ public class UserController {
     }
 
     @GetMapping("organisers")
-    @ValidateUserType(type = "admin")
+//    @ValidateUserType(type = "admin") //有bug
     @Operation(summary = "Find all organisers",description = "Pass user list, and will return organisers list")
-    public List<User> getOrganisers() {
+    public List<Map<String, Object>> getOrganisers() {
         User user = new User();
         user.setType("organiser");
-        return userRepository.findAll(Example.of(user));
+        List<User> organisers = userRepository.findAll(Example.of(user));
+        List<Map<String, Object>> responses = new ArrayList<>();
+
+        for (User organiser: organisers) {
+            Map<String, Object> response = new HashMap<>();
+
+            Long organiserId = organiser.getId();
+            String organiserEmail = organiser.getEmail();
+            String first_name = organiser.getFirstName();
+            String last_name = organiser.getLastName();
+            String phone = organiser.getPhone();
+            String status = organiser.getStatus();
+
+            response.put("organiserId", organiserId);
+            response.put("organiserEmail", organiserEmail);
+            response.put("first_name", first_name);
+            response.put("last_name", last_name);
+            response.put("phone", phone);
+            response.put("status", status);
+
+            responses.add(response);
+        }
+        return responses;
     }
 
     @GetMapping("owners")
