@@ -29,7 +29,7 @@
             <div class="marketItemDiv">
                 <div class="marketListItem" v-for="market in markets" :key="market.id" @click="goToMarketInfo(market.id)">
                     <div class="marketListName">{{ market.name }}</div>
-                    <div class="marketListSuburb">{{ market.suburb }}</div>
+                    <div class="marketListSuburb">Suburb: {{ market.suburb }}</div>
                     <div class="marketListAddress">{{ market.address }}</div>
                     <div class="marketListStall">Total stall: {{ market.stall }}</div>
                     <img class="marketListImage" src="../image/blacktownImg.png" :alt="market.name">
