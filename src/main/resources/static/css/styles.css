@@ -1345,3 +1345,57 @@ body {
 .paymentContainer button:hover {
     background-color: gray;
 }
+
+.stallForm-setting{
+    width:90%;
+    height:80%;
+    left:5%;
+    top:10%;
+    position: absolute;
+    border: 3px red;
+}
+.stall-form {
+    top:20%;
+    left: 0%;
+    width:40%;
+    position: absolute;
+}
+
+/* Full-width input fields */
+.stall-form label{
+    font-weight: 500;
+    margin-right: 3px;
+
+}
+.stall-form input[type=text] {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0 15px 0;
+    border: none;
+    background: rgba(233,239,255,0.7);
+}
+
+
+/* When the inputs get focus, do something */
+.stall-form input[type=text]:focus, .setting-form input[type=password]:focus {
+    background-color: rgba(233,239,255,1);
+    outline: none;
+}
+
+.confirmAddStall{
+    border:none;
+    background-color: #9BB692;
+    color: white;
+    position: absolute;
+    top:100%;
+    right:38%;
+    width:20%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.confirmAddStall:hover{
+    background-color: darkgreen;
+    color:white;
+}

@@ -73,7 +73,18 @@
         <div v-show="currentTab === 'StallInformation'" class="tabcontent" style="display: none; font-size: 18px">
             <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>
             <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">
+            <div class="stallForm-setting" >
+                <form action="#" class="stall-form">
+                    <h5>Add a stall</h5>
+                    <label><b>Stall ID</b></label>
+                    <input type="text" placeholder="Enter the id for this stall" name="stallID"  required>
 
+                    <label><b>Stall Price</b></label>
+                    <input type="text" placeholder="Enter the price for this stall" name="stallPrice" required>
+
+                    <button class="confirmAddStall" action="">Add</button>
+                </form>
+            </div>
 <!--            <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
 <!--            <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
 <!--            <div id="imageContainer2" class="photoDiv2">-->
