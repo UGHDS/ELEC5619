@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+
 import java.util.*;
 
 @Controller
@@ -17,6 +18,9 @@ public class LoginController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    HttpSession httpSession;
+
     @GetMapping("/login")
     public String index(Model model) {
         return "login";
@@ -24,7 +28,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Map<String, Object> login(@RequestParam String email, @RequestParam String password, Model model, HttpSession httpSession) {
+    public Map<String, Object> login(@RequestParam String email, @RequestParam String password, Model model) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
@@ -51,14 +55,16 @@ public class LoginController {
         }
     }
 
+    //仍有bug
     @DeleteMapping("/logout")
     @ResponseBody
-    public Map<String, Object> logout(Model model, HttpSession httpSession) {
+    public Map<String, Object> logout(Model model) {
         Map<String, Object> response = new HashMap<>();
-        model.addAttribute("currentUser", null);
+        model.asMap().remove("currentUser");
 
-        // 使用HttpSession来设置属性
-        httpSession.setAttribute("currentUser", null);
+        // Remove 'currentUser' from the HttpSession
+        httpSession.removeAttribute("currentUser");
+
 //            httpSession.invalidate();
         response.put("msg", "login out success");
         response.put("code", 200);
