@@ -23,7 +23,7 @@
         <div class="tab">
             <button class="tablinks" :class="{ active: currentTab === 'VenueInformation' }" @click="changeTab('VenueInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>
             <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>
-            <button class="tablinks" :class="{ active: currentTab === 'StallInformation' }" @click="changeTab('StallInformation')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Stall Information</button>
+            <button class="tablinks" :class="{ active: currentTab === 'StallInformation' }" @click="changeTab('StallInformation')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Stall Management</button>
         </div>
 
         <!-- Tab content -->
@@ -73,12 +73,13 @@
         <div v-show="currentTab === 'StallInformation'" class="tabcontent" style="display: none; font-size: 18px">
             <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>
             <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">
-            <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>
-            <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>
-            <div id="imageContainer2" class="photoDiv2">
-                <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">
-                <button id="deleteButton" class="delete-button2" style="display: none;">X</button>
-            </div>
+
+<!--            <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
+<!--            <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
+<!--            <div id="imageContainer2" class="photoDiv2">-->
+<!--                <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">-->
+<!--                <button id="deleteButton" class="delete-button2" style="display: none;">X</button>-->
+<!--            </div>-->
             <button type="submit" class="updateButton" onclick="">UPDATE</button>
         </div>
 

@@ -209,7 +209,7 @@
                 this.currentTab = tabName;
             },
             fetchMarketData(marketId) {
-                axios.get(`/api/venues/venue?venueID=${marketId}`)
+                axios.get(`/api/venues/venueByVenueId?venueID=${marketId}`)
                     .then(response => {
                         // 使用响应数据来更新Vue实例的数据
                         this.marketInfo = response.data;

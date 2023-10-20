@@ -379,7 +379,7 @@ body {
     color: black;
     position: absolute;
     bottom:5%;
-    left:52%;
+    left:47%;
     width:8%;
     height: 40px;
     border-radius: 4px;
@@ -527,6 +527,7 @@ body {
 .orderNum{
     font-size: 15px;
     font-weight: lighter;
+    margin-left: 20px;
     /*position: absolute;*/
     color:black;
     top:5%;
@@ -535,6 +536,7 @@ body {
 .marketStall{
     font-size: 20px;
     font-weight: 600;
+    margin-left: 20px;
     /*position: absolute;*/
     color: black;
     top:25%;
@@ -543,6 +545,7 @@ body {
 .dateAddress{
     font-size: 18px;
     font-weight: 500;
+    margin-left: 20px;
     /*position: absolute;*/
     color: black;
     top:50%;
@@ -553,16 +556,15 @@ body {
     font-weight: 600;
     /*position: absolute;*/
     color: black;
-    top:30%;
-    left:50%;
+    margin-left: 670px;
+    margin-top: -50px;
 }
 .userline{
     height:2px;
     width:100%;
     background-color: #BBBBBB;
     /*position: absolute;*/
-    left:0%;
-    bottom:0%;
+    margin-top: 10px;
 }
 
 .viewBtn{
@@ -570,9 +572,6 @@ body {
     background-color: #9BB692;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    left:68%;
-    width:12%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -588,9 +587,8 @@ body {
     background-color: #A95B5B;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    right:5%;
-    width:12%;
+    margin-left: 1100px;
+    margin-top: -40px;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -614,8 +612,8 @@ body {
     font-weight: 600;
     /*position: absolute;*/
     color: black;
-    top:30%;
-    left:55%;
+    margin-left: 670px;
+    margin-top: -60px;
 }
 
 
@@ -624,9 +622,9 @@ body {
     background-color: #9BB692;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    right:5%;
-    width:12%;
+    margin-left: 900px;
+    margin-top: -35px;
+    width:15%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -763,10 +761,10 @@ body {
 .reviewM-popup .cancel {
     color: black;
     font-size: 50px;
-    background-color: white;
+
     width: 30px;
     right: 3%;
-    top: 0%;
+    top: -10%;
     position: absolute;
     border: none;
 }
