@@ -9,7 +9,6 @@
     <title>Userhome Organizer</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
-
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
@@ -32,10 +31,10 @@
 
             <form action="#" class="marketForm">
                 <label>Venue Name:</label>
-                <input type="text" value="Fairfield Markets" name="venueName" style="width:87.8%; margin-left: 10px" required>
+                <input type="text" value="Fairfield Markets" name="venueName" id="venueName" style="width:87.8%; margin-left: 10px" required />
 
                 <label>Address: </label>
-                <input type="text" value="443 Smithfield Rd, Prairiewood NSW 2176" name="addressM" style="width:91.55%; margin-left: 10px" required>
+                <input type="text" id="addressInput"  placeholder="Enter an address" name="addressM" />
 
                 <label>Start Date:</label>
                 <input type="date" id="datePickerS" name="datePickerS" value="2023-10-10" style="width:12%; margin-left: 10px" required>
@@ -57,11 +56,11 @@
                 <input type="time" id="timePickerE" name="timePickerE" value="16:00" style="width:12%; margin-left: 10px" required>
 
                 <br><label>Brief introduction of the Venue:</label>
-                <textarea name="venueInfo"  style="height:120px;white-space: pre-wrap;" required>A Favourite Community Attraction since the Seventies. Fairfield Showground is renowned as the venue of the Fairfield Markets which have been attracting many thousands of shoppers each weekend since the Seventies. Our markets are the largest in Sydney's West. Friendly Family Fun is the motto of these markets and the fun is guaranteed. Every Saturday from 9AM to 4PM up to 600 undercover stalls are filled with everything from childrens' toys to clothes, sporting gear to jewellery, household items to car accessories, workshop tools to pool products and grocery items to fresh fruit and vege's. While the adults look for the bargains the kids can use up their energy on the jumping castle, carnival rides, merry go round or pony rides. And, when it is time for a relaxing break there are plenty of places to pick up mouth watering kebabs, burgers, Asian delicacies, ice creams, donuts, cold drinks or coffee.
+                <textarea name="venueInfo" id="venueInfo" style="height:120px;white-space: pre-wrap;" required>A Favourite Community Attraction since the Seventies. Fairfield Showground is renowned as the venue of the Fairfield Markets which have been attracting many thousands of shoppers each weekend since the Seventies. Our markets are the largest in Sydney's West. Friendly Family Fun is the motto of these markets and the fun is guaranteed. Every Saturday from 9AM to 4PM up to 600 undercover stalls are filled with everything from childrens' toys to clothes, sporting gear to jewellery, household items to car accessories, workshop tools to pool products and grocery items to fresh fruit and vege's. While the adults look for the bargains the kids can use up their energy on the jumping castle, carnival rides, merry go round or pony rides. And, when it is time for a relaxing break there are plenty of places to pick up mouth watering kebabs, burgers, Asian delicacies, ice creams, donuts, cold drinks or coffee.
                       </textarea>
             </form>
 
-            <button type="submit" class="updateButton" onclick="">UPDATE</button>
+            <button type="button" class="updateButton" onclick="submitVenue()">UPDATE</button>
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
@@ -192,6 +191,94 @@
         }
     });
 </script>
+<script>
+    var venue = {};
+    function initAutocomplete() {
+        const input = document.getElementById('addressInput');
+        const autocomplete = new google.maps.places.Autocomplete(input);
 
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            const latitude = place.geometry.location.lat();
+            const longitude = place.geometry.location.lng();
+
+            console.log('Latitude:', latitude);
+            console.log('Longitude:', longitude);
+            venue.latitude = latitude;
+            venue.longitude = longitude;
+            getPlaceDetails(place.place_id);
+        });
+    }
+
+    function getPlaceDetails(placeId) {
+        var input = document.getElementById('addressInput');
+        var service = new google.maps.places.PlacesService(input);
+
+        service.getDetails({
+            placeId: placeId
+        }, function(place, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                const address = extractAddressDetails(place);
+                venue.state = address.state;
+                venue.street = address.street;
+                venue.suburb = address.suburb;
+            }
+        });
+    }
+
+    function extractAddressDetails(place) {
+        var state = "";
+        var street = "";
+        var suburb = "";
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            var component = place.address_components[i];
+            var types = component.types;
+
+            if (types.indexOf('administrative_area_level_1') !== -1) {
+                state = component.long_name;
+            }
+
+            if (types.indexOf('street_number') !== -1) {
+                street = component.long_name;
+            }
+
+            if (types.indexOf('route') !== -1) {
+                street += ' ' + component.long_name;
+            }
+
+            if (types.indexOf('locality') !== -1 ||
+                types.indexOf('sublocality') !== -1 ||
+                types.indexOf('sublocality_level_1') !== -1) {
+                suburb = component.long_name;
+            }
+        }
+
+        return {
+            state: state,
+            street: street.trim(),  // Trim to ensure no leading/trailing spaces
+            suburb: suburb
+        };
+    }
+
+    function submitVenue(){
+        venue.venueName = $('#venueName').val();
+        venue.description = $('#venueInfo').val();
+        axios.post('/api/venues', venue) // Make sure the URL is correct
+            .then(response => {
+                console.log(response);
+                alert("Venue added to DB.");
+            })
+            .catch(error => {
+                alert("Venue update failed.");
+            });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-QTHpG5rvbPs5uE2QE7ucfGeXbU1g_hE&libraries=places&callback=initAutocomplete"></script>
 </body>
 </html>

@@ -32,6 +32,7 @@ public class Venue {
     private String street;
     private String suburb;
     private String state;
+    @Column(length = 2000)
     private String description;
     private String picture;
     private double longitude;

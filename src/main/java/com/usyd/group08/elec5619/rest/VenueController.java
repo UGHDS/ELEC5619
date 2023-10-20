@@ -56,6 +56,8 @@ public class VenueController {
             response.put("address", address);
             response.put("stall", stallNum);
             response.put("image", image);
+            response.put("latitude", venue.getLatitude());
+            response.put("longitude", venue.getLongitude());
             responses.add(response);
         }
         return responses;
@@ -120,31 +122,29 @@ public class VenueController {
     @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Find all venues for currentUser", description = "Returns currentUser's venues")
     public List<Map<String, Object>> getVenueByCurrentUser() {
-
         User user = (User) httpSession.getAttribute("currentUser");
-
-        List<Venue> venuesList = user.getVenues();
-
+        List<Venue> venuesList = venueRepository.findAll();
         List<Map<String, Object>> responses = new ArrayList<>();
-
         for (Venue venue: venuesList) {
-            Map<String, Object> response = new HashMap<>();
-            int venueId = venue.getId();
-            String venueName = venue.getVenueName();
-            String street = venue.getStreet();
-            String suburb = venue.getSuburb();
-            String state = venue.getState();
-            String address = street+", "+suburb+" "+state;
-            int stallNum = venue.getStalls().size();
-            String image = venue.getPicture();
+            if(user.getType().equals("admin") || Objects.equals(user.getId(), venue.getUser().getId())){
+                Map<String, Object> response = new HashMap<>();
+                int venueId = venue.getId();
+                String venueName = venue.getVenueName();
+                String street = venue.getStreet();
+                String suburb = venue.getSuburb();
+                String state = venue.getState();
+                String address = street+", "+suburb+" "+state;
+                int stallNum = venue.getStalls().size();
+                String image = venue.getPicture();
 
-            response.put("id", venueId);
-            response.put("name", venueName);
-            response.put("suburb", suburb);
-            response.put("address", address);
-            response.put("stall", stallNum);
-            response.put("image", image);
-            responses.add(response);
+                response.put("id", venueId);
+                response.put("name", venueName);
+                response.put("suburb", suburb);
+                response.put("address", address);
+                response.put("stall", stallNum);
+                response.put("image", image);
+                responses.add(response);
+            }
         }
         return responses;
     }
@@ -159,9 +159,10 @@ public class VenueController {
     @PostMapping
     @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add a new venue", description = "Pass in a venue without venueID")
-    public Venue addVenue(@RequestBody VenueWrapper addVenueWrapper) {
+    public boolean addVenue(@RequestBody VenueWrapper addVenueWrapper) {
         User user = (User) httpSession.getAttribute("currentUser");
         Venue venue = new Venue();
+        venue.setVenueName(addVenueWrapper.getVenueName());
         venue.setState(addVenueWrapper.getState());
         venue.setStreet(addVenueWrapper.getStreet());
         venue.setSuburb(addVenueWrapper.getSuburb());
@@ -169,9 +170,9 @@ public class VenueController {
         venue.setPicture(addVenueWrapper.getPicture());
         venue.setLongitude(addVenueWrapper.getLongitude());
         venue.setLatitude(addVenueWrapper.getLatitude());
-
         venue.setUser(user);
-        return venueRepository.save(venue);
+        venueRepository.save(venue);
+        return true;
     }
 
     /**
@@ -229,6 +230,7 @@ public class VenueController {
     //自制一个只有我需要的  venue信息  的class
     private static class VenueWrapper {
         private int venueId;
+        private String venueName;
         private String street;
         private String suburb;
         private String state;
@@ -299,6 +301,14 @@ public class VenueController {
 
         public void setLatitude(double latitude) {
             this.latitude = latitude;
+        }
+
+        public String getVenueName() {
+            return venueName;
+        }
+
+        public void setVenueName(String venueName) {
+            this.venueName = venueName;
         }
     }
 

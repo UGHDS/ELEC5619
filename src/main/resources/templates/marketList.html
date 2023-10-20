@@ -7,7 +7,7 @@
     <title>Market List</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-QTHpG5rvbPs5uE2QE7ucfGeXbU1g_hE&callback=initMap"></script>
 </head>
 <body>
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
@@ -41,6 +41,7 @@
             <form @submit.prevent="searchMarkets">
                 <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
             </form>
+            <div id="map" style="height: 600px;"></div>
         </div>
     </div>
 </div>
@@ -49,6 +50,20 @@
 
 
 <script>
+    function initMap() {
+
+    }
+
+    function setMapBounds(map, markers) {
+        var bounds = new google.maps.LatLngBounds();
+
+        markers.forEach(function(marker) {
+            bounds.extend(marker.position);
+        });
+
+        map.fitBounds(bounds);
+    }
+
     new Vue({
         el: '#app',
         data: {
@@ -64,6 +79,22 @@
                 axios.get('/api/venues') // Make sure the URL is correct
                     .then(response => {
                         this.markets = response.data;
+                        let marks = [];
+                        let map;
+                        for(let i=0; i<this.markets.length; i++){
+                            if(i===0){
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                    zoom: 20
+                                });
+                            }
+                            marks.push(new google.maps.Marker({
+                                position: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                map: map,
+                                title: this.markets[i].name,
+                            }));
+                        }
+                        setMapBounds(map, marks);
                     })
                     .catch(error => {
                         if (error.response) {
