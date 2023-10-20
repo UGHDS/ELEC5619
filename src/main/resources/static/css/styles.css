@@ -571,6 +571,8 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
+    margin-left: 900px;
+    margin-top: -35px;
     /*position: absolute;*/
     height: 40px;
     border-radius: 4px;
