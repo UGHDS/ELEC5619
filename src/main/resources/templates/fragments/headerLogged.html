@@ -8,9 +8,11 @@
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
+
 </head>
 <style>
     .collapse navbar-collapse{
@@ -33,37 +35,13 @@
 <!--            </span>-->
 <!--        </button>-->
         <div class="collapse navbar-collapse" style="position: absolute;right:5%" id="navbarSupportedContent">
-<!--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link active" aria-current="page" href="#">Home</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="#">Link</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item dropdown">-->
-<!--                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"-->
-<!--                       aria-expanded="false">-->
-<!--                        Dropdown-->
-<!--                    </a>-->
-<!--                    <ul class="dropdown-menu">-->
-<!--                        <li><a class="dropdown-item" href="#">Action</a></li>-->
-<!--                        <li><a class="dropdown-item" href="#">Another action</a></li>-->
-<!--                        <li>-->
-<!--                            <hr class="dropdown-divider">-->
-<!--                        </li>-->
-<!--                        <li><a class="dropdown-item" href="#">Something else here</a></li>-->
-<!--                    </ul>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link disabled">Disabled</a>-->
-<!--                </li>-->
-<!--            </ul>-->
+
             <ul class="nav justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/uhome">HOME</a>
+                    <a class="nav-link" aria-current="page" :href="homeLink">HOME</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/marketList">MARKET LIST</a>
+                    <a class="nav-link" href="/marketList" :href="marketLink">MARKET LIST</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/setting">PROFILE</a>
@@ -78,6 +56,53 @@
 <!--            <div>Hello, <span th:text="${currentUser?.firstName}"></span></div>-->
         </div>
     </div>
+    <script>
+        new Vue({
+            el: '.navbar',  // 使用 '.navbar' 选择器来定位您的导航条元素
+            data: {
+                userType:''  // 这里是示例值，您应该根据实际情况从服务器或其他来源获取它
+            },
+            computed: {
+                homeLink() {
+                    switch (this.userType) {
+                        case 'owner':
+                            return '/uhome';
+                        case 'organiser':
+                            return '/ohome';
+                        case 'admin':
+                            return '/ahome';
+                    }
+                },
+                marketLink() {
+                    switch (this.userType) {
+                        case 'owner':
+                            return '/marketList';
+                        case 'organiser':
+                            return '/marketList';
+                        case 'admin':
+                            return '/marketAdmin';
+                    }
+                }
+            },
+            created() {
+                // 当 Vue 实例被创建后，立即调用此函数
+                this.fetchUserInfo();
+            },
+            methods: {
+                fetchUserInfo() {
+                    axios.get('/api/users/getCurrentUserInfo')
+                        .then(response => {
+                            // 设置 userType 的值
+                            this.userType = response.data.type;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching user info:', error);
+                        });
+                }
+            }
+        });
+    </script>
 </nav>
+
 </body>
 </html>
