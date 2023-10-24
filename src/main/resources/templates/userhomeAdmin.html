@@ -32,17 +32,28 @@
 
             <!-- Tab content -->
             <div v-show="currentTab === 'RegistrationReview'" class="tabcontent">
-                <div class="bookingItem">
-                    <div class="orderNum">Account#CV0325</div>
-                    <div class="marketStall">Surry Hills Market, Stall #62</div>
-                    <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
-                    <button type="button" id="review" class="reviewBtn" @click="openREForm">View Registration Detail</button>
-                    <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>
-                    <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>
-                    <button type="button" id="review2" class="reviewBtn2" @click="openREForm">View Registration Detail</button>
-                    <button type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>
-                    <br><div class="userline"></div>
+                <div class="frame">
+                    <div v-for="organiser in organisers" :key="organiser.organiserId" class="bookingItem">
+                        <div class="orderNum">Account#{{ organiser.organiserEmail }}</div>
+                        <div class="marketStall">{{ organiser.first_name }} {{ organiser.last_name }}</div>
+                        <button v-if="organiser.status === 'active'" type="button" id="review2" class="reviewBtn2" @click="openREOneForm(organiser)">View Registration Detail</button>
+
+                        <template v-if="organiser.status === 'pending'">
+                            <button type="button" id="review" class="reviewBtn" @click="openREOneForm(organiser)">View Registration Detail</button>
+                            <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>
+                            <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>
+                        </template>
+
+                        <button v-if="organiser.status === 'deny'" type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>
+<!--                        <button type="button" id="review" class="reviewBtn" @click="openREOneForm(organiser)">View Registration Detail</button>-->
+<!--                        <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>-->
+<!--                        <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>-->
+<!--                        <button type="button" id="review2" class="reviewBtn2" @click="openREForm">View Registration Detail</button>-->
+<!--                        <button type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>-->
+                        <br><div class="userline"></div>
+                    </div>
                 </div>
+
 
             </div>
 
@@ -52,8 +63,8 @@
                     <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
                     <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
                     <div class="price">${{ booking.totalPrice }}</div>
-                    <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
-                    <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+                    <button type="submit" class="viewBtn" @click="openREForm(booking)">View Order Detail</button>
+                    <button type="submit" class="cancelBtn" @click="cancelBooking(booking.id)">Cancel Order</button>
                     <br><div class="userline"></div>
                 </div>
             </div>
@@ -64,7 +75,7 @@
                     <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
                     <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
                     <div class="priceHistory">${{ booking.totalPrice }}</div>
-                    <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
+                    <button type="submit" class="viewBtn2" @click="openREForm(booking)">View Order Detail</button>
                     <br><div class="userline"></div>
                 </div>
             </div>
@@ -72,38 +83,30 @@
 
 
         </div>
-        <div class="blackLayer" v-show="showFormLayer"></div>
-        <div class="review-popup" v-show="showREForm">
-            <button type="button" class="btn cancel" @click="closeREForm">x</button>
-            <form action="#" class="form-container">
-                <!--    need to modify-->
 
-                <h2 style="text-align: center">Registration Review</h2>
+    </div>
 
-                <label><b>First Name</b></label>
-                <input type="text" placeholder="Enter your first name" name="firstName" required>
+    <div class="blackLayer" v-show="showFormLayer"></div>
 
-                <label style="margin-left: 25px"><b>Last Name</b></label>
-                <input type="text" placeholder="Enter your last name" name="lastName" required>
+    <div class="reviewM-popup" v-show="showReviewForm">
+        <button type="button" class="btn cancel" @click="closeREForm">x</button>
+        <br><span>Order #{{ currentBooking.id }}</span><br>
+        <span>Account#{{ currentBooking.userEmail }}</span><br>
+        <span>Venue name: {{ currentBooking.venueName }}, Stall #{{ currentBooking.stallId }}</span><br>
+        <span>Venue address: {{ currentBooking.address }}</span><br>
+        <span>Booking proceed date: {{ currentBooking.dateSlot }}</span><br>
+        <span>Payment price: ${{ currentBooking.totalPrice }}</span><br>
+        <span>Order placed date: {{ currentBooking.bookingTime }}</span><br>
+        <span>Order status: {{ currentBooking.status }}</span>
+    </div>
 
-                <label><b>Business Name</b></label>
-                <input type="text" placeholder="Enter your business name, optional" name="businessName">
-
-                <label><b>ABN Number</b></label>
-                <input type="text" placeholder="Enter your ABN number, optional" name="abn">
-
-                <label><b>Phone number</b></label>
-                <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-                <label><b>Email</b></label>
-                <input type="text" placeholder="Enter your email address" name="email" required>
-
-                <button type="button" id="approve1" class="approveFormBtn" onclick="approveFormClick()">Approve</button>
-                <button type="button" id="deny3" class="denyFormBtn" onclick="denyFormClick()">Deny</button>
-
-                <!--    need to modify-->
-            </form>
-        </div>
+    <div class="reviewM-popup" v-show="showReviewOneForm">
+        <button type="button" class="btn cancel" @click="closeREOneForm">x</button>
+        <br><span>Account#{{ currentOrganiser.organiserEmail }}</span><br>
+        <span>First Name: {{ currentOrganiser.first_name }}</span><br>
+        <span>Last Name: {{ currentOrganiser.last_name }}</span><br>
+        <span>Phone: {{ currentOrganiser.phone }}</span><br>
+        <span>Account status: {{ currentOrganiser.status }}</span>
     </div>
 
     <!-- Footer -->
@@ -115,9 +118,13 @@
         data: {
             welcome:'',
             currentTab: 'RegistrationReview',
-            showREForm: false,
+            bookings:[],
+            organisers:[],
+            currentBooking: {},
+            currentOrganiser: {},
+            showReviewForm: false,
+            showReviewOneForm: false,
             showFormLayer: false,
-            bookings:[]
         },
         methods: {
             changeTab(tabName) {
@@ -143,12 +150,43 @@
                         console.error("Error fetching data:", error);
                     });
             },
-            openREForm: function() {  // 添加参数
-                this.showREForm = true;
+            getOrganisers() {
+                axios.get('/api/users/organisers') // Make sure the URL is correct
+                    .then(response => {
+                        this.organisers = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching booking data.";
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            cancelBooking(bookingId) {
+                axios.delete(`/api/bookings?bookingId=${bookingId}`)
+                    .then(response => {
+                        // 处理响应，例如重新获取 bookings
+                        this.getBookings();
+                    })
+                    .catch(error => {
+                        this.error = "Error cancelling the booking.";
+                        console.error("Error cancelling booking:", error);
+                    });
+            },
+            openREForm: function(booking) {  // 添加参数
+                this.currentBooking = booking;  // 保存当前的market
+                this.showReviewForm = true;
                 this.showFormLayer = true;
             },
             closeREForm: function() {
-                this.showREForm = false;
+                this.showReviewForm = false;
+                this.showFormLayer = false;
+            },
+            openREOneForm: function(organiser) {  // 添加参数
+                this.currentOrganiser = organiser;  // 保存当前的market
+                this.showReviewOneForm = true;
+                this.showFormLayer = true;
+            },
+            closeREOneForm: function() {
+                this.showReviewOneForm = false;
                 this.showFormLayer = false;
             },
             approveClick: function() {
@@ -187,6 +225,7 @@
         mounted() {
             this.welcomeMsg();
             this.getBookings();
+            this.getOrganisers();
         }
     });
 </script>

@@ -21,9 +21,12 @@
     <div class="frameContainer">
 
         <div class="tab">
-            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>
-            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>
-            <button class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>
+<!--            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>-->
+<!--            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>-->
+<!--            <button class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>-->
+            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" :style="getTabStyle('MarketInformation')">Venue Information</button>
+            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" :style="getTabStyle('PhotoGallery')">Photo Gallery</button>
+            <button v-if="userInfo.type === 'owner'" class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" :style="getTabStyle('StallBooking')">Booking a stall</button>
         </div>
 
         <!-- Tab content -->
@@ -36,7 +39,7 @@
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
-            <div class="photoVenue" style='background-image: url("../image/market1.jpg")'></div>
+            <div class="photoVenue" style='background-image: url("../image/marketTest.jpg")'></div>
 <!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
         </div>
 
@@ -45,6 +48,9 @@
                 <select v-model="selectedOptionDate.value">
                     <option v-for="option in optionsDate" :value="option.value">{{ option.text }}</option>
                 </select>
+
+<!--                <input type="date" v-model="selectedOptionDate.value" id="datePickerS" name="datePickerS" value="2023-11-10" style="width:12%; margin-left: 10px" required>-->
+
             </div>
 
             <div class="selectorStall">Selected a stall:
@@ -88,18 +94,18 @@
 
             <h3>Stallholder contact information</h3>
             <label class="label" for="name">Name:</label>
-            <input type="text" id="name" value="Stephen Strange">
+            <input type="text" id="name" :value="userInfo.first_name+' '+userInfo.last_name">
 
             <label class="label" for="email">Email:</label>
-            <input type="text" id="email" value="asdf@gmail.com">
+            <input type="text" id="email" :value="userInfo.userEmail">
 
             <label class="label" for="phone">Phone number:</label>
-            <input type="text" id="phone" value="0498682233">
+            <input type="text" id="phone" :value="userInfo.phone">
 
             <label class="label" for="description">Description on the product you will be selling (max 300 words)</label>
-            <input type="text" id="description">
+            <input type="text" id="description" required>
 
-            <button type="button" class="btn" @click="openPaymentForm">Book Now</button>
+            <button type="submit" class="btn" @click="openPaymentForm">Book Now</button>
 
         </form>
     </div>
@@ -137,16 +143,16 @@
 
             <h3>Card details</h3>
             <label class="label" for="card-number">Card number</label>
-            <input type="text" id="card-number" placeholder="Card number" style="width: 60%;">
+            <input type="text" id="card-number" placeholder="Card number" style="width: 60%;" required>
 
             <br><label class="label" for="expiry">Expiry Date</label>
-            <input type="text" id="expiry" placeholder="Month/Year" style="width: 20%;">
+            <input type="text" id="expiry" placeholder="Month/Year" style="width: 20%;" required>
 
             <label class="label" for="cvv" style="margin-left: 20px;">CVV</label>
-            <input type="text" id="cvv" placeholder="3 digital #" style="width: 20%;">
+            <input type="text" id="cvv" placeholder="3 digital #" style="width: 20%;" required>
 
             <br><label class="label" for="name-card">Name on Card</label>
-            <input type="text" id="name-card" placeholder="Full name" style="width: 60%;">
+            <input type="text" id="name-card" placeholder="Full name" style="width: 60%;" required>
 
 
             <br><button type="submit" class="btn" @click="closePaymentForm">Place Order</button>
@@ -167,6 +173,8 @@
         data: {
             currentTab: 'MarketInformation',
             marketInfo: '',
+            venueInfo:'',
+            userInfo:'',
             optionsStall: [],
             // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
             // userType: localStorage.getItem('userType'),
@@ -205,8 +213,34 @@
             }
         },
         methods: {
+            getUserInfo(){
+                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                    .then(response => {
+                        this.userInfo = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching welcome message.";
+                        console.error("Error fetching welcome message:", error);
+                    });
+            },
             changeTab(tabName) {
                 this.currentTab = tabName;
+            },
+            getTabStyle(tabName) {
+                let baseStyle = 'width: 33.328%';
+                if (this.userInfo.type !== 'owner') {
+                    baseStyle = 'width: 50%';
+                }
+
+                if (tabName === 'MarketInformation') {
+                    return `${baseStyle}; border-radius: 20px 0px 0px 0px`;
+                } else if (this.userInfo.type === 'owner' && tabName === 'StallBooking') {
+                    return `${baseStyle}; border-radius: 0px 20px 0px 0px`;
+                } else if (this.userInfo.type !== 'owner' && tabName === 'PhotoGallery') {
+                    return `${baseStyle}; border-radius: 0px 20px 0px 0px`;
+                } else {
+                    return baseStyle;
+                }
             },
             fetchMarketData(marketId) {
                 axios.get(`/api/venues/venueByVenueId?venueID=${marketId}`)
@@ -217,6 +251,28 @@
                             value: stall.id,
                             text: stall.stallId
                         }));
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            fetchMarketData2(marketId) {
+                axios.get(`/api/venueDate?venueId=${marketId}`)
+                    .then(response => {
+                        // Use the response data to update the Vue instance's data
+                        this.venueInfo = response.data;
+
+                        // Populate optionsDate with the dateSlot values
+                        this.optionsDate = this.venueInfo.map(item => ({
+                            value: item.dateSlot,
+                            text: item.dateSlot
+                        }));
+
+                        // Set the default selected date to the first available date
+                        if (this.optionsDate.length > 0) {
+                            this.selectedOptionDate.value = this.optionsDate[0].value;
+                            this.selectedOptionDate.text = this.optionsDate[0].text;
+                        }
                     })
                     .catch(error => {
                         console.error("Error fetching data:", error);
@@ -239,6 +295,21 @@
                 this.showPaymentForm = false;
             },
             closePaymentForm: function() {
+                const stallId = this.selectedOptionStall.value; // Assuming this is the stall ID
+                axios.post(`/api/bookings?stallDateId=${stallId}`, {
+                    // Your payload here. For example:
+                    // name: this.userInfo.first_name,
+                    // email: this.userInfo.userEmail,
+                    // ...other data
+                })
+                    .then(response => {
+                        // Handle success
+                        console.log("Booking successful:", response);
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error("Booking failed:", error);
+                    });
                 this.showPaymentForm = false;
                 this.showLayer = false;
             },
@@ -265,13 +336,17 @@
                 if (selected) {
                     this.selectedOptionDate.text = selected.text;
                 }
+                // this.selectedOptionDate.text = newVal;
             }
         },
         mounted() {
+            this.getUserInfo();
             let params = new URLSearchParams(window.location.search);
             let marketId = params.get('id');
 
             this.fetchMarketData(marketId);
+            this.fetchMarketData2(marketId);
+
         }
     });
 

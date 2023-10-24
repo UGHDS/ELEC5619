@@ -23,11 +23,13 @@
 
         <!-- Tab content -->
         <div v-show="currentTab === 'listView'" class="tabcontent">
-            <form @submit.prevent="searchMarkets">
-                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
-            </form>
+<!--            <form @submit.prevent="searchMarkets">-->
+
+            <!--            </form>-->
+
             <div class="marketItemDiv">
-                <div class="marketListItem" v-for="market in markets" :key="market.id" @click="goToMarketInfo(market.id)">
+
+                <div class="marketListItem" v-for="market in filteredMarkets" :key="market.id" @click="goToMarketInfo(market.id)">
                     <div class="marketListName">{{ market.name }}</div>
                     <div class="marketListSuburb">Suburb: {{ market.suburb }}</div>
                     <div class="marketListAddress">{{ market.address }}</div>
@@ -35,13 +37,16 @@
                     <img class="marketListImage" src="../image/blacktownImg.png" :alt="market.name">
                 </div>
             </div>
+            <label>
+                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
+            </label>
         </div>
 
         <div v-show="currentTab === 'mapView'" class="tabcontent">
-            <form @submit.prevent="searchMarkets">
-                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
-            </form>
-            <div id="map" style="height: 600px;"></div>
+<!--            <form @submit.prevent="searchMarkets">-->
+<!--                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">-->
+<!--            </form>-->
+            <div id="map" style="height: 420px;"></div>
         </div>
     </div>
 </div>
@@ -70,6 +75,14 @@
             currentTab: 'listView',
             searchQuery: '',
             markets: []
+        },
+        computed: {
+            filteredMarkets() {
+                if (!this.searchQuery) {
+                    return this.markets;
+                }
+                return this.markets.filter(market => market.suburb.toLowerCase().includes(this.searchQuery.toLowerCase()));
+            }
         },
         methods: {
             changeTab(tabName) {

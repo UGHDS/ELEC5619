@@ -69,7 +69,7 @@
         </div>
 
         <button class="pswChangeBtn" @click="openPswForm">Change Password</button>
-        <button type="submit" class="updateButton" onclick="">UPDATE</button>
+        <button type="submit" class="updateButton" @click="updateUserInformation">UPDATE</button>
     </div>
 </div>
 
@@ -95,11 +95,63 @@
                         console.error("Error fetching welcome message:", error);
                     });
             },
+            updateUserInformation: function() {
+                // axios.put('/api/users', {
+                //     id: this.userInfo.id,
+                //     firstName: this.userInfo.firstName,
+                //     lastName: this.userInfo.lastName,
+                //     email: this.userInfo.email,
+                //     phone: this.userInfo.phone
+                // })
+                //     .then(response => {
+                //         // Handle success
+                //         alert('User information updated successfully');
+                //     })
+                //     .catch(error => {
+                //         // Handle error
+                //         console.error('Error updating user information:', error);
+                //     });
+                const data = {
+                    id: this.userInfo.id,
+                    firstName: this.userInfo.firstName,
+                    lastName: this.userInfo.lastName,
+                    email: this.userInfo.email,
+                    phone: this.userInfo.phone
+                };
+                console.log("Data being sent: ", data);  // Debugging line
+
+                axios.put('/api/users', data)
+                    .then(response => {
+                        alert('User information updated successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error updating user information:', error);
+                    });
+            },
             openPswForm: function() {
                 this.pswForm = true;
 
             },
             closePswForm: function() {
+                const newPassword = document.querySelector('input[name=psw]').value;
+                const confirmPassword = document.querySelector('input[name=psw2]').value;
+
+                if (newPassword === confirmPassword) {
+                    axios.put('/api/users', {
+                        id: this.userInfo.id,
+                        password: newPassword // Make sure to encrypt this before sending
+                    })
+                        .then(response => {
+                            // Handle success
+                            alert('Password updated successfully');
+                        })
+                        .catch(error => {
+                            // Handle error
+                            console.error('Error updating password:', error);
+                        });
+                } else {
+                    alert('Confirm password is not the same as the new password');
+                }
                 this.pswForm = false;
             }
         },
