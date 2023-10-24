@@ -40,86 +40,84 @@
     <span class="welcomeM">Confused about booking a market stall? Our website provides the simple and secure way to help you book a market stall. Besides that, the market organizers can also efficiently manage and optimize stall arrangemens with our website.</span>
     <span class="welcomeM2">Join us today to experience the simplest way to book and organize market stalls!</span>
 </div>
-<button class="signupSH" onclick="openSHForm()">Register as STALL HOLDER</button>
-<button class="signupMO" onclick="openMOForm()">Register as MARKET ORGANIZER</button>
+<div id="app">
+    <button class="signupSH" @click="openSHForm">Register as STALL HOLDER</button>
+    <button class="signupMO" @click="openMOForm">Register as MARKET ORGANIZER</button>
 
-<div class="blackLayer" id="layer"></div>
-<div class="SHform-popup" id="SHForm">
-    <button type="button" class="btn cancel" onclick="closeSHForm()">x</button>
-    <form action="#" class="form-container">
-        <!--    need to modify-->
+    <div class="SHform-popup" v-show="showSHForm">
+        <button type="button" class="btn cancel" @click="closeSHForm">x</button>
+        <form action="/api/users/register" method="post" class="form-container">
+            <h2 style="text-align: center">Registration for Stall Holder</h2>
 
-        <h2 style="text-align: center">Registration for Stall Holder</h2>
+            <label><b>First Name</b></label>
+            <input type="text" placeholder="Enter your first name" name="firstName" required>
 
-        <label><b>First Name</b></label>
-        <input type="text" placeholder="Enter your first name" name="firstName" required>
+            <label style="margin-left: 25px"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter your last name" name="lastName" required>
 
-        <label style="margin-left: 25px"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter your last name" name="lastName" required>
+            <label><b>Business Name</b></label>
+            <input type="text" placeholder="Enter your business name, optional" name="businessName">
 
-        <label><b>Business Name</b></label>
-        <input type="text" placeholder="Enter your business name, optional" name="businessName">
+            <label><b>ABN Number</b></label>
+            <input type="text" placeholder="Enter your ABN number, optional" name="abn">
 
-        <label><b>ABN Number</b></label>
-        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+            <label><b>Phone number</b></label>
+            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
 
-        <label><b>Phone number</b></label>
-        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+            <label><b>Email</b></label>
+            <input type="text" placeholder="Enter your email address" name="email" required>
 
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter your email address" name="email" required>
+            <label><b>Confirmed Email</b></label>
+            <input type="text" placeholder="Confirm your email address" name="email2" required>
 
-        <label><b>Confirmed Email</b></label>
-        <input type="text" placeholder="Confirm your email address" name="email2" required>
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
 
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+            <label><b>Confirmed Password</b></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
 
-        <label><b>Confirmed Password</b></label>
-        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+            <button type="submit" class="btn" onclick="">Register</button>
 
-        <button type="submit" class="btn" onclick="">Register</button>
-        <!--    need to modify-->
-    </form>
+        </form>
+    </div>
+    <div class="MOform-popup" v-show="showMOForm">
+        <button type="button" class="btn cancel" @click="closeMOForm">x</button>
+        <form action="/api/users/register" method="post" class="form-container">
+
+            <h2 style="text-align: center">Registration for Market Organizer</h2>
+
+            <label><b>First Name</b></label>
+            <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+            <label style="margin-left: 25px"><b>Last Name</b></label>
+            <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+            <label><b>Business Name</b></label>
+            <input type="text" placeholder="Enter your business name" name="businessName" required>
+
+            <label><b>ABN Number</b></label>
+            <input type="text" placeholder="Enter your ABN number" name="abn" required>
+
+            <label><b>Phone number</b></label>
+            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+            <label><b>Email</b></label>
+            <input type="text" placeholder="Enter your email address" name="email" required>
+
+            <label><b>Confirmed Email</b></label>
+            <input type="text" placeholder="Confirm your email address" name="email2" required>
+
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+
+            <label><b>Confirmed Password</b></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+
+            <button type="submit" class="btn" onclick="">Register</button>
+        </form>
+    </div>
 </div>
-<div class="MOform-popup" id="MOForm">
-    <button type="button" class="btn cancel" onclick="closeMOForm()">x</button>
-    <form action="#" class="form-container">
-<!--    need to modify-->
-        <h2 style="text-align: center">Registration for Market Organizer</h2>
 
-        <label><b>First Name</b></label>
-        <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-        <label style="margin-left: 25px"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-        <label><b>Business Name</b></label>
-        <input type="text" placeholder="Enter your business name" name="businessName" required>
-
-        <label><b>ABN Number</b></label>
-        <input type="text" placeholder="Enter your ABN number" name="abn" required>
-
-        <label><b>Phone number</b></label>
-        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter your email address" name="email" required>
-
-        <label><b>Confirmed Email</b></label>
-        <input type="text" placeholder="Confirm your email address" name="email2" required>
-
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
-
-        <label><b>Confirmed Password</b></label>
-        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
-
-        <button type="submit" class="btn" onclick="">Register</button>
-<!--        need to modify-->
-
-    </form>
-</div>
 <!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
@@ -175,6 +173,29 @@
         document.getElementById("layer").style.display = "none";
 
     }
+    new Vue({
+        el: '#app',
+        data: {
+            showSHForm: false,
+            showMOForm: false,
+
+        },
+        methods: {
+            openSHForm: function() {
+                this.showSHForm = true;
+
+            },
+            closeSHForm: function() {
+                this.showSHForm = false;
+            },
+            openMOForm: function() {
+                this.showMOForm = true;
+            },
+            closeMOForm: function() {
+                this.showMOForm = false;
+            }
+        }
+    });
 </script>
 
 </body>

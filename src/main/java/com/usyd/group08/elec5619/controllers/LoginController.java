@@ -1,6 +1,6 @@
 package com.usyd.group08.elec5619.controllers;
 
-import com.usyd.group08.elec5619.models.Result;
+//import com.usyd.group08.elec5619.models.Result;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.repositries.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+
 import java.util.*;
 
 @Controller
@@ -17,6 +18,9 @@ public class LoginController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    HttpSession httpSession;
+
     @GetMapping("/login")
     public String index(Model model) {
         return "login";
@@ -24,7 +28,7 @@ public class LoginController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Result login(@RequestParam String email, @RequestParam String password, Model model, HttpSession httpSession) {
+    public Map<String, Object> login(@RequestParam String email, @RequestParam String password, Model model) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
@@ -42,22 +46,29 @@ public class LoginController {
             response.put("status", curUser.getStatus());
             response.put("firstName", curUser.getFirstName());
             response.put("lastName", curUser.getLastName());
-            return Result.success(response);
+            return response;
 
         } else {//用户名，密码错误
-            return Result.error("Invalid username or password");
+//            return Result.error("Invalid username or password");
+            response.put("error", "login error");
+            return response;
         }
     }
 
+    //仍有bug
     @DeleteMapping("/logout")
     @ResponseBody
-    public Result logout(Model model, HttpSession httpSession) {
-            model.addAttribute("currentUser", null);
+    public Map<String, Object> logout(Model model) {
+        Map<String, Object> response = new HashMap<>();
+        model.asMap().remove("currentUser");
 
-            // 使用HttpSession来设置属性
-            httpSession.setAttribute("currentUser", null);
+        // Remove 'currentUser' from the HttpSession
+        httpSession.removeAttribute("currentUser");
+
 //            httpSession.invalidate();
+        response.put("msg", "login out success");
+        response.put("code", 200);
 
-            return Result.success();
+        return response;
     }
 }

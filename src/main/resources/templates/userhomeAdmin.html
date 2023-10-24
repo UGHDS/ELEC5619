@@ -2,163 +2,195 @@
 <html>
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Userhome Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-<span class="userHomeTitle">Welcome back, <b style="color: #9A9A9A">usergroup</b> FirstName </span>
+<div id="vueApp">
+    <!-- Navbar -->
+
+    <!-- Main Content -->
+    <div class="container-md">
+        <span class="userHomeTitle">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
+
+        <!-- ... Rest of your content ... -->
+        <div class="frameContainer">
+
+            <div class="tab">
+                <button class="tablinks" :class="{ active: currentTab === 'RegistrationReview' }" @click="changeTab('RegistrationReview')" style="width:33.3%;border-radius: 20px 0px 0px 0px">Registration Review</button>
+                <button class="tablinks" :class="{ active: currentTab === 'ActiveBooking' }" @click="changeTab('ActiveBooking')" style="width:33.3%">Active Booking</button>
+                <button class="tablinks" :class="{ active: currentTab === 'BookingHistory' }" @click="changeTab('BookingHistory')" style="width:33.4%;border-radius: 0px 20px 0px 0px">Booking History</button>
+            </div>
+
+            <!-- Tab content -->
+            <div v-show="currentTab === 'RegistrationReview'" class="tabcontent">
+                <div class="bookingItem">
+                    <div class="orderNum">Account#CV0325</div>
+                    <div class="marketStall">Surry Hills Market, Stall #62</div>
+                    <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
+                    <button type="button" id="review" class="reviewBtn" @click="openREForm">View Registration Detail</button>
+                    <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>
+                    <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>
+                    <button type="button" id="review2" class="reviewBtn2" @click="openREForm">View Registration Detail</button>
+                    <button type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>
+                    <br><div class="userline"></div>
+                </div>
+
+            </div>
+
+            <div v-show="currentTab === 'ActiveBooking'" class="tabcontent">
+                <div v-for="booking in activeBookings" :key="booking.id" class="bookingItem">
+                    <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
+                    <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
+                    <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
+                    <div class="price">${{ booking.totalPrice }}</div>
+                    <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
+                    <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
+                    <br><div class="userline"></div>
+                </div>
+            </div>
+
+            <div v-show="currentTab === 'BookingHistory'" class="tabcontent" style="display: none">
+                <div v-for="booking in bookingHistory" :key="booking.id" class="bookingHistoryItem">
+                    <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
+                    <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
+                    <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
+                    <div class="priceHistory">${{ booking.totalPrice }}</div>
+                    <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
+                    <br><div class="userline"></div>
+                </div>
+            </div>
 
 
-<div class="frameContainer">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'RegistrationReview')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Registration Review</button>
-        <button class="tablinks" onclick="openTabs(event, 'ActiveBooking')" style="width:33.3%">Active Booking</button>
-        <button class="tablinks" onclick="openTabs(event, 'BookingHistory')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking History</button>
-    </div>
-
-    <!-- Tab content -->
-    <div id="RegistrationReview" class="tabcontent">
-        <div class="bookingItem">
-            <div class="orderNum">Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>
-            <button type="button" id="review" class="reviewBtn" onclick="openREForm()">View Registration Detail</button>
-            <button type="button" id="approve" class="approveBtn" onclick="approveClick()">Approve</button>
-            <button type="button" id="deny" class="denyBtn" onclick="denyClick()">Deny</button>
-            <button type="button" id="review2" class="reviewBtn2" onclick="openREForm()">View Registration Detail</button>
-            <button type="button" id="deny2" class="denyBtn2" onclick="denyClick()">Denied</button>
-            <br><div class="userline"></div>
         </div>
+        <div class="blackLayer" v-show="showFormLayer"></div>
+        <div class="review-popup" v-show="showREForm">
+            <button type="button" class="btn cancel" @click="closeREForm">x</button>
+            <form action="#" class="form-container">
+                <!--    need to modify-->
 
-    </div>
+                <h2 style="text-align: center">Registration Review</h2>
 
-    <div id="ActiveBooking" class="tabcontent">
-        <div class="bookingItem">
-            <div class="orderNum">Order#CV0325, Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-            <div class="price">$45</div>
-            <button type="submit" class="viewBtn" onclick="">View Order Detail</button>
-            <button type="submit" class="cancelBtn" onclick="">Cancel Order</button>
-            <br><div class="userline"></div>
+                <label><b>First Name</b></label>
+                <input type="text" placeholder="Enter your first name" name="firstName" required>
+
+                <label style="margin-left: 25px"><b>Last Name</b></label>
+                <input type="text" placeholder="Enter your last name" name="lastName" required>
+
+                <label><b>Business Name</b></label>
+                <input type="text" placeholder="Enter your business name, optional" name="businessName">
+
+                <label><b>ABN Number</b></label>
+                <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+
+                <label><b>Phone number</b></label>
+                <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
+
+                <label><b>Email</b></label>
+                <input type="text" placeholder="Enter your email address" name="email" required>
+
+                <button type="button" id="approve1" class="approveFormBtn" onclick="approveFormClick()">Approve</button>
+                <button type="button" id="deny3" class="denyFormBtn" onclick="denyFormClick()">Deny</button>
+
+                <!--    need to modify-->
+            </form>
         </div>
     </div>
 
-    <div id="BookingHistory" class="tabcontent" style="display: none">
-        <div class="bookingHistoryItem">
-            <div class="orderNum">Order#CV0325, Account#CV0325</div>
-            <div class="marketStall">Surry Hills Market, Stall #62</div>
-            <div class="dateAddress">12/09/2023 - Crown St, Surry Hills NSW 2010 </div>
-            <div class="priceHistory">$45</div>
-            <button type="submit" class="viewBtn2" onclick="">View Order Detail</button>
-            <br><div class="userline"></div>
-        </div>
-    </div>
-
-
-
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
 </div>
-<div class="blackLayer" id="layer"></div>
-<div class="review-popup" id="reForm">
-    <button type="button" class="btn cancel" onclick="closeREForm()">x</button>
-    <form action="#" class="form-container">
-        <!--    need to modify-->
-
-        <h2 style="text-align: center">Registration Review</h2>
-
-        <label><b>First Name</b></label>
-        <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-        <label style="margin-left: 25px"><b>Last Name</b></label>
-        <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-        <label><b>Business Name</b></label>
-        <input type="text" placeholder="Enter your business name, optional" name="businessName">
-
-        <label><b>ABN Number</b></label>
-        <input type="text" placeholder="Enter your ABN number, optional" name="abn">
-
-        <label><b>Phone number</b></label>
-        <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-        <label><b>Email</b></label>
-        <input type="text" placeholder="Enter your email address" name="email" required>
-
-        <button type="button" id="approve1" class="approveFormBtn" onclick="approveFormClick()">Approve</button>
-        <button type="button" id="deny3" class="denyFormBtn" onclick="denyFormClick()">Deny</button>
-
-        <!--    need to modify-->
-    </form>
-</div>
-<!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
-
-<!--你可以在下面添加自己想添加的JavaScript-->
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    new Vue({
+        el: '#vueApp',
+        data: {
+            welcome:'',
+            currentTab: 'RegistrationReview',
+            showREForm: false,
+            showFormLayer: false,
+            bookings:[]
+        },
+        methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
+            welcomeMsg(){
+                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                    .then(response => {
+                        this.welcome = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching welcome message.";
+                        console.error("Error fetching welcome message:", error);
+                    });
+            },
+            getBookings() {
+                axios.get('/api/bookings/user/allBookingHistory') // Make sure the URL is correct
+                    .then(response => {
+                        this.bookings = response.data;
+                    })
+                    .catch(error => {
+                        this.error = "Error fetching booking data.";
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            openREForm: function() {  // 添加参数
+                this.showREForm = true;
+                this.showFormLayer = true;
+            },
+            closeREForm: function() {
+                this.showREForm = false;
+                this.showFormLayer = false;
+            },
+            approveClick: function() {
+                this.isApproveVisible = false;
+                this.isDenyVisible = false;
+                // ...rest of your logic...
+            },
+            denyClick: function() {
+                this.isApproveVisible = false;
+                this.isDenyVisible = false;
+                // ...rest of your logic...
+            },
+            approveFormClick: function() {
+                this.isReviewVisible = false;
+                this.isLayerVisible = false;
+                this.isApproveVisible = false;
+                this.isDenyVisible = false;
+                // ...rest of your logic...
+            },
+            denyFormClick: function() {
+                this.isReviewVisible = false;
+                this.isLayerVisible = false;
+                this.isApproveVisible = false;
+                this.isDenyVisible = false;
+                // ...rest of your logic...
+            }
+        },
+        computed: {
+            activeBookings() {
+                return this.bookings[0] || [];
+            },
+            bookingHistory() {
+                return this.bookings[1] || [];
+            }
+        },
+        mounted() {
+            this.welcomeMsg();
+            this.getBookings();
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    document.getElementById("defaultOpen").click();
-
-    function openREForm() {
-        document.getElementById("reForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-    }
-    function closeREForm() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-    }
-
-    function approveClick() {
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyClick() {
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function approveFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-
+    });
 </script>
+
 
 </body>
 </html>

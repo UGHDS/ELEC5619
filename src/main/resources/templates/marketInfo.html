@@ -2,237 +2,278 @@
 <html>
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Market Information</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
 </head>
 <body>
 <!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
 <!--这部分是你要写的部分-->
-<span class="userHomeTitle"><a href="marketList.html" class="backBtn"><</a>Fairfield Markets</span>
+<div id="app">
+    <span class="userHomeTitle"><a href="/marketList" class="backBtn"><</a>{{marketInfo.name}}</span>
+    <div class="frameContainer">
+
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>
+            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>
+            <button class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>
+        </div>
+
+        <!-- Tab content -->
+        <div v-show="currentTab === 'MarketInformation'"  class="tabcontent">
+            <div class="venueDescription">{{marketInfo.description}}</div>
+            <div class="venueAddress">{{marketInfo.address}}</div>
+<!--            <div class="openHour">Open Hours: openHour</div>-->
+            <div class="venuePrice">Estimated Stall Fee: ${{marketInfo.stall_price}}</div>
+            <div class="stallNumber">Total stall: {{marketInfo.stall}}</div>
+        </div>
+
+        <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
+            <div class="photoVenue" style='background-image: url("../image/market1.jpg")'></div>
+<!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
+        </div>
+
+        <div v-show="currentTab === 'StallBooking'"  class="tabcontent" >
+            <div class="selectorDate">Selected a date:
+                <select v-model="selectedOptionDate.value">
+                    <option v-for="option in optionsDate" :value="option.value">{{ option.text }}</option>
+                </select>
+            </div>
+
+            <div class="selectorStall">Selected a stall:
+                <select v-model="selectedOptionStall.value">
+                    <option v-for="option in optionsStall" :value="option.value">{{ option.text }}</option>
+                </select>
+            </div>
+
+            <button class="bookingConfirm" @click="openBookingForm">Confirm</button>
+<!--            <button v-else class="directLogin" @click="redirectToLogin">Login to Continue</button>-->
 
 
-<div class="frameContainer">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'MarketInformation')" id="defaultOpen" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Market Information</button>
-        <button class="tablinks" onclick="openTabs(event, 'PhotoGallery')" style="width:33.3%">Photo Gallery</button>
-        <button class="tablinks" onclick="openTabs(event, 'StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>
+        </div>
+
+    </div>
+    <div class="blackLayer" v-show="showLayer"></div>
+    <div class="booking-popup" v-show="showBookingForm">
+        <button type="button" class="btn cancel" @click="closeBookingForm">x</button>
+<!--        <form action="" method="" class="bookingContainer">-->
+        <form class="bookingContainer">
+
+            <h2>Order detail</h2>
+
+            <table class="bookingTable">
+                <tr>
+                    <th>Quality</th>
+                    <th>Stall number</th>
+                    <th>Market name</th>
+                    <th>Booking date</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>{{ selectedOptionStall.text }}</td>
+                    <td>{{ marketInfo.name }}</td>
+                    <td>{{ selectedOptionDate.text }}</td>
+                    <td>${{ selectedStallPrice }}</td>
+                </tr>
+            </table>
+
+            <h3>Stallholder contact information</h3>
+            <label class="label" for="name">Name:</label>
+            <input type="text" id="name" value="Stephen Strange">
+
+            <label class="label" for="email">Email:</label>
+            <input type="text" id="email" value="asdf@gmail.com">
+
+            <label class="label" for="phone">Phone number:</label>
+            <input type="text" id="phone" value="0498682233">
+
+            <label class="label" for="description">Description on the product you will be selling (max 300 words)</label>
+            <input type="text" id="description">
+
+            <button type="button" class="btn" @click="openPaymentForm">Book Now</button>
+
+        </form>
     </div>
 
-    <!-- Tab content -->
-    <div id="MarketInformation" class="tabcontent">
+    <div class="payment-popup" v-show="showPaymentForm">
+        <button type="button" class="btn cancel" @click="backBookingForm"><</button>
+        <button type="button" class="btn cancel" @click="closePaymentForm">x</button>
+        <form action="" method="" class="paymentContainer">
+            <h2>Payment</h2>
 
-<!--        <form action="#" class="marketForm">-->
-<!--            <label>Venue Name:</label>-->
-<!--            <input type="text" value="Fairfield Markets" name="venueName" style="width:87.8%; margin-left: 10px" required>-->
+            <table>
+                <tr>
+                    <th>Fee option (Check if needed, can be provided by the venue organizer)</th>
+                    <th>Quality</th>
+                    <th>Fee name</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" @change="updateAdditionalFees" checked disabled></td>
+                    <td>1</td>
+                    <td>Basic stall booking fee</td>
+                    <td>${{ selectedStallPrice }}</td>
+                    <td rowspan="2" class="totalPrice">${{ totalPrice }}</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" @change="updateAdditionalFees"></td>
+                    <td>1</td>
+                    <td>Basic stall facilities rent fee</td>
+                    <td>$50</td>
+                </tr>
+            </table>
 
-<!--            <label>Address: </label>-->
-<!--            <input type="text" value="443 Smithfield Rd, Prairiewood NSW 2176" name="addressM" style="width:91.55%; margin-left: 10px" required>-->
+            <p>*Basic stall facilities include one stall tent, two tables, and four chairs.</p>
 
-<!--            <label>Start Date:</label>-->
-<!--            <input type="date" id="datePickerS" name="datePickerS" value="2023-10-10" style="width:12%; margin-left: 10px" required>-->
+            <h3>Card details</h3>
+            <label class="label" for="card-number">Card number</label>
+            <input type="text" id="card-number" placeholder="Card number" style="width: 60%;">
 
-<!--            <label>- End Date:</label>-->
-<!--            <input type="date" id="datePickerE" name="datePickerE" value="2023-12-10" style="width:12%; margin-left: 10px" required>-->
+            <br><label class="label" for="expiry">Expiry Date</label>
+            <input type="text" id="expiry" placeholder="Month/Year" style="width: 20%;">
 
-<!--            <label style="margin-left: 50px"><input type="checkbox" name="weekday" value="Monday"> Mon</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Tuesday"> Tue</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Wednesday"> Wed</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Thursday"> Thu</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Friday"> Fri</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Saturday" checked> Sat</label>-->
-<!--            <label style="margin-left: 5px"><input type="checkbox" name="weekday" value="Sunday"> Sun</label>-->
+            <label class="label" for="cvv" style="margin-left: 20px;">CVV</label>
+            <input type="text" id="cvv" placeholder="3 digital #" style="width: 20%;">
 
-<!--            <br><label>Open hours:</label>-->
-<!--            <input type="time" id="timePickerS" name="timePickerS" value="10:00" style="width:12%; margin-left: 10px" required>-->
-<!--            <label>-</label>-->
-<!--            <input type="time" id="timePickerE" name="timePickerE" value="16:00" style="width:12%; margin-left: 10px" required>-->
+            <br><label class="label" for="name-card">Name on Card</label>
+            <input type="text" id="name-card" placeholder="Full name" style="width: 60%;">
 
-<!--            <br><label>Brief introduction of the Venue:</label>-->
-<!--            <textarea name="venueInfo"  style="height:120px;white-space: pre-wrap;" required>A Favourite Community Attraction since the Seventies. Fairfield Showground is renowned as the venue of the Fairfield Markets which have been attracting many thousands of shoppers each weekend since the Seventies. Our markets are the largest in Sydney's West. Friendly Family Fun is the motto of these markets and the fun is guaranteed. Every Saturday from 9AM to 4PM up to 600 undercover stalls are filled with everything from childrens' toys to clothes, sporting gear to jewellery, household items to car accessories, workshop tools to pool products and grocery items to fresh fruit and vege's. While the adults look for the bargains the kids can use up their energy on the jumping castle, carnival rides, merry go round or pony rides. And, when it is time for a relaxing break there are plenty of places to pick up mouth watering kebabs, burgers, Asian delicacies, ice creams, donuts, cold drinks or coffee.-->
-<!--                      </textarea>-->
-<!--        </form>-->
 
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
+            <br><button type="submit" class="btn" @click="closePaymentForm">Place Order</button>
+
+        </form>
     </div>
-
-    <div id="PhotoGallery" class="tabcontent">
-<!--        <span class="photoText">Add photos of Venue to let others have a better knowledge of the Venue:</span>-->
-<!--        <input type="file" id="fileInput" accept="image/*" class="photoInput" multiple>-->
-<!--        <div id="imageContainer" class="photoDiv"></div>-->
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
-    </div>
-
-    <div id="StallBooking" class="tabcontent" style="display: none; font-size: 18px">
-<!--        <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>-->
-<!--        <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">-->
-<!--        <span class="photoText" style="top:30%">Add stall distribution map (with stall number):</span>-->
-<!--        <input type="file" id="fileInput2" accept="image/*" class="photoInput2" multiple>-->
-<!--        <div id="imageContainer2" class="photoDiv2">-->
-<!--            <img id="displayImage2" class="displayImage2" src="" alt="Selected Image">-->
-<!--            <button id="deleteButton" class="delete-button2" style="display: none;">X</button>-->
-<!--        </div>-->
-<!--        <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
-    </div>
-
-
 
 </div>
-<div class="blackLayer" id="layer"></div>
 
 
 <!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
+<div th:replace="fragments/footer :: footer"></div>
 
 <!--你可以在下面添加自己想添加的JavaScript-->
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-
-    document.getElementById("defaultOpen").click();
-
-
-    const fileInput = document.getElementById('fileInput');
-    const imageContainer = document.getElementById('imageContainer');
-
-    fileInput.addEventListener('change', (e) => {
-        const files = e.target.files;
-        let imageCount = imageContainer.querySelectorAll('.displayed-image').length;
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            if (imageCount >= 8) {
-                alert('Maximum of 8 photos reached.');
-                break;
+    new Vue({
+        el: '#app',
+        data: {
+            currentTab: 'MarketInformation',
+            marketInfo: '',
+            optionsStall: [],
+            // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
+            // userType: localStorage.getItem('userType'),
+            selectedOptionDate: {
+                text: '',  // Default initial value
+                value: ''
+            },
+            selectedOptionStall: {
+                text: '',  // Default initial value
+                value: ''
+            },
+            optionsDate: [
+                { value: 'date1', text: 'date1' },
+                { value: 'date2', text: 'date2' },
+                { value: 'date3', text: 'date3' }
+            ],
+            showLayer: false,
+            showBookingForm: false,
+            showPaymentForm: false,
+            additionalFees: 0,
+            facilityFee: 50,
+        },
+        computed: {
+            baseFee() {
+                return this.selectedStallPrice;
+            },
+            totalPrice: function() {
+                return this.baseFee + this.additionalFees;
+            },
+            selectedStallPrice() {
+                if (this.marketInfo.stalls) {
+                    const selectedStall = this.marketInfo.stalls.find(stall => stall.id === this.selectedOptionStall.value);
+                    return selectedStall ? selectedStall.price : 0;
+                }
+                return 0;
             }
+        },
+        methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
+            fetchMarketData(marketId) {
+                axios.get(`/api/venues/venueByVenueId?venueID=${marketId}`)
+                    .then(response => {
+                        // 使用响应数据来更新Vue实例的数据
+                        this.marketInfo = response.data;
+                        this.optionsStall = this.marketInfo.stalls.map(stall => ({
+                            value: stall.id,
+                            text: stall.stallId
+                        }));
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            openBookingForm: function() {
+                this.showBookingForm = true;
+                this.showLayer = true;
+            },
+            closeBookingForm: function() {
+                this.showBookingForm = false;
+                this.showLayer = false;
+            },
+            openPaymentForm: function() {
+                this.showBookingForm = false;
+                this.showPaymentForm = true;
+            },
+            backBookingForm: function() {
+                this.showBookingForm = true;
+                this.showPaymentForm = false;
+            },
+            closePaymentForm: function() {
+                this.showPaymentForm = false;
+                this.showLayer = false;
+            },
+            updateAdditionalFees: function(event) {
+                if (event.target.checked) {
+                    this.additionalFees += this.facilityFee;
+                } else {
+                    this.additionalFees -= this.facilityFee;
+                }
+            }
+            // redirectToLogin() {
+            //     window.location.href = "/login";
+            // }
+        },
+        watch: {
+            'selectedOptionStall.value': function(newVal) {
+                const selected = this.optionsStall.find(option => option.value === newVal);
+                if (selected) {
+                    this.selectedOptionStall.text = selected.text;
+                }
+            },
+            'selectedOptionDate.value': function(newVal) {
+                const selected = this.optionsDate.find(option => option.value === newVal);
+                if (selected) {
+                    this.selectedOptionDate.text = selected.text;
+                }
+            }
+        },
+        mounted() {
+            let params = new URLSearchParams(window.location.search);
+            let marketId = params.get('id');
 
-            const imageElement = document.createElement('div');
-            imageElement.classList.add('image-wrapper');
-
-            const img = document.createElement('img');
-            img.classList.add('displayed-image');
-
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('delete-button');
-            deleteButton.textContent = 'X';
-
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-                img.src = event.target.result;
-            };
-
-            reader.readAsDataURL(file);
-
-            // Add a click event listener to the delete button
-            deleteButton.addEventListener('click', () => {
-                imageContainer.removeChild(imageElement);
-                imageCount--;
-            });
-
-            imageElement.appendChild(img);
-            imageElement.appendChild(deleteButton);
-
-            // Append the new photo to the container
-            imageContainer.appendChild(imageElement);
-
-            imageCount++;
+            this.fetchMarketData(marketId);
         }
-
-        // Clear the file input to allow adding more files
-        fileInput.value = '';
     });
-
-    const fileInput2 = document.getElementById('fileInput2');
-    const imageContainer2 = document.getElementById('imageContainer2');
-    const displayImage = document.getElementById('displayImage2');
-    const deleteButton = document.getElementById('deleteButton');
-
-    fileInput2.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-                displayImage.src = event.target.result;
-                displayImage.style.display = 'block';
-                deleteButton.style.display = 'inline-block';
-            };
-
-            reader.readAsDataURL(file);
-        }
-    });
-
-    deleteButton.addEventListener('click', () => {
-        displayImage.src = '';
-        fileInput2.value = '';
-        deleteButton.style.display = 'none';
-        displayImage.style.display ='none';
-    });
-
-
-
-
-
-
-    function openREForm() {
-        document.getElementById("reForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-    }
-    function closeREForm() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-    }
-
-    function approveClick() {
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyClick() {
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function approveFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("review2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
-    function denyFormClick() {
-        document.getElementById("reForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-        document.getElementById("deny2").style.display = "block";
-        document.getElementById("review").style.display = "none";
-        document.getElementById("approve").style.display = "none";
-        document.getElementById("deny").style.display = "none";
-    }
-
 
 </script>
 

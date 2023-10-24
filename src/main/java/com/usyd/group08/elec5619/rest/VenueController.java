@@ -1,8 +1,10 @@
 package com.usyd.group08.elec5619.rest;
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
+import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
+import com.usyd.group08.elec5619.repositries.UserRepository;
 import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
@@ -10,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/venues")
@@ -22,6 +23,8 @@ public class VenueController {
     @Autowired
     HttpSession httpSession;
 
+    @Autowired
+    UserRepository userRepository;
 
 
     /**
@@ -31,10 +34,120 @@ public class VenueController {
      */
     @GetMapping
     @Operation(summary = "Find all venues", description = "Returns a list of all venues")
-    public List<Venue> getVenues() {
-        return venueRepository.findAll();
+    public List<Map<String, Object>> getVenues() {
+        List<Venue> venuesList = venueRepository.findAll();
+
+        List<Map<String, Object>> responses = new ArrayList<>();
+
+        for (Venue venue: venuesList) {
+            Map<String, Object> response = new HashMap<>();
+            int venueId = venue.getId();
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+            int stallNum = venue.getStalls().size();
+            String image = venue.getPicture();
+
+            response.put("id", venueId);
+            response.put("name", venueName);
+            response.put("suburb", suburb);
+            response.put("address", address);
+            response.put("stall", stallNum);
+            response.put("image", image);
+            response.put("latitude", venue.getLatitude());
+            response.put("longitude", venue.getLongitude());
+            responses.add(response);
+        }
+        return responses;
     }
 
+    /**
+     * Find venue by Venueid
+     *
+     * @return that venue
+     */
+    @GetMapping("/venueByVenueId")
+    @Operation(summary = "Find venue by VenueId", description = "Returns that venue")
+    public Map<String, Object> getVenueById(@RequestParam String venueID) {
+        Optional<Venue> optionalVenue = venueRepository.findById(Integer.parseInt(venueID));
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (optionalVenue.isPresent()) {
+            Venue venue = optionalVenue.get();
+            //判断当前得到的VenueID 是否是属于当前的organiser的，如果是的话删除不是的话返还false, admin可以删除所有的venue
+            int venueId = venue.getId();
+            String venueName = venue.getVenueName();
+            String street = venue.getStreet();
+            String suburb = venue.getSuburb();
+            String state = venue.getState();
+            String address = street+", "+suburb+" "+state;
+            int stallNum = venue.getStalls().size();
+            String image = venue.getPicture();
+            String description = venue.getDescription();
+            List<Stall> stalls = venue.getStalls();
+
+            int sum = 0;
+            for (Stall stall: stalls) {
+                sum+=stall.getPrice();
+            }
+            int stallPrice = sum/ stalls.size();
+
+            response.put("id", venueId);
+            response.put("name", venueName);
+            response.put("suburb", suburb);
+            response.put("address", address);
+            response.put("stall", stallNum);
+            response.put("image", image);
+            response.put("description", description);
+            response.put("stall_price", stallPrice);
+            response.put("stalls", stalls);
+
+        }else{
+            response.put("code", 404);
+            response.put("msg", "Can not find venue by Id");
+        }
+        return response;
+    }
+
+
+    /**
+     * Find all venues for currentUser
+     *
+     * @return currentUser's venues
+     */
+    @GetMapping("/venueByCurrentUser")
+    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
+    @Operation(summary = "Find all venues for currentUser", description = "Returns currentUser's venues")
+    public List<Map<String, Object>> getVenueByCurrentUser() {
+        User user = (User) httpSession.getAttribute("currentUser");
+        List<Venue> venuesList = venueRepository.findAll();
+        List<Map<String, Object>> responses = new ArrayList<>();
+        for (Venue venue: venuesList) {
+            if(user.getType().equals("admin") || Objects.equals(user.getId(), venue.getUser().getId())){
+                Map<String, Object> response = new HashMap<>();
+                int venueId = venue.getId();
+                String venueName = venue.getVenueName();
+                String street = venue.getStreet();
+                String suburb = venue.getSuburb();
+                String state = venue.getState();
+                String address = street+", "+suburb+" "+state;
+                int stallNum = venue.getStalls().size();
+                String image = venue.getPicture();
+
+                response.put("id", venueId);
+                response.put("name", venueName);
+                response.put("suburb", suburb);
+                response.put("address", address);
+                response.put("stall", stallNum);
+                response.put("image", image);
+                responses.add(response);
+            }
+        }
+        return responses;
+    }
 
 
     /**
@@ -46,9 +159,10 @@ public class VenueController {
     @PostMapping
     @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add a new venue", description = "Pass in a venue without venueID")
-    public Venue addVenue(@RequestBody VenueWrapper addVenueWrapper) {
+    public boolean addVenue(@RequestBody VenueWrapper addVenueWrapper) {
         User user = (User) httpSession.getAttribute("currentUser");
         Venue venue = new Venue();
+        venue.setVenueName(addVenueWrapper.getVenueName());
         venue.setState(addVenueWrapper.getState());
         venue.setStreet(addVenueWrapper.getStreet());
         venue.setSuburb(addVenueWrapper.getSuburb());
@@ -56,9 +170,9 @@ public class VenueController {
         venue.setPicture(addVenueWrapper.getPicture());
         venue.setLongitude(addVenueWrapper.getLongitude());
         venue.setLatitude(addVenueWrapper.getLatitude());
-
         venue.setUser(user);
-        return venueRepository.save(venue);
+        venueRepository.save(venue);
+        return true;
     }
 
     /**
@@ -116,6 +230,7 @@ public class VenueController {
     //自制一个只有我需要的  venue信息  的class
     private static class VenueWrapper {
         private int venueId;
+        private String venueName;
         private String street;
         private String suburb;
         private String state;
@@ -186,6 +301,14 @@ public class VenueController {
 
         public void setLatitude(double latitude) {
             this.latitude = latitude;
+        }
+
+        public String getVenueName() {
+            return venueName;
+        }
+
+        public void setVenueName(String venueName) {
+            this.venueName = venueName;
         }
     }
 

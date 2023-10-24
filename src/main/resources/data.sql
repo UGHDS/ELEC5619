@@ -9,8 +9,8 @@ INSERT INTO user (id, email, first_name, last_name, password, phone, type, statu
 INSERT INTO user (id, email, first_name, last_name, password, phone, type, status) VALUES (9, 'organisertest@qq.com', 'organiserrrrr', 'test', '12345678', '042433333', 'organiser', 'active');
 
 /*Venue*/
-INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (1, -33.8785839, 151.2014858, 9, 'test description', 'ChinaTown1.png', 'state1', 'street1', '2007', 'test venue 1');
-INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (2, -33.8785839, 151.2014858, 3, 'test description2', 'ChinaTown2.png', 'state2', 'street2', '2008', 'test venue 2');
+INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (1, -33.8054155, 150.9011621, 9, 'test description', 'ChinaTown1.png', 'NSW 2007', 'Cricketers Arms Rd', 'Prospect', 'Blacktown Markets');
+INSERT INTO elec5619.venue (id, latitude, longitude, user_id, description, picture, state, street, suburb, venue_name) VALUES (2, -33.8675706, 150.9012203, 3, 'test description2', 'ChinaTown2.png', 'NSW 2008', '443 Smithfield Rd', 'Prairiewood', 'Fairfield Markets');
 
 /*Venue Date*/
 INSERT INTO venue_date (date_slot, venue_id) VALUES ('2023-09-25', 1);
@@ -40,8 +40,8 @@ INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023
 
 
 /*Booking*/
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (1, '2023-09-25 12:35:47.011265', 8, 9, 'Booked');
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (2, '2023-09-25 12:35:50.743700', 7, 9, 'Cancelled');
-INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (3, '2023-09-25 12:36:09.904322', 9, 9, 'Booked');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (1, '2023-09-25 12:35:47.011265', 8, 1, 'Booked');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (2, '2023-09-25 12:35:50.743700', 7, 1, 'Cancelled');
+INSERT INTO booking (id, booking_time, stall_date_id, user_id, status) VALUES (3, '2023-09-25 12:36:09.904322', 9, 1, 'Booked');
 
 

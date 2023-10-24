@@ -2,79 +2,119 @@
 <html>
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
+    <head th:include="fragments/headerLogged :: head"></head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Market List</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-QTHpG5rvbPs5uE2QE7ucfGeXbU1g_hE&callback=initMap"></script>
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
-<!--<nav th:replace="fragments/header :: navbar"></nav>-->
+<nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
-<span class="userHomeTitle">Market list</span>
-<div class="frameContainer">
+<div id="app">
+    <span class="userHomeTitle">Market list</span>
+    <div class="frameContainer">
 
-    <div class="tab">
-        <button class="tablinks" onclick="openTabs(event, 'listView')" id="defaultOpen" style="border-radius: 20px 0px 0px 0px" >View by List</button>
-        <button class="tablinks" onclick="openTabs(event, 'mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
-    </div>
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'listView' }" @click="changeTab('listView')" style="border-radius: 20px 0px 0px 0px">View by List</button>
+            <button class="tablinks" :class="{ active: currentTab === 'mapView' }" @click="changeTab('mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
+        </div>
 
-    <!-- Tab content -->
-    <div id="listView" class="tabcontent">
-        <form action="/search" method="GET" >
-            <input type="text" id="search" class="searchBox" name="search" placeholder="Search suburb..">
-<!--            <input type="submit" value="Search">-->
-        </form>
-        <div class="marketItemDiv">
-            <div class="marketListItem">
-                <div class="marketListName">Blacktown Markets</div>
-                <div class="marketListSuburb">Suburb: Prospect</div>
-                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
-                <div class="marketListStall">Total stall: 120</div>
-                <img class="marketListImage" src="../image/blacktownImg.png" alt="market photo">
-            </div>
-            <div class="marketListItem">
-                <div class="marketListName">Blacktown Markets</div>
-                <div class="marketListSuburb">Suburb: Prospect</div>
-                <div class="marketListAddress">Address: Cricketers Arms Rd, Prospect NSW 2148</div>
-                <div class="marketListStall">Total stall: 120</div>
-                <img class="marketListImage" src="../image/blacktownImg.png" alt="market photo">
+        <!-- Tab content -->
+        <div v-show="currentTab === 'listView'" class="tabcontent">
+            <form @submit.prevent="searchMarkets">
+                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
+            </form>
+            <div class="marketItemDiv">
+                <div class="marketListItem" v-for="market in markets" :key="market.id" @click="goToMarketInfo(market.id)">
+                    <div class="marketListName">{{ market.name }}</div>
+                    <div class="marketListSuburb">Suburb: {{ market.suburb }}</div>
+                    <div class="marketListAddress">{{ market.address }}</div>
+                    <div class="marketListStall">Total stall: {{ market.stall }}</div>
+                    <img class="marketListImage" src="../image/blacktownImg.png" :alt="market.name">
+                </div>
             </div>
         </div>
+
+        <div v-show="currentTab === 'mapView'" class="tabcontent">
+            <form @submit.prevent="searchMarkets">
+                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">
+            </form>
+            <div id="map" style="height: 600px;"></div>
+        </div>
     </div>
-
-    <div id="mapView" class="tabcontent" style="display: none">
-        <form action="/search" method="GET" >
-            <input type="text" id="search2" class="searchBox" name="search" placeholder="Search suburb..">
-            <!--            <input type="submit" value="Search">-->
-        </form>
-
-    </div>
-
-
-
 </div>
-<!--从templates/fragments/footer.html 引入的footer-->
-<!--<div th:replace="fragments/footer :: footer"></div>-->
 
-<!--你可以在下面添加自己想添加的JavaScript-->
+<div th:replace="fragments/footer :: footer"></div>
+
+
 <script>
-    function openTabs(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
+    function initMap() {
+
     }
 
-    document.getElementById("defaultOpen").click();
+    function setMapBounds(map, markers) {
+        var bounds = new google.maps.LatLngBounds();
 
+        markers.forEach(function(marker) {
+            bounds.extend(marker.position);
+        });
 
+        map.fitBounds(bounds);
+    }
+
+    new Vue({
+        el: '#app',
+        data: {
+            currentTab: 'listView',
+            searchQuery: '',
+            markets: []
+        },
+        methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
+            getMarkets() {
+                axios.get('/api/venues') // Make sure the URL is correct
+                    .then(response => {
+                        this.markets = response.data;
+                        let marks = [];
+                        let map;
+                        for(let i=0; i<this.markets.length; i++){
+                            if(i===0){
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                    zoom: 20
+                                });
+                            }
+                            marks.push(new google.maps.Marker({
+                                position: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                map: map,
+                                title: this.markets[i].name,
+                            }));
+                        }
+                        setMapBounds(map, marks);
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            console.error("Error Data:", error.response.data);
+                        }
+                        console.error("Error fetching data:", error);
+                    });
+            },
+            goToMarketInfo(marketId) {
+                // 使用Vue Router 或者直接window.location进行页面跳转
+                window.location.href = `/marketInfo?id=${marketId}`;
+            },
+            searchMarkets() {
+                // Implement the search logic or API call here
+            }
+        },
+        mounted() {
+            this.getMarkets();
+        }
+    });
 </script>
 
 </body>

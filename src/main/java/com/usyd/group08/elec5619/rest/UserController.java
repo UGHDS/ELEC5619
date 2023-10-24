@@ -2,7 +2,9 @@ package com.usyd.group08.elec5619.rest;
 
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
+import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
+import com.usyd.group08.elec5619.models.Venue;
 import com.usyd.group08.elec5619.repositries.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
@@ -10,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,21 +23,62 @@ public class UserController {
     @Autowired
     HttpSession httpSession;
 
-    @GetMapping("hello")
+    @GetMapping("getCurrentUserInfo")
     @ValidateUserType
-    @Operation(summary = "welcome current user",description = "Pass user name, and return 'Hello, current user'")
-    public String people(@RequestParam(value = "name", defaultValue = "World") String name) {
+    @Operation(summary = "get current user info",description = "Pass user name, and return 'Hello, current user'")
+    public Map<String, Object> getCurrentUser() {
         User user = (User) httpSession.getAttribute("currentUser");
-        return "Hello, " + user.getFirstName();
+        Map<String, Object> response = new HashMap<>();
+
+        //判断当前得到的VenueID 是否是属于当前的organiser的，如果是的话删除不是的话返还false, admin可以删除所有的venue
+        Long userId = user.getId();
+        String userEmail = user.getEmail();
+        String first_name = user.getFirstName();
+        String last_name = user.getLastName();
+        String phone = user.getPhone();
+        String status = user.getStatus();
+        String type = user.getType();
+
+        response.put("userId", userId);
+        response.put("userEmail", userEmail);
+        response.put("first_name", first_name);
+        response.put("last_name", last_name);
+        response.put("phone", phone);
+        response.put("status", status);
+        response.put("type", type);
+
+        return response;
     }
 
     @GetMapping("organisers")
-    @ValidateUserType(type = "admin")
+//    @ValidateUserType(type = "admin") //有bug
     @Operation(summary = "Find all organisers",description = "Pass user list, and will return organisers list")
-    public List<User> getOrganisers() {
+    public List<Map<String, Object>> getOrganisers() {
         User user = new User();
         user.setType("organiser");
-        return userRepository.findAll(Example.of(user));
+        List<User> organisers = userRepository.findAll(Example.of(user));
+        List<Map<String, Object>> responses = new ArrayList<>();
+
+        for (User organiser: organisers) {
+            Map<String, Object> response = new HashMap<>();
+
+            Long organiserId = organiser.getId();
+            String organiserEmail = organiser.getEmail();
+            String first_name = organiser.getFirstName();
+            String last_name = organiser.getLastName();
+            String phone = organiser.getPhone();
+            String status = organiser.getStatus();
+
+            response.put("organiserId", organiserId);
+            response.put("organiserEmail", organiserEmail);
+            response.put("first_name", first_name);
+            response.put("last_name", last_name);
+            response.put("phone", phone);
+            response.put("status", status);
+
+            responses.add(response);
+        }
+        return responses;
     }
 
     @GetMapping("owners")

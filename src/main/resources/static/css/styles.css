@@ -43,7 +43,7 @@ body {
 .mySlides1 img {
     vertical-align: middle;
     width: 1200px;
-    height: 815px;
+    height: 780px;
     opacity: .6;
 }
 
@@ -160,8 +160,7 @@ body {
 
 .SHform-popup {
     width:70%;
-    height:75%;
-    display: none;
+    height:78%;
     position: absolute;
     top:12%;
     left:15%;
@@ -172,8 +171,7 @@ body {
 
 .MOform-popup {
     width:70%;
-    height:75%;
-    display: none;
+    height:78%;
     position: absolute;
     top:12%;
     left:15%;
@@ -315,7 +313,7 @@ body {
     font-weight: 500;
     position: absolute;
     color: #6C6C6C;
-    bottom:0%;
+    bottom:-15%;
     left:0%;
 }
 .userID{
@@ -381,7 +379,7 @@ body {
     color: black;
     position: absolute;
     bottom:5%;
-    left:47.5%;
+    left:47%;
     width:8%;
     height: 40px;
     border-radius: 4px;
@@ -411,7 +409,6 @@ body {
     height:80%;
     right:5%;
     bottom:0%;
-    display: none;
     position: absolute;
     border: 3px red;
 }
@@ -513,16 +510,25 @@ body {
 
 .bookingItem{
     border: none;
-    position: absolute;
+    /*position: absolute;*/
     margin-top: 10px;
     width:100%;
     height:20%;
 }
 
+.bookingItem, .bookingHistoryItem {
+    display: flex;
+    flex-direction: column;  /* stack children vertically */
+    align-items: start;      /* align children to the start (left) */
+    justify-content: space-between;  /* distribute space between children evenly */
+    /* ... other styles ... */
+}
+
 .orderNum{
     font-size: 15px;
     font-weight: lighter;
-    position: absolute;
+    margin-left: 20px;
+    /*position: absolute;*/
     color:black;
     top:5%;
     left:3%;
@@ -530,7 +536,8 @@ body {
 .marketStall{
     font-size: 20px;
     font-weight: 600;
-    position: absolute;
+    margin-left: 20px;
+    /*position: absolute;*/
     color: black;
     top:25%;
     left:3%;
@@ -538,7 +545,8 @@ body {
 .dateAddress{
     font-size: 18px;
     font-weight: 500;
-    position: absolute;
+    margin-left: 20px;
+    /*position: absolute;*/
     color: black;
     top:50%;
     left:3%;
@@ -546,28 +554,26 @@ body {
 .price{
     font-size: 20px;
     font-weight: 600;
-    position: absolute;
+    /*position: absolute;*/
     color: black;
-    top:30%;
-    left:50%;
+    margin-left: 670px;
+    margin-top: -50px;
 }
 .userline{
     height:2px;
     width:100%;
     background-color: #BBBBBB;
-    position: absolute;
-    left:0%;
-    bottom:0%;
+    /*position: absolute;*/
+    margin-top: 10px;
 }
 
 .viewBtn{
     border:none;
     background-color: #9BB692;
     color: white;
-    position: absolute;
-    top:20%;
-    left:68%;
-    width:12%;
+    margin-left: 900px;
+    margin-top: -35px;
+    /*position: absolute;*/
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -582,10 +588,9 @@ body {
     border:none;
     background-color: #A95B5B;
     color: white;
-    position: absolute;
-    top:20%;
-    right:5%;
-    width:12%;
+    /*position: absolute;*/
+    margin-left: 1100px;
+    margin-top: -40px;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -598,7 +603,7 @@ body {
 
 .bookingHistoryItem{
     border: none;
-    position: absolute;
+    /*position: absolute;*/
     margin-top: 10px;
     width:100%;
     height:20%;
@@ -607,10 +612,10 @@ body {
 .priceHistory{
     font-size: 20px;
     font-weight: 600;
-    position: absolute;
+    /*position: absolute;*/
     color: black;
-    top:30%;
-    left:55%;
+    margin-left: 670px;
+    margin-top: -60px;
 }
 
 
@@ -618,10 +623,10 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
-    position: absolute;
-    top:20%;
-    right:5%;
-    width:12%;
+    /*position: absolute;*/
+    margin-left: 900px;
+    margin-top: -35px;
+    width:15%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -637,7 +642,7 @@ body {
     border:none;
     background-color: darkgray;
     color: white;
-    position: absolute;
+    /*position: absolute;*/
     top:20%;
     left:48%;
     width:15%;
@@ -731,7 +736,6 @@ body {
 .blackLayer {
     width:100%;
     height:100%;
-    display: none;
     position: absolute;
     overflow: hidden;
     top:0%;
@@ -739,11 +743,42 @@ body {
     background-color: rgba(0,0,0, 0.7);
     border: none;
 }
+.reviewM-popup {
+    width:50%;
+    height:30%;
+    /*display: none;*/
+    position: absolute;
+    top:35%;
+    left:25%;
+    background-color: white;
+    border: none;
+}
+
+.reviewM-popup span{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 18px;
+}
+
+.reviewM-popup .cancel {
+    color: black;
+    font-size: 50px;
+
+    width: 30px;
+    right: 3%;
+    top: -10%;
+    position: absolute;
+    border: none;
+}
+
+.reviewM-popup .cancel:hover{
+    color:red;
+}
 
 .review-popup {
     width:70%;
     height:60%;
-    display: none;
+    /*display: none;*/
     position: absolute;
     top:15%;
     left:15%;
@@ -926,7 +961,7 @@ body {
 /*marketAdmin.html*/
 .marketItem{
     border: none;
-    position: absolute;
+    /*position: absolute;*/
     margin-top: 20px;
     width:100%;
     height:20%;
@@ -936,7 +971,7 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
-    position: absolute;
+    /*position: absolute;*/
     top:20%;
     right:5%;
     width:15%;
@@ -966,19 +1001,23 @@ body {
 /*marketList.html*/
 .marketItemDiv{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     width:100%;
     height: 85%;
     position: absolute;
     top:15%;
     left:0%;
-    overflow: auto;
+    overflow-y: auto;
 }
+
 .marketListItem{
     background-color: black;
     width:42.5%;
     height:35%;
-    margin-top: 60px;
-    margin-left: 65px;
+    margin-top: 50px;
+    margin-left: 40px;
+    margin-right: 50px;
     border-radius: 6px;
 }
 
@@ -1015,9 +1054,9 @@ body {
 }
 
 .marketListImage{
-    max-width: 168px;
-    max-height:169px;
-    margin-top: -126px;
+    max-width: 155px;
+    max-height:160px;
+    margin-top: -165px;
     margin-left: 383px;
     border-radius: 6px;
 }
@@ -1148,4 +1187,215 @@ body {
 
 .signupMOLogin:hover{
     background-color: rgba(130, 175, 133, 0.8);
+}
+
+/*marketInfo.html*/
+.venueDescription{
+    margin-left: 50px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.venueAddress{
+    margin-left: 50px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.openHour{
+    margin-left: 50px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.venuePrice{
+    margin-left: 50px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.stallNumber{
+    margin-left: 50px;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.photoVenue{
+    position: absolute;
+    width:80%;
+    height:80%;
+    left:10%;
+    top:15%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.selectorDate{
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.selectorStall{
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+.bookingConfirm{
+    border:none;
+    background-color: #9BB692;
+    color: white;
+    position: absolute;
+    top:80%;
+    left:5%;
+    width:10%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.booking-popup {
+    width:70%;
+    height:78%;
+    position: absolute;
+    top:12%;
+    left:15%;
+    right: 15px;
+    background-color: white;
+    border: none;
+}
+
+.bookingContainer {
+    padding-top: 10px;
+    width:80%;
+    font-size:15px;
+    left: 10%;
+    position: absolute;
+    background-color: white;
+}
+
+.bookingTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.bookingTable th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+.bookingContainer label {
+    font-weight: bold;
+}
+.bookingContainer input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.bookingContainer button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.bookingContainer button:hover {
+    background-color: gray;
+}
+
+.payment-popup {
+    width:70%;
+    height:78%;
+    position: absolute;
+    top:12%;
+    left:15%;
+    right: 15px;
+    background-color: white;
+    border: none;
+}
+
+.paymentContainer {
+    padding-top: 10px;
+    width:80%;
+    font-size:15px;
+    left: 10%;
+    position: absolute;
+    background-color: white;
+}
+.paymentContainer th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+.paymentContainer label {
+    font-weight: bold;
+}
+.paymentContainer input[type="text"], .paymentContainer input[type="number"], .paymentContainer select {
+
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.paymentContainer button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.paymentContainer button:hover {
+    background-color: gray;
+}
+
+.stallForm-setting{
+    width:90%;
+    height:80%;
+    left:5%;
+    top:10%;
+    position: absolute;
+    border: 3px red;
+}
+.stall-form {
+    top:20%;
+    left: 0%;
+    width:40%;
+    position: absolute;
+}
+
+/* Full-width input fields */
+.stall-form label{
+    font-weight: 500;
+    margin-right: 3px;
+
+}
+.stall-form input[type=text] {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0 15px 0;
+    border: none;
+    background: rgba(233,239,255,0.7);
+}
+
+
+/* When the inputs get focus, do something */
+.stall-form input[type=text]:focus, .setting-form input[type=password]:focus {
+    background-color: rgba(233,239,255,1);
+    outline: none;
+}
+
+.confirmAddStall{
+    border:none;
+    background-color: #9BB692;
+    color: white;
+    position: absolute;
+    top:100%;
+    right:38%;
+    width:20%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.confirmAddStall:hover{
+    background-color: darkgreen;
+    color:white;
 }
