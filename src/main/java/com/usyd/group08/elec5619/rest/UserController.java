@@ -106,13 +106,21 @@ public class UserController {
 
     @PostMapping("register")
     @Operation(summary = "Register new owner or organiser",description = "Pass in a user without userID")
-    public User register(@RequestBody User user) {
-        if(user.getType().equals("owner")){
-            user.setStatus("active");
+    public User register(@RequestParam String firstName, String lastName, String phone, String email, String password, String type) {
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setPhone(phone);
+        newUser.setPassword(password);
+        newUser.setType(type);
+
+        if(type.equals("owner")){
+            newUser.setStatus("active");
         }else {
-            user.setStatus("pending");
+            newUser.setStatus("pending");
         }
-        return userRepository.save(user);
+        return userRepository.save(newUser);
     }
 
     @DeleteMapping
