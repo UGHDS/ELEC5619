@@ -44,6 +44,8 @@
     <button class="signupSH" @click="openSHForm">Register as STALL HOLDER</button>
     <button class="signupMO" @click="openMOForm">Register as MARKET ORGANIZER</button>
 
+    <div class="blackLayer" v-show="showFormLayer"></div>
+
     <div class="SHform-popup" v-show="showSHForm">
         <button type="button" class="btn cancel" @click="closeSHForm">x</button>
         <form action="/api/users/register" method="post" class="form-container">
@@ -55,11 +57,11 @@
             <label style="margin-left: 25px"><b>Last Name</b></label>
             <input type="text" placeholder="Enter your last name" name="lastName" required>
 
-            <label><b>Business Name</b></label>
-            <input type="text" placeholder="Enter your business name, optional" name="businessName">
+<!--            <label><b>Business Name</b></label>-->
+<!--            <input type="text" placeholder="Enter your business name, optional" name="businessName">-->
 
-            <label><b>ABN Number</b></label>
-            <input type="text" placeholder="Enter your ABN number, optional" name="abn">
+<!--            <label><b>ABN Number</b></label>-->
+<!--            <input type="text" placeholder="Enter your ABN number, optional" name="abn">-->
 
             <label><b>Phone number</b></label>
             <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
@@ -67,17 +69,18 @@
             <label><b>Email</b></label>
             <input type="text" placeholder="Enter your email address" name="email" required>
 
-            <label><b>Confirmed Email</b></label>
-            <input type="text" placeholder="Confirm your email address" name="email2" required>
+<!--            <label><b>Confirmed Email</b></label>-->
+<!--            <input type="text" placeholder="Confirm your email address" name="email2" required>-->
 
             <label><b>Password</b></label>
-            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+            <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
 
-            <label><b>Confirmed Password</b></label>
-            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+            <label><b>Confirmed Password </b><span v-if="psw2 != '' && passwordsMatch === false" style="color:red;">Passwords do not match</span>
+            </label>
+            <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
 
-            <button type="submit" class="btn" onclick="">Register</button>
-
+<!--            <span v-if="passwordsMatch === false" style="color:red;">Passwords do not match</span>-->
+            <button type="submit" class="btn" @click="registerSH" :disabled="passwordsMatch === false">Register</button>
         </form>
     </div>
     <div class="MOform-popup" v-show="showMOForm">
@@ -92,11 +95,11 @@
             <label style="margin-left: 25px"><b>Last Name</b></label>
             <input type="text" placeholder="Enter your last name" name="lastName" required>
 
-            <label><b>Business Name</b></label>
-            <input type="text" placeholder="Enter your business name" name="businessName" required>
+<!--            <label><b>Business Name</b></label>-->
+<!--            <input type="text" placeholder="Enter your business name" name="businessName" required>-->
 
-            <label><b>ABN Number</b></label>
-            <input type="text" placeholder="Enter your ABN number" name="abn" required>
+<!--            <label><b>ABN Number</b></label>-->
+<!--            <input type="text" placeholder="Enter your ABN number" name="abn" required>-->
 
             <label><b>Phone number</b></label>
             <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
@@ -104,17 +107,17 @@
             <label><b>Email</b></label>
             <input type="text" placeholder="Enter your email address" name="email" required>
 
-            <label><b>Confirmed Email</b></label>
-            <input type="text" placeholder="Confirm your email address" name="email2" required>
+<!--            <label><b>Confirmed Email</b></label>-->
+<!--            <input type="text" placeholder="Confirm your email address" name="email2" required>-->
 
             <label><b>Password</b></label>
-            <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>
+            <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
 
-            <label><b>Confirmed Password</b></label>
-            <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
+            <label><b>Confirmed Password </b><span v-if="psw2 != '' && passwordsMatch === false" style="color:red;"> Passwords do not match</span></label>
+            <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
 
-            <button type="submit" class="btn" onclick="">Register</button>
-        </form>
+<!--            <span v-if="passwordsMatch === false">Passwords do not match</span>-->
+            <button type="submit" class="btn" @click="registerMO" :disabled="passwordsMatch === false">Register</button>        </form>
     </div>
 </div>
 
@@ -143,56 +146,100 @@
         setTimeout(showSlides, 8000); // Change image every 2 seconds
     }
 
-    function onChange() {
-        const password = document.querySelector('input[name=psw]');
-        const confirm = document.querySelector('input[name=psw2]');
-        if (confirm.value === password.value) {
-            confirm.setCustomValidity('');
-        } else {
-            confirm.setCustomValidity('Passwords do not match');
-        }
-    }
-
-    function openSHForm() {
-        document.getElementById("SHForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-
-    }
-    function closeSHForm() {
-        document.getElementById("SHForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-
-    }
-    function openMOForm() {
-        document.getElementById("MOForm").style.display = "block";
-        document.getElementById("layer").style.display = "block";
-
-    }
-    function closeMOForm() {
-        document.getElementById("MOForm").style.display = "none";
-        document.getElementById("layer").style.display = "none";
-
-    }
     new Vue({
         el: '#app',
         data: {
             showSHForm: false,
             showMOForm: false,
+            showFormLayer: false,
+            passwordsMatch: null
+
 
         },
         methods: {
+            validatePasswords: function() {
+                const form = this.showSHForm ? document.querySelector('.SHform-popup .form-container') : document.querySelector('.MOform-popup .form-container');
+                const formData = new FormData(form);
+                const password = formData.get('psw');
+                const confirmPassword = formData.get('psw2');
+
+                this.passwordsMatch = (password === confirmPassword);
+            },
+            registerSH: function() {
+                // Step 1: Capture Form Data
+                const form = document.querySelector('.SHform-popup .form-container');
+                const formData = new FormData(form);
+
+                const firstName = formData.get('firstName');
+                const lastName = formData.get('lastName');
+                const phoneNum = formData.get('phoneNum');
+                const email = formData.get('email');
+                const password = formData.get('psw');
+
+                const type = 'owner';
+
+                // Step 2: Construct API URL
+                const apiUrl = `/api/users/register?firstName=${firstName}&lastName=${lastName}&phone=${phoneNum}&email=${email}&password=${password}&type=${type}`;
+
+                // Step 3: Make API Call
+                axios.post(apiUrl)
+                    .then(response => {
+                        // Handle success
+                        alert('Registration successful! You may login your account now!');
+                        window.location.href = '/login';
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error('Error updating user information:', error);
+                    });
+            },
+            registerMO: function() {
+                // Step 1: Capture Form Data
+                const form = document.querySelector('.MOform-popup .form-container');
+                const formData = new FormData(form);
+
+                const firstName = formData.get('firstName');
+                const lastName = formData.get('lastName');
+                const phoneNum = formData.get('phoneNum');
+                const email = formData.get('email');
+                const password = formData.get('psw');
+
+                const type = 'organiser';
+
+                // Step 2: Construct API URL
+                const apiUrl = `/api/users/register?firstName=${firstName}&lastName=${lastName}&phone=${phoneNum}&email=${email}&password=${password}&type=${type}`;
+
+                // Step 3: Make API Call
+                axios.post(apiUrl)
+                    .then(response => {
+                        // Handle success
+                        alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
+                        window.location.href = '/';
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error('Error updating user information:', error);
+                    });
+            },
             openSHForm: function() {
                 this.showSHForm = true;
+                this.showFormLayer = true;
 
             },
             closeSHForm: function() {
                 this.showSHForm = false;
+                this.showFormLayer = false;
+
             },
             openMOForm: function() {
                 this.showMOForm = true;
+                this.showFormLayer = true;
+
             },
             closeMOForm: function() {
                 this.showMOForm = false;
+                this.showFormLayer = false;
+
             }
         }
     });

@@ -160,9 +160,9 @@ body {
 
 .SHform-popup {
     width:70%;
-    height:78%;
+    height:60%;
     position: absolute;
-    top:12%;
+    top:20%;
     left:15%;
     right: 15px;
     background-color: white;
@@ -171,9 +171,9 @@ body {
 
 .MOform-popup {
     width:70%;
-    height:78%;
+    height:60%;
     position: absolute;
-    top:12%;
+    top:20%;
     left:15%;
     right: 15px;
     background-color: white;
@@ -206,7 +206,7 @@ body {
 .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 5px;
-    margin: 5px 0 5px 0;
+    margin: 10px 0 5px 0;
     border: none;
     background: #f1f1f1;
 }
@@ -232,7 +232,7 @@ body {
     width: 20%;
     left:40%;
     position: absolute;
-    bottom: -8%;
+    bottom: -18%;
     opacity: 0.8;
     font-weight: bold;
 }
