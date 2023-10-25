@@ -129,22 +129,19 @@ public class UserController {
     }
 
     @PutMapping
-    @ValidateUserType(type = "admin")
+    @ValidateUserType
     @Operation(summary = "Update user info", description = "Pass the updated user object, and will return the updated user object.")
-    public User updateUser(@RequestParam User pendingUpdateUser){
-        Optional<User> optionalUser = userRepository.findById(String.valueOf(pendingUpdateUser.getId()));
+    public boolean updateUser(@RequestParam String firstName, String lastName, String phone, String email, String userId){
+        Optional<User> optionalUser = userRepository.findById(String.valueOf(userId));
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            user.setEmail(pendingUpdateUser.getEmail());
-            user.setFirstName(pendingUpdateUser.getFirstName());
-            user.setLastName(pendingUpdateUser.getLastName());
-            user.setPassword(pendingUpdateUser.getPassword());
-            user.setPhone(pendingUpdateUser.getPhone());
-            return user;
+            user.setEmail(email);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhone(phone);
+            userRepository.save(user);  // 保存更改到数据库
+            return true;
         }
-        return null;
+        return false;
     }
-
-
-
 }
