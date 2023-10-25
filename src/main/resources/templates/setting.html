@@ -27,10 +27,10 @@
             <form action="#" class="setting-form">
                 <!--    need to modify-->
                 <label>First Name</label>
-                <input type="text" placeholder="first name" name="firstName" :value="userInfo.first_name" required>
+                <input type="text" placeholder="first name" name="firstName" v-model="updatedUserInfo.first_name" required>
 
                 <label style="margin-left: 25px">Last Name</label>
-                <input type="text" placeholder="last name" name="lastName" :value="userInfo.last_name" required>
+                <input type="text" placeholder="last name" name="lastName" v-model="updatedUserInfo.last_name" required>
 
 <!--                <label>Business Name</label>-->
 <!--                <input type="text" placeholder="Enter your business name, optional" name="businessName">-->
@@ -39,10 +39,10 @@
 <!--                <input type="text" placeholder="Enter your ABN number, optional" name="abn">-->
 
                 <label>Phone number</label>
-                <input type="text" placeholder="phone number" name="phoneNum" :value="userInfo.phone" required>
+                <input type="text" placeholder="phone number" name="phoneNum" v-model="updatedUserInfo.phone" required>
 
                 <label>Email</label>
-                <input type="text" placeholder="email address" name="email" :value="userInfo.userEmail" required>
+                <input type="text" placeholder="email address" name="email" v-model="updatedUserInfo.userEmail" required>
 
                 <!--        <label><b>Confirmed Email</b></label>-->
                 <!--        <input type="text" placeholder="Confirm your email address" name="email2" required>-->
@@ -82,7 +82,8 @@
         el: '#app',
         data: {
             pswForm: false,
-            userInfo:''
+            userInfo:'',
+            updatedUserInfo: {}
         },
         methods: {
             getUserInfo(){
@@ -96,35 +97,21 @@
                     });
             },
             updateUserInformation: function() {
-                // axios.put('/api/users', {
-                //     id: this.userInfo.id,
-                //     firstName: this.userInfo.firstName,
-                //     lastName: this.userInfo.lastName,
-                //     email: this.userInfo.email,
-                //     phone: this.userInfo.phone
-                // })
-                //     .then(response => {
-                //         // Handle success
-                //         alert('User information updated successfully');
-                //     })
-                //     .catch(error => {
-                //         // Handle error
-                //         console.error('Error updating user information:', error);
-                //     });
-                const data = {
-                    id: this.userInfo.id,
-                    firstName: this.userInfo.firstName,
-                    lastName: this.userInfo.lastName,
-                    email: this.userInfo.email,
-                    phone: this.userInfo.phone
-                };
-                console.log("Data being sent: ", data);  // Debugging line
+                // Step 1: Capture Form Data
+                const { first_name, last_name, phone, userEmail } = this.updatedUserInfo;
+                const userId = this.userInfo.userId;
 
-                axios.put('/api/users', data)
+                // Step 2: Construct API URL
+                const apiUrl = `/api/users?firstName=${first_name}&lastName=${last_name}&phone=${phone}&email=${userEmail}&userId=${userId}`;
+
+                // Step 3: Make API Call
+                axios.put(apiUrl)
                     .then(response => {
-                        alert('User information updated successfully');
+                        // Handle success
+                        alert('User information updated successfully! You may need to re-login to see the changes.');
                     })
                     .catch(error => {
+                        // Handle error
                         console.error('Error updating user information:', error);
                     });
             },
@@ -133,30 +120,40 @@
 
             },
             closePswForm: function() {
-                const newPassword = document.querySelector('input[name=psw]').value;
-                const confirmPassword = document.querySelector('input[name=psw2]').value;
-
-                if (newPassword === confirmPassword) {
-                    axios.put('/api/users', {
-                        id: this.userInfo.id,
-                        password: newPassword // Make sure to encrypt this before sending
-                    })
-                        .then(response => {
-                            // Handle success
-                            alert('Password updated successfully');
-                        })
-                        .catch(error => {
-                            // Handle error
-                            console.error('Error updating password:', error);
-                        });
-                } else {
-                    alert('Confirm password is not the same as the new password');
-                }
+                // const newPassword = document.querySelector('input[name=psw]').value;
+                // const confirmPassword = document.querySelector('input[name=psw2]').value;
+                //
+                // if (newPassword === confirmPassword) {
+                //     axios.put('/api/users', {
+                //         id: this.userInfo.id,
+                //         password: newPassword // Make sure to encrypt this before sending
+                //     })
+                //         .then(response => {
+                //             // Handle success
+                //             alert('Password updated successfully');
+                //         })
+                //         .catch(error => {
+                //             // Handle error
+                //             console.error('Error updating password:', error);
+                //         });
+                // } else {
+                //     alert('Confirm password is not the same as the new password');
+                // }
                 this.pswForm = false;
             }
         },
         mounted() {
             this.getUserInfo();
+            // this.updatedUserInfo = Object.assign({}, this.userInfo);  // Initialize updatedUserInfo
+
+        },
+        watch: {
+            userInfo: {
+                immediate: true,  // Run the handler immediately after the watcher is created
+                handler: function(newVal) {
+                    this.updatedUserInfo = JSON.parse(JSON.stringify(newVal));  // Deep copy
+                }
+            }
         }
     });
     // function onChange() {

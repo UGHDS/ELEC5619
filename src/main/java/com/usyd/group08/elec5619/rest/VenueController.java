@@ -133,6 +133,7 @@ public class VenueController {
                 String street = venue.getStreet();
                 String suburb = venue.getSuburb();
                 String state = venue.getState();
+                String description = venue.getDescription();
                 String address = street+", "+suburb+" "+state;
                 int stallNum = venue.getStalls().size();
                 String image = venue.getPicture();
@@ -140,6 +141,7 @@ public class VenueController {
                 response.put("id", venueId);
                 response.put("name", venueName);
                 response.put("suburb", suburb);
+                response.put("description", description);
                 response.put("address", address);
                 response.put("stall", stallNum);
                 response.put("image", image);

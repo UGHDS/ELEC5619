@@ -8,6 +8,7 @@
     <title>Market Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-QTHpG5rvbPs5uE2QE7ucfGeXbU1g_hE&callback=initMap"></script>
 
 </head>
 
@@ -18,13 +19,29 @@
     <span class="userHomeTitle">Market list</span>
 
     <div class="frameContainerR">
-        <div class="marketItem" v-for="market in markets" :key="market.id">
-            <div class="orderNum">Venue #{{ market.id }}</div>
-            <div class="marketStall">{{ market.name }}</div>
-<!--            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>-->
-            <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
-            <br>
-            <div class="userline"></div>
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'listView' }" @click="changeTab('listView')" style="border-radius: 20px 0px 0px 0px">View by List</button>
+            <button class="tablinks" :class="{ active: currentTab === 'mapView' }" @click="changeTab('mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
+        </div>
+
+        <div v-show="currentTab === 'listView'" class="tabcontent">
+            <div class="marketItemDiv2" style="top:10%;">
+                <div class="marketItem" v-for="market in markets" :key="market.id">
+                    <div class="orderNum">Venue #{{ market.id }}</div>
+                    <div class="marketStall">{{ market.name }}</div>
+                    <!--            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>-->
+                    <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
+                    <br>
+                    <div class="userline"></div>
+                </div>
+            </div>
+
+        </div>
+        <div v-show="currentTab === 'mapView'" class="tabcontent">
+            <!--            <form @submit.prevent="searchMarkets">-->
+            <!--                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">-->
+            <!--            </form>-->
+            <div id="map" style="height: 420px;"></div>
         </div>
     </div>
 
@@ -43,19 +60,53 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 <script>
+    function initMap() {
+
+    }
+
+    function setMapBounds(map, markers) {
+        var bounds = new google.maps.LatLngBounds();
+
+        markers.forEach(function(marker) {
+            bounds.extend(marker.position);
+        });
+
+        map.fitBounds(bounds);
+    }
+
     new Vue({
         el: '#app',
         data: {
+            currentTab: 'listView',
             markets:[],
             currentMarket: {},
             showReviewForm: false,
             showFormLayer: false,
         },
         methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
             getMarkets() {
                 axios.get('/api/venues') // Make sure the URL is correct
                     .then(response => {
                         this.markets = response.data;
+                        let marks = [];
+                        let map;
+                        for(let i=0; i<this.markets.length; i++){
+                            if(i===0){
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                    zoom: 20
+                                });
+                            }
+                            marks.push(new google.maps.Marker({
+                                position: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                map: map,
+                                title: this.markets[i].name,
+                            }));
+                        }
+                        setMapBounds(map, marks);
                     })
                     .catch(error => {
                         if (error.response) {
@@ -63,6 +114,10 @@
                         }
                         console.error("Error fetching data:", error);
                     });
+            },
+            goToMarketInfo(marketId) {
+                // 使用Vue Router 或者直接window.location进行页面跳转
+                window.location.href = `/marketInfo?id=${marketId}`;
             },
             openREForm: function(market) {  // 添加参数
                 this.currentMarket = market;  // 保存当前的market

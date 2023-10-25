@@ -36,8 +36,8 @@ INSERT INTO stall (venue_id, stall_id, price) VALUES (2,'B_02','100');
 /*Stall Date*/
 INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 1, 1, 6, 'Available');
 INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 2, 1, 7, 'Available');
-INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 3, 1, 8, 'Available');
-INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 4, 1, 9, 'Available');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 3, 1, 8, 'Booked');
+INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 4, 1, 9, 'Booked');
 INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-25', 5, 1, 10, 'Available');
 INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-24', 6, 2, 11, 'Available');
 INSERT INTO stall_date (date_slot, stall_id, venue_id, id, status) VALUES ('2023-09-24', 7, 2, 12, 'Available');

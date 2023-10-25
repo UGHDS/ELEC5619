@@ -669,9 +669,9 @@ body {
     border:none;
     background-color: darkgray;
     color: white;
-    position: absolute;
+    /*position: absolute;*/
     margin-left: 972px;
-    margin-top: 15px;
+    margin-top: -35px;
     width:20%;
     height: 40px;
     border-radius: 4px;
@@ -968,11 +968,10 @@ body {
 
 /*marketAdmin.html*/
 .marketItem{
-    border: none;
+    /*border: none;*/
     /*position: absolute;*/
     margin-top: 20px;
     width:100%;
-    height:20%;
 }
 
 .marketReview{
@@ -980,9 +979,9 @@ body {
     background-color: #9BB692;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    right:5%;
-    width:15%;
+    margin-top: -40px;
+    margin-left: 900px;
+    width:20%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -1003,12 +1002,23 @@ body {
     height:65%;
     bottom:10%;
     left:5%;
-    overflow-y: auto;
 }
 
 /*marketList.html*/
 .marketItemDiv{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width:100%;
+    height: 85%;
+    position: absolute;
+    top:15%;
+    left:0%;
+    overflow-y: auto;
+}
+
+.marketItemDiv2{
+    /*display: flex;*/
     flex-wrap: wrap;
     justify-content: space-between;
     width:100%;
@@ -1408,4 +1418,11 @@ body {
 .confirmAddStall:hover{
     background-color: darkgreen;
     color:white;
+}
+
+.photoLink{
+    width: 800px;
+    position: absolute;
+    top:25%;
+    left:5%;
 }

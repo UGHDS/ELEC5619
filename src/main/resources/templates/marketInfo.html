@@ -186,11 +186,7 @@
                 text: '',  // Default initial value
                 value: ''
             },
-            optionsDate: [
-                { value: 'date1', text: 'date1' },
-                { value: 'date2', text: 'date2' },
-                { value: 'date3', text: 'date3' }
-            ],
+            optionsDate: [],
             showLayer: false,
             showBookingForm: false,
             showPaymentForm: false,
@@ -294,7 +290,7 @@
                 this.showBookingForm = true;
                 this.showPaymentForm = false;
             },
-            closePaymentForm: function() {
+            closePaymentForm() {
                 const stallId = this.selectedOptionStall.value; // Assuming this is the stall ID
                 axios.post(`/api/bookings?stallDateId=${stallId}`, {
                     // Your payload here. For example:

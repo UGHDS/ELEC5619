@@ -40,7 +40,7 @@
 
                         <template v-if="organiser.status === 'pending'">
                             <button type="button" id="review" class="reviewBtn" @click="openREOneForm(organiser)">View Registration Detail</button>
-                            <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>
+                            <button type="button" id="approve" class="approveBtn" @click="approveOrganiser(organiser.organiserId)">Approve</button>
                             <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>
                         </template>
 
@@ -189,10 +189,20 @@
                 this.showReviewOneForm = false;
                 this.showFormLayer = false;
             },
-            approveClick: function() {
-                this.isApproveVisible = false;
-                this.isDenyVisible = false;
-                // ...rest of your logic...
+            approveOrganiser(organiserId) {
+                axios.put(`/api/users/organisers/approve?userID=${organiserId}`)
+                    .then(response => {
+                        // Find the index of the organiser in the organisers array
+                        const index = this.organisers.findIndex(org => org.organiserId === organiserId);
+
+                        // Update the status of the organiser to 'active'
+                        if (index !== -1) {
+                            this.organisers[index].status = 'active';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error approving the organiser:", error);
+                    });
             },
             denyClick: function() {
                 this.isApproveVisible = false;
