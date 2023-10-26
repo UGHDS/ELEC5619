@@ -200,32 +200,28 @@ public class VenueController {
         return false;
     }
 
-    /**
-     * Update venue information
-     *
-     * @param venueWrapper
-     * @return
-     */
     @PutMapping
-    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
+//    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Update venue info", description = "Pass the updated venue object, and will return the updated venue object.")
-    public Venue updateVenue(@RequestBody VenueWrapper venueWrapper) {
-        User user = (User) httpSession.getAttribute("currentUser");
-        Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueWrapper.getVenueId()));
+    public boolean updateVenue(@RequestParam String venueId, String latitude, String longitude, String description, String picture, String state, String street, String suburb, String venueName) {
+//        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueId));
         if (optionalVenue.isPresent()) {
             Venue venue = optionalVenue.get();
-            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
-                venue.setStreet(venueWrapper.getStreet());
-                venue.setSuburb(venueWrapper.getSuburb());
-                venue.setState(venueWrapper.getState());
-                venue.setDescription(venueWrapper.getDescription());
-                venue.setPicture(venueWrapper.getPicture());
-                venue.setLongitude(venueWrapper.getLongitude());
-                venue.setLatitude(venueWrapper.getLatitude());
-                return venueRepository.save(venue);
-            }
+//            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
+                venue.setStreet(street);
+                venue.setSuburb(suburb);
+                venue.setState(state);
+                venue.setDescription(description);
+                venue.setPicture(picture);
+                venue.setLongitude(Double.valueOf(longitude));
+                venue.setLatitude(Double.valueOf(latitude));
+                venue.setVenueName(venueName);
+                venueRepository.save(venue);
+                return true;
+//            }
         }
-        return null;
+        return false;
     }
 
 
