@@ -152,4 +152,18 @@ public class UserController {
         }
         return false;
     }
+
+    @PutMapping("/password")
+//    @ValidateUserType
+    @Operation(summary = "Update user info", description = "Pass the updated user object, and will return the updated user object.")
+    public boolean updatePassword(@RequestParam String userId, String password){
+        Optional<User> optionalUser = userRepository.findById(String.valueOf(userId));
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setPassword(password);
+            userRepository.save(user);  // 保存更改到数据库
+            return true;
+        }
+        return false;
+    }
 }
