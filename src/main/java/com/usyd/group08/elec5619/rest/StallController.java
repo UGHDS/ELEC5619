@@ -64,20 +64,23 @@ public class StallController {
     }
 
     @PostMapping
-    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
+//    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add stalls into venue by id", description = "Pass a list of stalls in post body and a " +
             "venue id in the query. venue_id must from current user. [NOTES] venue_id in 'Request body' can skip and will be ignored")
-    public boolean addStalls(@RequestParam int venueId, @RequestBody List<Stall> stalls) {
-        User user = (User) httpSession.getAttribute("currentUser");
-        Optional<Venue> venue = venueRepository.findById(venueId);
-        if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
-            for (Stall stall : stalls) {
-                stall.setVenueId(venueId);
-                stallRepository.save(stall);
-            }
-            return true;
-        }
-        return false;
+    public boolean addStalls(@RequestParam String venueId, String price, String stallName) {
+//        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> venue = venueRepository.findById(Integer.valueOf(venueId));
+//        if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
+//            for (Stall stall : stalls) {
+        Stall newStall = new Stall();
+        newStall.setVenueId(Integer.valueOf(venueId));
+        newStall.setPrice(Double.valueOf(price));
+        newStall.setStallId(stallName);
+        stallRepository.save(newStall);
+//            }
+        return true;
+//        }
+//        return false;
     }
 
     @DeleteMapping
