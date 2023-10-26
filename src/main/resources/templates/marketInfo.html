@@ -21,9 +21,6 @@
     <div class="frameContainer">
 
         <div class="tab">
-<!--            <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" style="width:33.3%; border-radius: 20px 0px 0px 0px" >Venue Information</button>-->
-<!--            <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" style="width:33.3%">Photo Gallery</button>-->
-<!--            <button class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Booking a stall</button>-->
             <button class="tablinks" :class="{ active: currentTab === 'MarketInformation' }" @click="changeTab('MarketInformation')" :style="getTabStyle('MarketInformation')">Venue Information</button>
             <button class="tablinks" :class="{ active: currentTab === 'PhotoGallery' }" @click="changeTab('PhotoGallery')" :style="getTabStyle('PhotoGallery')">Photo Gallery</button>
             <button v-if="userInfo.type === 'owner'" class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" :style="getTabStyle('StallBooking')">Booking a stall</button>
@@ -39,8 +36,10 @@
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
-            <div class="photoVenue" style='background-image: url("../image/marketTest.jpg")'></div>
-<!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
+<!--            <div class="photoVenue" style='background-image: url("../image/marketTest.jpg")'></div>-->
+            <div class="photoVenue" :style="{ 'background-image': 'url(' + marketInfo.image + ')' }"></div>
+
+            <!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
         </div>
 
         <div v-show="currentTab === 'StallBooking'"  class="tabcontent" >
@@ -49,7 +48,6 @@
                     <option v-for="option in optionsDate" :value="option.value">{{ option.text }}</option>
                 </select>
 
-<!--                <input type="date" v-model="selectedOptionDate.value" id="datePickerS" name="datePickerS" value="2023-11-10" style="width:12%; margin-left: 10px" required>-->
 
             </div>
 
@@ -60,7 +58,6 @@
             </div>
 
             <button class="bookingConfirm" @click="openBookingForm">Confirm</button>
-<!--            <button v-else class="directLogin" @click="redirectToLogin">Login to Continue</button>-->
 
 
 
@@ -70,7 +67,6 @@
     <div class="blackLayer" v-show="showLayer"></div>
     <div class="booking-popup" v-show="showBookingForm">
         <button type="button" class="btn cancel" @click="closeBookingForm">x</button>
-<!--        <form action="" method="" class="bookingContainer">-->
         <form class="bookingContainer">
 
             <h2>Order detail</h2>
@@ -175,7 +171,9 @@
             marketInfo: '',
             venueInfo:'',
             userInfo:'',
+            stallDateId: null,
             optionsStall: [],
+            stallDates: [],
             // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
             // userType: localStorage.getItem('userType'),
             selectedOptionDate: {
@@ -274,6 +272,20 @@
                         console.error("Error fetching data:", error);
                     });
             },
+            fetchStallDates() {
+                const id = this.selectedOptionStall.value;
+
+                axios.get(`/api/stalls/${id}/stallDates`)
+                    .then(response => {
+                        this.stallDates = response.data;
+                        if (this.stallDates.length > 0) {
+                            this.stallDateId = this.stallDates[0].id;  // Store the first stallDateId
+                        }
+                    })
+                    .catch(error => {
+                        console.error('There was an error fetching stall dates:', error);
+                    });
+            },
             openBookingForm: function() {
                 this.showBookingForm = true;
                 this.showLayer = true;
@@ -291,8 +303,7 @@
                 this.showPaymentForm = false;
             },
             closePaymentForm() {
-                const stallId = this.selectedOptionStall.value; // Assuming this is the stall ID
-                axios.post(`/api/bookings?stallDateId=${stallId}`, {
+                axios.post(`/api/bookings?stallDateId=${this.stallDateId}`, {
                     // Your payload here. For example:
                     // name: this.userInfo.first_name,
                     // email: this.userInfo.userEmail,
@@ -301,6 +312,8 @@
                     .then(response => {
                         // Handle success
                         console.log("Booking successful:", response);
+                        alert('Your order has been placed successfully!');
+                        window.location.href = '/uhome';
                     })
                     .catch(error => {
                         // Handle error
@@ -316,15 +329,15 @@
                     this.additionalFees -= this.facilityFee;
                 }
             }
-            // redirectToLogin() {
-            //     window.location.href = "/login";
-            // }
         },
         watch: {
             'selectedOptionStall.value': function(newVal) {
                 const selected = this.optionsStall.find(option => option.value === newVal);
                 if (selected) {
                     this.selectedOptionStall.text = selected.text;
+                    this.selectedOptionStall.value = selected.value;
+
+                    this.fetchStallDates();
                 }
             },
             'selectedOptionDate.value': function(newVal) {
@@ -332,7 +345,6 @@
                 if (selected) {
                     this.selectedOptionDate.text = selected.text;
                 }
-                // this.selectedOptionDate.text = newVal;
             }
         },
         mounted() {
@@ -342,6 +354,7 @@
 
             this.fetchMarketData(marketId);
             this.fetchMarketData2(marketId);
+            // this.fetchStallDates();
 
         }
     });
