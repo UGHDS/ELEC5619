@@ -16,9 +16,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/stalls")
@@ -41,14 +39,28 @@ public class StallController {
      * @return
      */
     @GetMapping
-    @ValidateUserType
+//    @ValidateUserType
     @Operation(summary = "Find all stalls in current venue", description = "Pass venue ID, and will return stalls list in this specific venue")
-    public List<Stall> getStallsByVenueId(@RequestParam String venueID) {
+    public List<Map<String, Object>> getStallsByVenueId(@RequestParam String venueID) {
+        List<Map<String, Object>> responses = new ArrayList<>();
         Optional<Venue> venue = venueRepository.findById(Integer.parseInt(venueID));
         if (venue.isPresent()) {
-            return venue.get().getStalls();
+            List<Stall> stallList = venue.get().getStalls();
+
+            for (Stall stall: stallList) {
+                List<StallDate> stallDateList = stallDateRepository.getStallDateByStallId(stall.getId());
+                for (StallDate stallDate: stallDateList) {
+                    if (stallDate.getStatus().equals("Available")){
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("stallId", stall.getId());
+                        response.put("stallName", stall.getStallId());
+                        response.put("dateSlot", stallDate.getVenueDate().getDateSlot());
+                        responses.add(response);
+                    }
+                }
+            }
         }
-        return null;
+        return responses;
     }
 
     @PostMapping
