@@ -1,20 +1,20 @@
 # Used Libraries and Their Versions
-Spring Boot Starter Parent: 3.1.2
-Spring Boot Starter Data JPA: Latest (inherited from parent)
-Spring Boot Starter Web: Latest (inherited from parent)
-MySQL Connector: Runtime scope
-Spring Boot Starter Test: Test scope
-Spring Boot Starter Thymeleaf: Latest (inherited from parent)
-Spring Boot Devtools: Optional
-Springdoc OpenAPI Starter WebMVC UI: 2.1.0
-Spring Boot Starter AOP: Latest (inherited from parent)
-JUnit: Test scope
+  - Spring Boot Starter Parent: 3.1.2
+  - Spring Boot Starter Data JPA: Latest (inherited from parent)
+  - Spring Boot Starter Web: Latest (inherited from parent)
+  - MySQL Connector: Runtime scope
+  - Spring Boot Starter Test: Test scope
+  - Spring Boot Starter Thymeleaf: Latest (inherited from parent)
+  - Spring Boot Devtools: Optional
+  - Springdoc OpenAPI Starter WebMVC UI: 2.1.0
+  - Spring Boot Starter AOP: Latest (inherited from parent)
+  - JUnit: Test scope
 
 # Working Functionalities
-User Management
-Stall Management
-Venue Management
-Booking Management
+  - User Management
+  - Stall Management
+  - Venue Management
+  - Booking Management
 
 # Quick Guide on How to Run the Application
   1. Make sure you have MySQL installed and running.
