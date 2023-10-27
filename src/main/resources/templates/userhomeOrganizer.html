@@ -34,7 +34,7 @@
                 <input type="text" v-model="updatedInfo.name" name="venueName" id="venueName" style="width:87.8%; margin-left: 10px" required />
 
                 <label>Address: </label>
-                <input type="text" id="addressInput" v-model="marketInfo.address" placeholder="Enter an address" name="addressM" />
+                <input type="text" id="addressInput" v-model="updatedInfo.address" placeholder="Enter an address" name="addressM" />
 
                 <label>Start Date:</label>
                 <input type="date" v-model="startDate" style="width:12%; margin-left: 10px" required>
@@ -56,7 +56,7 @@
 <!--                <input type="time" id="timePickerE" name="timePickerE" value="16:00" style="width:12%; margin-left: 10px" required>-->
 
                 <br><label>Brief introduction of the Venue:</label>
-                <textarea name="venueInfo" v-model="updatedInfo.description" id="venueInfo" style="height:120px;white-space: pre-wrap;" required>A Favourite Community Attraction since the Seventies. Fairfield Showground is renowned as the venue of the Fairfield Markets which have been attracting many thousands of shoppers each weekend since the Seventies. Our markets are the largest in Sydney's West. Friendly Family Fun is the motto of these markets and the fun is guaranteed. Every Saturday from 9AM to 4PM up to 600 undercover stalls are filled with everything from childrens' toys to clothes, sporting gear to jewellery, household items to car accessories, workshop tools to pool products and grocery items to fresh fruit and vege's. While the adults look for the bargains the kids can use up their energy on the jumping castle, carnival rides, merry go round or pony rides. And, when it is time for a relaxing break there are plenty of places to pick up mouth watering kebabs, burgers, Asian delicacies, ice creams, donuts, cold drinks or coffee.
+                <textarea name="venueInfo" v-model="updatedInfo.description" id="venueInfo" style="height:120px;white-space: pre-wrap;" required>
                       </textarea>
             </form>
 
@@ -123,7 +123,7 @@
             currentTab: 'VenueInformation',
             updatedInfo: {},
             startDate: '2023-10-10',
-            endDate: '2023-12-10',
+            endDate: '2023-10-17',
             selectedWeekdays: []
         },
         methods: {
@@ -211,14 +211,16 @@
             updateMarketInformation: function() {
                 // Step 1: Capture Form Data
                 const venueId = this.marketInfo.id;
-                const latitude = this.marketInfo.latitude;
-                const longitude = this.marketInfo.longitude;
+                const latitude = venue.latitude;
+                const longitude = venue.longitude;
                 const description = this.updatedInfo.description;
                 const picture = this.updatedInfo.image;
-                const state = this.marketInfo.state;
-                const street = this.marketInfo.street;
-                const suburb = this.marketInfo.suburb;
+                // const address = this.updatedInfo.address;
+                const state = venue.state;
+                const street = venue.street;
+                const suburb = venue.suburb;
                 const venueName = this.updatedInfo.name;
+                console.log('venue:',venue);
 
                 // Step 2: Construct API URL
                 const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
@@ -293,14 +295,19 @@
         var input = document.getElementById('addressInput');
         var service = new google.maps.places.PlacesService(input);
 
+
         service.getDetails({
             placeId: placeId
         }, function(place, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 const address = extractAddressDetails(place);
+                // console.log('state:', address.state);
+                // console.log('address:', address);
                 venue.state = address.state;
                 venue.street = address.street;
                 venue.suburb = address.suburb;
+                // console.log('state:', address.state);
+                // console.log('address:', address);
             }
         });
     }

@@ -4,7 +4,7 @@
     <head th:include="fragments/header :: head"></head>
     <link href="../css/styles.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Page</title>
+    <title>Register Success Page</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
 
@@ -19,77 +19,16 @@
 
 <div id="app">
     <div class="indexContent">
-        <span class="welcomeM" style="font-size: 50px; top:15%">Welcome Back</span>
     </div>
     <div class="loginFormDiv" style="top:28%">
-        <form @submit.prevent="handleLogin" class="loginForm">
+        <div class="loginForm">
+            <span class="RStext">Thank you for registering in our website! If you are registered as stall holder, you may login to your account now! If you are registed as marker organizer, there will be an approval process to confirm your given information to keep our customers safe. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!</span>
 
-            <input type="email" placeholder="Enter your email address" name="email" required>
+            <button class="btn" @click="goToLogin" style="top:80%">OK</button>
+        </div>
 
-            <input type="password" placeholder="Enter your password" name="password" required>
 
-            <button type="submit" class="btn" onclick="">LOGIN</button>
-        </form>
-        <span class="noAccountMsg">Doesn't have an account yet?</span>
 
-        <button class="signupSHLogin" id="formSh" @click="openSHForm">Register as STALL HOLDER</button>
-        <button class="signupMOLogin" id="formMo" @click="openMOForm">Register as MARKET ORGANIZER</button>
-    </div>
-
-    <div class="blackLayer" v-show="showFormLayer"></div>
-
-    <div class="SHform-popup" v-show="showSHForm">
-        <button type="button" class="btn cancel" @click="closeSHForm">x</button>
-        <form action="/api/users/register" method="post" class="form-container">
-            <h2 style="text-align: center">Registration for Stall Holder</h2>
-
-            <label><b>First Name</b></label>
-            <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-            <label style="margin-left: 25px"><b>Last Name</b></label>
-            <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-            <label><b>Phone number</b></label>
-            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-            <label><b>Email</b></label>
-            <input type="text" placeholder="Enter your email address" name="email" required>
-
-            <label><b>Password</b></label>
-            <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
-
-            <label><b>Confirmed Password </b><span v-if="psw2 != '' && passwordsMatch === false" style="color:red;">Passwords do not match</span>
-            </label>
-            <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
-
-            <button type="submit" class="btn" @click="registerSH" :disabled="passwordsMatch === false">Register</button>
-        </form>
-    </div>
-    <div class="MOform-popup" v-show="showMOForm">
-        <button type="button" class="btn cancel" @click="closeMOForm">x</button>
-        <form action="/api/users/register" method="post" class="form-container">
-
-            <h2 style="text-align: center">Registration for Market Organizer</h2>
-
-            <label><b>First Name</b></label>
-            <input type="text" placeholder="Enter your first name" name="firstName" required>
-
-            <label style="margin-left: 25px"><b>Last Name</b></label>
-            <input type="text" placeholder="Enter your last name" name="lastName" required>
-
-            <label><b>Phone number</b></label>
-            <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
-
-            <label><b>Email</b></label>
-            <input type="text" placeholder="Enter your email address" name="email" required>
-
-            <label><b>Password</b></label>
-            <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
-
-            <label><b>Confirmed Password </b><span v-if="psw2 != '' && passwordsMatch === false" style="color:red;"> Passwords do not match</span></label>
-            <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
-
-            <button type="submit" class="btn" @click="registerMO" :disabled="passwordsMatch === false">Register</button>        </form>
     </div>
 </div>
 <div th:replace="fragments/footer :: footer"></div>
@@ -107,6 +46,9 @@
 
         },
         methods: {
+            goToLogin() {
+                window.location.href = '/login';
+            },
             validatePasswords: function() {
                 const form = this.showSHForm ? document.querySelector('.SHform-popup .form-container') : document.querySelector('.MOform-popup .form-container');
                 const formData = new FormData(form);
@@ -154,8 +96,8 @@
 
                 axios.post(apiUrl)
                     .then(response => {
-                        // alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
-                        window.location.href = '/registerSuccess';
+                        alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
+                        window.location.href = '/';
                     })
                     .catch(error => {
                         console.error('Error updating user information:', error);

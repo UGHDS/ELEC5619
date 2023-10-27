@@ -12,10 +12,8 @@
 
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
 <div id="app">
     <span class="userHomeTitle"><a href="/marketList" class="backBtn"><</a>{{marketInfo.name}}</span>
     <div class="frameContainer">
@@ -26,20 +24,16 @@
             <button v-if="userInfo.type === 'owner'" class="tablinks" :class="{ active: currentTab === 'StallBooking' }" @click="changeTab('StallBooking')" :style="getTabStyle('StallBooking')">Booking a stall</button>
         </div>
 
-        <!-- Tab content -->
         <div v-show="currentTab === 'MarketInformation'"  class="tabcontent">
             <div class="venueDescription">{{marketInfo.description}}</div>
             <div class="venueAddress">{{marketInfo.address}}</div>
-<!--            <div class="openHour">Open Hours: openHour</div>-->
             <div class="venuePrice">Estimated Stall Fee: ${{marketInfo.stall_price}}</div>
             <div class="stallNumber">Total stall: {{marketInfo.stall}}</div>
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
-<!--            <div class="photoVenue" style='background-image: url("../image/marketTest.jpg")'></div>-->
             <div class="photoVenue" :style="{ 'background-image': 'url(' + marketInfo.image + ')' }"></div>
 
-            <!--            <div class="photoVenue" :style="'background-image: url(../image/' + marketInfo.image + ')'"></div>-->
         </div>
 
         <div v-show="currentTab === 'StallBooking'"  class="tabcontent" >
@@ -67,7 +61,7 @@
     <div class="blackLayer" v-show="showLayer"></div>
     <div class="booking-popup" v-show="showBookingForm">
         <button type="button" class="btn cancel" @click="closeBookingForm">x</button>
-        <form class="bookingContainer">
+        <div class="bookingContainer">
 
             <h2>Order detail</h2>
 
@@ -101,15 +95,15 @@
             <label class="label" for="description">Description on the product you will be selling (max 300 words)</label>
             <input type="text" id="description" required>
 
-            <button type="submit" class="btn" @click="openPaymentForm">Book Now</button>
+            <button class="btn" @click="openPaymentForm">Book Now</button>
 
-        </form>
+        </div>
     </div>
 
     <div class="payment-popup" v-show="showPaymentForm">
         <button type="button" class="btn cancel" @click="backBookingForm"><</button>
         <button type="button" class="btn cancel" @click="closePaymentForm">x</button>
-        <form action="" method="" class="paymentContainer">
+        <div class="paymentContainer">
             <h2>Payment</h2>
 
             <table>
@@ -153,16 +147,14 @@
 
             <br><button type="submit" class="btn" @click="closePaymentForm">Place Order</button>
 
-        </form>
+        </div>
     </div>
 
 </div>
 
 
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!--你可以在下面添加自己想添加的JavaScript-->
 <script>
     new Vue({
         el: '#app',
@@ -175,14 +167,12 @@
             optionsStall: [],
             stallDates: [],
             stallInfo:[],
-            // isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
-            // userType: localStorage.getItem('userType'),
             selectedOptionDate: {
-                text: '',  // Default initial value
+                text: '',
                 value: ''
             },
             selectedOptionStall: {
-                text: '',  // Default initial value
+                text: '',
                 value: ''
             },
             optionsDate: [],
@@ -209,7 +199,7 @@
         },
         methods: {
             getUserInfo(){
-                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo')
                     .then(response => {
                         this.userInfo = response.data;
                     })
@@ -240,12 +230,8 @@
             fetchMarketData(marketId) {
                 axios.get(`/api/venues/venueByVenueId?venueID=${marketId}`)
                     .then(response => {
-                        // 使用响应数据来更新Vue实例的数据
                         this.marketInfo = response.data;
-                        // this.optionsStall = this.marketInfo.stalls.map(stall => ({
-                        //     value: stall.id,
-                        //     text: stall.stallId
-                        // }));
+
                     })
                     .catch(error => {
                         console.error("Error fetching data:", error);
@@ -254,7 +240,6 @@
             fetchMarketData1(marketId) {
                 axios.get(`/api/stalls?venueID=${marketId}`)
                     .then(response => {
-                        // 使用响应数据来更新Vue实例的数据
                         this.stallInfo = response.data;
 
                         this.updateOptionsStallBasedOnDate();
@@ -266,16 +251,13 @@
             fetchMarketData2(marketId) {
                 axios.get(`/api/venueDate?venueId=${marketId}`)
                     .then(response => {
-                        // Use the response data to update the Vue instance's data
                         this.venueInfo = response.data;
 
-                        // Populate optionsDate with the dateSlot values
                         this.optionsDate = this.venueInfo.map(item => ({
                             value: item.dateSlot,
                             text: item.dateSlot
                         }));
 
-                        // Set the default selected date to the first available date
                         if (this.optionsDate.length > 0) {
                             this.selectedOptionDate.value = this.optionsDate[0].value;
                             this.selectedOptionDate.text = this.optionsDate[0].text;
@@ -300,7 +282,7 @@
                     .then(response => {
                         this.stallDates = response.data;
                         if (this.stallDates.length > 0) {
-                            this.stallDateId = this.stallDates[0].id;  // Store the first stallDateId
+                            this.stallDateId = this.stallDates[0].id;
                         }
                     })
                     .catch(error => {
@@ -324,20 +306,13 @@
                 this.showPaymentForm = false;
             },
             closePaymentForm() {
-                axios.post(`/api/bookings?stallDateId=${this.stallDateId}`, {
-                    // Your payload here. For example:
-                    // name: this.userInfo.first_name,
-                    // email: this.userInfo.userEmail,
-                    // ...other data
-                })
+                axios.post(`/api/bookings?stallDateId=${this.stallDateId}`)
                     .then(response => {
-                        // Handle success
                         console.log("Booking successful:", response);
                         alert('Your order has been placed successfully!');
                         window.location.href = '/uhome';
                     })
                     .catch(error => {
-                        // Handle error
                         console.error("Booking failed:", error);
                     });
                 this.showPaymentForm = false;
@@ -378,7 +353,6 @@
             this.fetchMarketData(marketId);
             this.fetchMarketData1(marketId);
             this.fetchMarketData2(marketId);
-            // this.fetchStallDates();
 
         }
     });

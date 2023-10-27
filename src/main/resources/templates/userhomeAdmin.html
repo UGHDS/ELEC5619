@@ -10,18 +10,13 @@
 
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
 <div id="vueApp">
-    <!-- Navbar -->
 
-    <!-- Main Content -->
     <div class="container-md">
         <span class="userHomeTitle">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
 
-        <!-- ... Rest of your content ... -->
         <div class="frameContainer">
 
             <div class="tab">
@@ -30,7 +25,6 @@
                 <button class="tablinks" :class="{ active: currentTab === 'BookingHistory' }" @click="changeTab('BookingHistory')" style="width:33.4%;border-radius: 0px 20px 0px 0px">Booking History</button>
             </div>
 
-            <!-- Tab content -->
             <div v-show="currentTab === 'RegistrationReview'" class="tabcontent">
                 <div class="frame">
                     <div v-for="organiser in organisers" :key="organiser.organiserId" class="bookingItem">
@@ -45,11 +39,6 @@
                         </template>
 
                         <button v-if="organiser.status === 'deny'" type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>
-<!--                        <button type="button" id="review" class="reviewBtn" @click="openREOneForm(organiser)">View Registration Detail</button>-->
-<!--                        <button type="button" id="approve" class="approveBtn" @click="approveClick">Approve</button>-->
-<!--                        <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>-->
-<!--                        <button type="button" id="review2" class="reviewBtn2" @click="openREForm">View Registration Detail</button>-->
-<!--                        <button type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>-->
                         <br><div class="userline"></div>
                     </div>
                 </div>
@@ -109,7 +98,6 @@
         <span>Account status: {{ currentOrganiser.status }}</span>
     </div>
 
-    <!-- Footer -->
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 <script>
@@ -131,7 +119,7 @@
                 this.currentTab = tabName;
             },
             welcomeMsg(){
-                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo')
                     .then(response => {
                         this.welcome = response.data;
                     })
@@ -141,7 +129,7 @@
                     });
             },
             getBookings() {
-                axios.get('/api/bookings/user/allBookingHistory') // Make sure the URL is correct
+                axios.get('/api/bookings/user/allBookingHistory')
                     .then(response => {
                         this.bookings = response.data;
                     })
@@ -151,7 +139,7 @@
                     });
             },
             getOrganisers() {
-                axios.get('/api/users/organisers') // Make sure the URL is correct
+                axios.get('/api/users/organisers')
                     .then(response => {
                         this.organisers = response.data;
                     })
@@ -163,7 +151,6 @@
             cancelBooking(bookingId) {
                 axios.delete(`/api/bookings?bookingId=${bookingId}`)
                     .then(response => {
-                        // 处理响应，例如重新获取 bookings
                         this.getBookings();
                     })
                     .catch(error => {
@@ -171,8 +158,8 @@
                         console.error("Error cancelling booking:", error);
                     });
             },
-            openREForm: function(booking) {  // 添加参数
-                this.currentBooking = booking;  // 保存当前的market
+            openREForm: function(booking) {
+                this.currentBooking = booking;
                 this.showReviewForm = true;
                 this.showFormLayer = true;
             },
@@ -180,8 +167,8 @@
                 this.showReviewForm = false;
                 this.showFormLayer = false;
             },
-            openREOneForm: function(organiser) {  // 添加参数
-                this.currentOrganiser = organiser;  // 保存当前的market
+            openREOneForm: function(organiser) {
+                this.currentOrganiser = organiser;
                 this.showReviewOneForm = true;
                 this.showFormLayer = true;
             },
@@ -192,10 +179,8 @@
             approveOrganiser(organiserId) {
                 axios.put(`/api/users/organisers/approve?userID=${organiserId}`)
                     .then(response => {
-                        // Find the index of the organiser in the organisers array
                         const index = this.organisers.findIndex(org => org.organiserId === organiserId);
 
-                        // Update the status of the organiser to 'active'
                         if (index !== -1) {
                             this.organisers[index].status = 'active';
                         }
@@ -207,21 +192,18 @@
             denyClick: function() {
                 this.isApproveVisible = false;
                 this.isDenyVisible = false;
-                // ...rest of your logic...
             },
             approveFormClick: function() {
                 this.isReviewVisible = false;
                 this.isLayerVisible = false;
                 this.isApproveVisible = false;
                 this.isDenyVisible = false;
-                // ...rest of your logic...
             },
             denyFormClick: function() {
                 this.isReviewVisible = false;
                 this.isLayerVisible = false;
                 this.isApproveVisible = false;
                 this.isDenyVisible = false;
-                // ...rest of your logic...
             }
         },
         computed: {

@@ -29,7 +29,6 @@
                 <div class="marketItem" v-for="market in markets" :key="market.id">
                     <div class="orderNum">Venue #{{ market.id }}</div>
                     <div class="marketStall">{{ market.name }}</div>
-                    <!--            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>-->
                     <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
                     <br>
                     <div class="userline"></div>
@@ -38,9 +37,7 @@
 
         </div>
         <div v-show="currentTab === 'mapView'" class="tabcontent">
-            <!--            <form @submit.prevent="searchMarkets">-->
-            <!--                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">-->
-            <!--            </form>-->
+
             <div id="map" style="height: 420px;"></div>
         </div>
     </div>
@@ -100,7 +97,7 @@
                 this.currentTab = tabName;
             },
             getMarkets() {
-                axios.get('/api/venues') // Make sure the URL is correct
+                axios.get('/api/venues')
                     .then(response => {
                         this.markets = response.data;
                         let marks = [];
@@ -128,11 +125,10 @@
                     });
             },
             goToMarketInfo(marketId) {
-                // 使用Vue Router 或者直接window.location进行页面跳转
                 window.location.href = `/marketInfo?id=${marketId}`;
             },
-            openREForm: function(market) {  // 添加参数
-                this.currentMarket = market;  // 保存当前的market
+            openREForm: function(market) {
+                this.currentMarket = market;
                 this.showReviewForm = true;
                 this.showFormLayer = true;
             },
@@ -141,7 +137,6 @@
                 this.showFormLayer = false;
             },
             updateMarketInformation: function() {
-                // Step 1: Capture Form Data
                 const venueId = this.currentMarket.id;
                 const latitude = this.currentMarket.latitude;
                 const longitude = this.currentMarket.longitude;
@@ -152,17 +147,13 @@
                 const suburb = this.updatedInfo.suburb;
                 const venueName = this.updatedInfo.name;
 
-                // Step 2: Construct API URL
                 const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
 
-                // Step 3: Make API Call
                 axios.put(apiUrl)
                     .then(response => {
-                        // Handle success
                         alert('Venue information updated successfully!');
                     })
                     .catch(error => {
-                        // Handle error
                         console.error('Error updating venue information:', error);
                         alert('Error updating venue information!');
 
@@ -174,9 +165,9 @@
         },
         watch: {
             currentMarket: {
-                immediate: true,  // Run the handler immediately after the watcher is created
+                immediate: true,
                 handler: function(newVal) {
-                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));  // Deep copy
+                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));
                 }
             }
         }

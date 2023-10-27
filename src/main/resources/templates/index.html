@@ -190,7 +190,8 @@
                     })
                     .catch(error => {
                         // Handle error
-                        console.error('Error updating user information:', error);
+                        window.location.href = '/login';
+                        // console.error('Error updating user information:', error);
                     });
             },
             registerMO: function() {
@@ -213,8 +214,8 @@
                 axios.post(apiUrl)
                     .then(response => {
                         // Handle success
-                        alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
-                        window.location.href = '/';
+                        // alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
+                        window.location.href = '/registerSuccess';
                     })
                     .catch(error => {
                         // Handle error

@@ -10,33 +10,24 @@
 
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
 <div id="app">
     <span class="title">Profile Detail</span>
     <div class="frameContainer">
         <div class="topSetting">
-            <span class="userName">{{userInfo.first_name}} {{userInfo.last_name}}</span>
+            <span class="userName">{{updatedUserInfo.first_name}} {{updatedUserInfo.last_name}}</span>
             <span class="userGroup">{{userInfo.type}}</span>
-            <span class="userID">Account#{{userInfo.userEmail}}</span>
+            <span class="userID">Account#{{updatedUserInfo.userEmail}}</span>
         </div>
         <div class="line"></div>
         <div class="settingForm">
-            <form action="#" class="setting-form">
-                <!--    need to modify-->
+            <div class="setting-form">
                 <label>First Name</label>
                 <input type="text" placeholder="first name" name="firstName" v-model="updatedUserInfo.first_name" required>
 
                 <label style="margin-left: 25px">Last Name</label>
                 <input type="text" placeholder="last name" name="lastName" v-model="updatedUserInfo.last_name" required>
-
-<!--                <label>Business Name</label>-->
-<!--                <input type="text" placeholder="Enter your business name, optional" name="businessName">-->
-
-<!--                <label>ABN Number</label>-->
-<!--                <input type="text" placeholder="Enter your ABN number, optional" name="abn">-->
 
                 <label>Phone number</label>
                 <input type="text" placeholder="phone number" name="phoneNum" v-model="updatedUserInfo.phone" required>
@@ -44,20 +35,10 @@
                 <label>Email</label>
                 <input type="text" placeholder="email address" name="email" v-model="updatedUserInfo.userEmail" required>
 
-                <!--        <label><b>Confirmed Email</b></label>-->
-                <!--        <input type="text" placeholder="Confirm your email address" name="email2" required>-->
-
-                <!--        <label><b>Password</b></label>-->
-                <!--        <input type="password" placeholder="Enter your password" name="psw" onChange="onChange()" required>-->
-
-                <!--        <label><b>Confirmed Password</b></label>-->
-                <!--        <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>-->
-
-                <!--    need to modify-->
-            </form>
+            </div>
         </div>
         <div class="pswForm-setting" v-show="pswForm">
-            <form action="#" class="psw-form">
+            <div class="psw-form">
                 <label><b>New Password</b></label>
                 <input type="password" placeholder="Enter your new password"  name="psw" onChange="onChange()" required>
 
@@ -65,7 +46,7 @@
                 <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
 
                 <button class="confirmPsw" @click="closePswForm">Confirm</button>
-            </form>
+            </div>
         </div>
 
         <button class="pswChangeBtn" @click="openPswForm">Change Password</button>
@@ -73,10 +54,8 @@
     </div>
 </div>
 
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!--你可以在下面添加自己想添加的JavaScript-->
 <script>
     new Vue({
         el: '#app',
@@ -87,7 +66,7 @@
         },
         methods: {
             getUserInfo(){
-                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo')
                     .then(response => {
                         this.userInfo = response.data;
                     })
@@ -97,19 +76,17 @@
                     });
             },
             updateUserInformation: function() {
-                // Step 1: Capture Form Data
                 const { first_name, last_name, phone, userEmail } = this.updatedUserInfo;
                 const userId = this.userInfo.userId;
 
-                // Step 2: Construct API URL
                 const apiUrl = `/api/users?firstName=${first_name}&lastName=${last_name}&phone=${phone}&email=${userEmail}&userId=${userId}`;
 
-                // Step 3: Make API Call
                 axios.put(apiUrl)
                     .then(response => {
                         // Handle success
                         alert('User information updated successfully! You may need to re-login to see the changes.');
-                        this.getUserInfo();
+
+
                     })
                     .catch(error => {
                         // Handle error
@@ -131,11 +108,9 @@
                 if (newPassword === confirmPassword) {
                     axios.put(apiUrl)
                         .then(response => {
-                            // Handle success
                             alert('Password updated successfully!');
                         })
                         .catch(error => {
-                            // Handle error
                             console.error('Error updating password:', error);
                         });
                 } else {
@@ -146,14 +121,13 @@
         },
         mounted() {
             this.getUserInfo();
-            // this.updatedUserInfo = Object.assign({}, this.userInfo);  // Initialize updatedUserInfo
 
         },
         watch: {
             userInfo: {
-                immediate: true,  // Run the handler immediately after the watcher is created
+                immediate: true,
                 handler: function(newVal) {
-                    this.updatedUserInfo = JSON.parse(JSON.stringify(newVal));  // Deep copy
+                    this.updatedUserInfo = JSON.parse(JSON.stringify(newVal));
                 }
             }
         }

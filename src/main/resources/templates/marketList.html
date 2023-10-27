@@ -21,11 +21,8 @@
             <button class="tablinks" :class="{ active: currentTab === 'mapView' }" @click="changeTab('mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
         </div>
 
-        <!-- Tab content -->
         <div v-show="currentTab === 'listView'" class="tabcontent">
-<!--            <form @submit.prevent="searchMarkets">-->
 
-            <!--            </form>-->
 
             <div class="marketItemDiv">
 
@@ -43,9 +40,7 @@
         </div>
 
         <div v-show="currentTab === 'mapView'" class="tabcontent">
-<!--            <form @submit.prevent="searchMarkets">-->
-<!--                <input type="text" v-model="searchQuery" class="searchBox" placeholder="Search suburb..">-->
-<!--            </form>-->
+
             <div id="map" style="height: 420px;"></div>
         </div>
     </div>
@@ -89,7 +84,7 @@
                 this.currentTab = tabName;
             },
             getMarkets() {
-                axios.get('/api/venues') // Make sure the URL is correct
+                axios.get('/api/venues')
                     .then(response => {
                         this.markets = response.data;
                         let marks = [];
@@ -117,11 +112,7 @@
                     });
             },
             goToMarketInfo(marketId) {
-                // 使用Vue Router 或者直接window.location进行页面跳转
                 window.location.href = `/marketInfo?id=${marketId}`;
-            },
-            searchMarkets() {
-                // Implement the search logic or API call here
             }
         },
         mounted() {

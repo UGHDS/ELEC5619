@@ -652,7 +652,7 @@ body {
     color: white;
     /*position: absolute;*/
     margin-left: 600px;
-    margin-top: -35px;
+    margin-top: -55px;
     width:20%;
     height: 40px;
     border-radius: 4px;
@@ -1497,4 +1497,15 @@ body {
     border: 1px solid #ccc;
     text-align: center;
     width:120px;
+}
+
+.RStext{
+    font-size: 20px;
+    text-align: justify;
+
+    position: absolute;
+    top:15%;
+    left:7%;
+    width:750px;
+
 }

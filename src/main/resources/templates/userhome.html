@@ -11,10 +11,8 @@
 
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
 <div id="app">
         <span class="title">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
 
@@ -71,10 +69,8 @@
 </div>
 
 
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!--你可以在下面添加自己想添加的JavaScript-->
 <script>
     new Vue({
         el: '#app',
@@ -92,7 +88,7 @@
                 this.currentTab = tabName;
             },
             getBookings() {
-                axios.get('/api/bookings/own') // Make sure the URL is correct
+                axios.get('/api/bookings/own')
                     .then(response => {
                         this.bookings = response.data;
 
@@ -105,7 +101,6 @@
             cancelBooking(bookingId) {
                 axios.delete(`/api/bookings?bookingId=${bookingId}`)
                     .then(response => {
-                        // 处理响应，例如重新获取 bookings
                         this.getBookings();
                     })
                     .catch(error => {
@@ -115,7 +110,7 @@
             },
 
             welcomeMsg(){
-                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo')
                     .then(response => {
                         this.welcome = response.data;
                     })
@@ -124,8 +119,8 @@
                         console.error("Error fetching welcome message:", error);
                     });
             },
-            openREForm: function(booking) {  // 添加参数
-                this.currentBooking = booking;  // 保存当前的market
+            openREForm: function(booking) {
+                this.currentBooking = booking;
                 this.showReviewForm = true;
                 this.showFormLayer = true;
             },

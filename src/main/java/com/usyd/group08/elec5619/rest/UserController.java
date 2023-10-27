@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
@@ -121,7 +122,7 @@ public class UserController {
 
     @PostMapping("register")
     @Operation(summary = "Register new owner or organiser",description = "Pass in a user without userID")
-    public User register(@RequestParam String firstName, String lastName, String phone, String email, String password, String type) {
+    public RedirectView register(@RequestParam String firstName, String lastName, String phone, String email, String password, String type) {
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setFirstName(firstName);
@@ -130,12 +131,17 @@ public class UserController {
         newUser.setPassword(password);
         newUser.setType(type);
 
+        if (type == null){
+            return new RedirectView("/registerSuccess");
+        }
+
         if(type.equals("owner")){
             newUser.setStatus("active");
         }else {
             newUser.setStatus("pending");
         }
-        return userRepository.save(newUser);
+        userRepository.save(newUser);
+        return new RedirectView("/registerSuccess");  // Redirect to a success page or any other URL after registration
     }
 
     @DeleteMapping
