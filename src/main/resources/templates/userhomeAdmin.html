@@ -47,26 +47,32 @@
             </div>
 
             <div v-show="currentTab === 'ActiveBooking'" class="tabcontent">
-                <div v-for="booking in activeBookings" :key="booking.id" class="bookingItem">
-                    <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
-                    <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
-                    <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
-                    <div class="price">${{ booking.totalPrice }}</div>
-                    <button type="submit" class="viewBtn" @click="openREForm(booking)">View Order Detail</button>
-                    <button type="submit" class="cancelBtn" @click="cancelBooking(booking.id)">Cancel Order</button>
-                    <br><div class="userline"></div>
+                <div class="frame">
+                    <div v-for="booking in activeBookings" :key="booking.id" class="bookingItem">
+                        <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
+                        <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
+                        <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
+                        <div class="price">${{ booking.totalPrice }}</div>
+                        <button type="submit" class="viewBtn" @click="openREForm(booking)">View Order Detail</button>
+                        <button type="submit" class="cancelBtn" @click="cancelBooking(booking.id)">Cancel Order</button>
+                        <br><div class="userline"></div>
+                    </div>
                 </div>
+
             </div>
 
             <div v-show="currentTab === 'BookingHistory'" class="tabcontent" style="display: none">
-                <div v-for="booking in bookingHistory" :key="booking.id" class="bookingHistoryItem">
-                    <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
-                    <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
-                    <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
-                    <div class="priceHistory">${{ booking.totalPrice }}</div>
-                    <button type="submit" class="viewBtn2" @click="openREForm(booking)">View Order Detail</button>
-                    <br><div class="userline"></div>
+                <div class="frame">
+                    <div v-for="booking in bookingHistory" :key="booking.id" class="bookingHistoryItem">
+                        <div class="orderNum">Order #{{ booking.id }}, Account#{{ booking.userEmail }}</div>
+                        <div class="marketStall">{{ booking.venueName }}, Stall #{{ booking.stallId }}</div>
+                        <div class="dateAddress">{{ booking.dateSlot }} · {{ booking.address }}</div>
+                        <div class="priceHistory">${{ booking.totalPrice }}</div>
+                        <button type="submit" class="viewBtn2" @click="openREForm(booking)">View Order Detail</button>
+                        <br><div class="userline"></div>
+                    </div>
                 </div>
+
             </div>
 
 

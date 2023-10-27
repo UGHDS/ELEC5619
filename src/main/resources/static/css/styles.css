@@ -598,7 +598,7 @@ body {
     color: white;
     /*position: absolute;*/
     margin-left: 1100px;
-    margin-top: -40px;
+    margin-top: -42px;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -1117,8 +1117,8 @@ body {
 }
 
 .marketListImage{
-    max-width: 165px;
-    max-height:160px;
+    width: 165px;
+    height:152px;
     margin-top: -160px;
     margin-left: 386px;
     border-radius: 6px;

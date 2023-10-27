@@ -7,11 +7,9 @@
     <title>Home Page</title>
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/header :: navbar"></nav>
 
 
-<!--这部分是你要写的部分-->
 <div class="slideshow-container1">
 
     <div class="mySlides1 fade">
@@ -57,20 +55,11 @@
             <label style="margin-left: 25px"><b>Last Name</b></label>
             <input type="text" placeholder="Enter your last name" name="lastName" required>
 
-<!--            <label><b>Business Name</b></label>-->
-<!--            <input type="text" placeholder="Enter your business name, optional" name="businessName">-->
-
-<!--            <label><b>ABN Number</b></label>-->
-<!--            <input type="text" placeholder="Enter your ABN number, optional" name="abn">-->
-
             <label><b>Phone number</b></label>
             <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
 
             <label><b>Email</b></label>
             <input type="text" placeholder="Enter your email address" name="email" required>
-
-<!--            <label><b>Confirmed Email</b></label>-->
-<!--            <input type="text" placeholder="Confirm your email address" name="email2" required>-->
 
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
@@ -79,7 +68,6 @@
             </label>
             <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
 
-<!--            <span v-if="passwordsMatch === false" style="color:red;">Passwords do not match</span>-->
             <button type="submit" class="btn" @click="registerSH" :disabled="passwordsMatch === false">Register</button>
         </form>
     </div>
@@ -95,20 +83,11 @@
             <label style="margin-left: 25px"><b>Last Name</b></label>
             <input type="text" placeholder="Enter your last name" name="lastName" required>
 
-<!--            <label><b>Business Name</b></label>-->
-<!--            <input type="text" placeholder="Enter your business name" name="businessName" required>-->
-
-<!--            <label><b>ABN Number</b></label>-->
-<!--            <input type="text" placeholder="Enter your ABN number" name="abn" required>-->
-
             <label><b>Phone number</b></label>
             <input type="text" placeholder="Enter your phone number" name="phoneNum" required>
 
             <label><b>Email</b></label>
             <input type="text" placeholder="Enter your email address" name="email" required>
-
-<!--            <label><b>Confirmed Email</b></label>-->
-<!--            <input type="text" placeholder="Confirm your email address" name="email2" required>-->
 
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter your password" name="psw" @input="validatePasswords" required>
@@ -116,15 +95,12 @@
             <label><b>Confirmed Password </b><span v-if="psw2 != '' && passwordsMatch === false" style="color:red;"> Passwords do not match</span></label>
             <input type="password" placeholder="Confirm your password" name="psw2" @input="validatePasswords" required>
 
-<!--            <span v-if="passwordsMatch === false">Passwords do not match</span>-->
             <button type="submit" class="btn" @click="registerMO" :disabled="passwordsMatch === false">Register</button>        </form>
     </div>
 </div>
 
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 
-<!--你可以在下面添加自己想添加的JavaScript-->
 <script>
     let slideIndex = 0;
     showSlides();
@@ -143,7 +119,7 @@
         }
         slides[slideIndex-1].style.display = "block";
         dots[slideIndex-1].className += " active";
-        setTimeout(showSlides, 8000); // Change image every 2 seconds
+        setTimeout(showSlides, 8000);
     }
 
     new Vue({
@@ -166,7 +142,6 @@
                 this.passwordsMatch = (password === confirmPassword);
             },
             registerSH: function() {
-                // Step 1: Capture Form Data
                 const form = document.querySelector('.SHform-popup .form-container');
                 const formData = new FormData(form);
 
@@ -178,24 +153,18 @@
 
                 const type = 'owner';
 
-                // Step 2: Construct API URL
                 const apiUrl = `/api/users/register?firstName=${firstName}&lastName=${lastName}&phone=${phoneNum}&email=${email}&password=${password}&type=${type}`;
 
-                // Step 3: Make API Call
                 axios.post(apiUrl)
                     .then(response => {
-                        // Handle success
                         alert('Registration successful! You may login your account now!');
                         window.location.href = '/login';
                     })
                     .catch(error => {
-                        // Handle error
                         window.location.href = '/login';
-                        // console.error('Error updating user information:', error);
                     });
             },
             registerMO: function() {
-                // Step 1: Capture Form Data
                 const form = document.querySelector('.MOform-popup .form-container');
                 const formData = new FormData(form);
 
@@ -207,18 +176,13 @@
 
                 const type = 'organiser';
 
-                // Step 2: Construct API URL
                 const apiUrl = `/api/users/register?firstName=${firstName}&lastName=${lastName}&phone=${phoneNum}&email=${email}&password=${password}&type=${type}`;
 
-                // Step 3: Make API Call
                 axios.post(apiUrl)
                     .then(response => {
-                        // Handle success
-                        // alert('Thank you for registering in our website! To keep our customers safe, there will be an approval process to confirm your given information. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!');
                         window.location.href = '/registerSuccess';
                     })
                     .catch(error => {
-                        // Handle error
                         console.error('Error updating user information:', error);
                     });
             },

@@ -11,10 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
 </head>
 <body>
-<!--引入 templates/fragments/header.html中的navbar-->
 <nav th:replace="fragments/headerLogged :: navbar"></nav>
 
-<!--这部分是你要写的部分-->
 <div id="app">
     <span class="userHomeTitle">Welcome Back, {{ welcome.first_name }} {{ welcome.last_name }}</span>
 
@@ -26,7 +24,6 @@
             <button class="tablinks" :class="{ active: currentTab === 'StallInformation' }" @click="changeTab('StallInformation')" style="width:33.4%; border-radius: 0px 20px 0px 0px">Stall Management</button>
         </div>
 
-        <!-- Tab content -->
         <div v-show="currentTab === 'VenueInformation'" class="tabcontent">
 
             <form action="#" class="marketForm" >
@@ -50,11 +47,6 @@
                 <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Saturday" checked> Sat</label>
                 <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Sunday"> Sun</label>
 
-<!--                <br><label>Open hours:</label>-->
-<!--                <input type="time" id="timePickerS" name="timePickerS" value="10:00" style="width:12%; margin-left: 10px" required>-->
-<!--                <label>-</label>-->
-<!--                <input type="time" id="timePickerE" name="timePickerE" value="16:00" style="width:12%; margin-left: 10px" required>-->
-
                 <br><label>Brief introduction of the Venue:</label>
                 <textarea name="venueInfo" v-model="updatedInfo.description" id="venueInfo" style="height:120px;white-space: pre-wrap;" required>
                       </textarea>
@@ -66,14 +58,10 @@
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
             <span class="photoText">Update photo of Venue to let others have a better knowledge of the Venue:</span>
             <input type="text" v-model="updatedInfo.image"   name="photoLink" class="photoLink" placeholder="Enter the link of photo..">
-<!--            <input type="file" id="fileInput" @change="handleFileInputChange($event, 'imageContainer', 8)" accept="image/*" class="photoInput" multiple>-->
-<!--            <div id="imageContainer" class="photoDiv"></div>-->
             <button type="submit" class="updateButton" @click="updateMarketInformation">UPDATE</button>
         </div>
 
         <div v-show="currentTab === 'StallInformation'" class="tabcontent" style="display: none; font-size: 18px">
-<!--            <label style="position: absolute; top:15%; left: 5%">Total stall number:</label>-->
-<!--            <input type="number" placeholder="Enter the total stall number" name="stallNum" class="stallNum">-->
             <div class="stallForm-setting" >
                 <form action="#" class="stall-form">
                     <h5>Add a stall</h5>
@@ -101,7 +89,6 @@
                 </div>
             </div>
 
-<!--            <button type="submit" class="updateButton" onclick="">UPDATE</button>-->
         </div>
 
 
@@ -111,7 +98,6 @@
 
 
 
-<!--从templates/fragments/footer.html 引入的footer-->
 <div th:replace="fragments/footer :: footer"></div>
 <script>
     new Vue({
@@ -131,7 +117,7 @@
                 this.currentTab = tabName;
             },
             welcomeMsg() {
-                axios.get('/api/users/getCurrentUserInfo') // Make sure the URL is correct
+                axios.get('/api/users/getCurrentUserInfo')
                     .then(response => {
                         this.welcome = response.data;
                     })
@@ -141,7 +127,7 @@
                     });
             },
             getMarketInfo() {
-                axios.get('/api/venues/venueByCurrentUser') // Make sure the URL is correct
+                axios.get('/api/venues/venueByCurrentUser')
                     .then(response => {
                         this.marketInfo = response.data [0];
                     })
@@ -155,7 +141,7 @@
             },
             getStallInfo() {
                 const venueID = this.marketInfo.id;
-                axios.get(`/api/venues/venueByVenueId?venueID=${venueID}`) // Make sure the URL is correct
+                axios.get(`/api/venues/venueByVenueId?venueID=${venueID}`)
                     .then(response => {
                         this.stalls = response.data.stalls;
                     })
@@ -165,7 +151,7 @@
                     });
             },
             addStallToVenue: function() {
-                console.log("addStallToVenue function called"); // Step 1
+                console.log("addStallToVenue function called");
 
                 const stallName = document.querySelector('input[name=stallID]').value;
                 const price = document.querySelector('input[name=stallPrice]').value;
@@ -175,12 +161,10 @@
 
                 axios.post(apiUrl)
                     .then(response => {
-                        // Handle success
                         alert('Stall added successfully!');
                         this.getStallInfo();
                     })
                     .catch(error => {
-                        // Handle error
                         console.error('Error adding stall:', error);
                     });
             },
@@ -190,17 +174,14 @@
                 const selectedWeekdays = this.selectedWeekdays;
                 const requestBody = [];
 
-                // Define an array to map index to weekdays. Note that JavaScript's `getDay()`
-                // method returns 0 for Sunday, 1 for Monday, etc.
                 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
                 for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                     // Convert the date to its weekday string
                     const weekdayStr = weekdays[d.getDay()];
                     if (selectedWeekdays.includes(weekdayStr)) {
-                        // Convert the date back to YYYY-MM-DD format before pushing it
                         const year = d.getFullYear();
-                        const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
                         const day = String(d.getDate()).padStart(2, '0');
                         requestBody.push(`${year}-${month}-${day}`);
                     }
@@ -209,30 +190,24 @@
                 return requestBody;
             },
             updateMarketInformation: function() {
-                // Step 1: Capture Form Data
                 const venueId = this.marketInfo.id;
                 const latitude = venue.latitude;
                 const longitude = venue.longitude;
                 const description = this.updatedInfo.description;
                 const picture = this.updatedInfo.image;
-                // const address = this.updatedInfo.address;
                 const state = venue.state;
                 const street = venue.street;
                 const suburb = venue.suburb;
                 const venueName = this.updatedInfo.name;
                 console.log('venue:',venue);
 
-                // Step 2: Construct API URL
                 const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
 
-                // Step 3: Make API Call
                 axios.put(apiUrl)
                     .then(response => {
-                        // Handle success
                         alert('Venue information updated successfully!');
                     })
                     .catch(error => {
-                        // Handle error
                         console.error('Error updating venue information:', error);
                         alert('Error updating venue information!');
 
@@ -253,14 +228,12 @@
         mounted() {
             this.welcomeMsg();
             this.getMarketInfo();
-            // this.getStallInfo();
-            // Initialization or API call if needed
         },
         watch: {
             marketInfo: {
-                immediate: true,  // Run the handler immediately after the watcher is created
+                immediate: true,
                 handler: function(newVal) {
-                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));  // Deep copy
+                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));
                 }
             }
         }
@@ -301,13 +274,9 @@
         }, function(place, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 const address = extractAddressDetails(place);
-                // console.log('state:', address.state);
-                // console.log('address:', address);
                 venue.state = address.state;
                 venue.street = address.street;
                 venue.suburb = address.suburb;
-                // console.log('state:', address.state);
-                // console.log('address:', address);
             }
         });
     }
@@ -346,7 +315,7 @@
 
         return {
             state: state,
-            street: street.trim(),  // Trim to ensure no leading/trailing spaces
+            street: street.trim(),
             suburb: suburb
         };
     }
@@ -354,7 +323,7 @@
     function submitVenue(){
         venue.venueName = $('#venueName').val();
         venue.description = $('#venueInfo').val();
-        axios.post('/api/venues', venue) // Make sure the URL is correct
+        axios.post('/api/venues', venue)
             .then(response => {
                 console.log(response);
                 alert("Venue added to DB.");

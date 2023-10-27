@@ -83,13 +83,9 @@
 
                 axios.put(apiUrl)
                     .then(response => {
-                        // Handle success
                         alert('User information updated successfully! You may need to re-login to see the changes.');
-
-
                     })
                     .catch(error => {
-                        // Handle error
                         console.error('Error updating user information:', error);
                     });
             },
