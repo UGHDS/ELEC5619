@@ -12,9 +12,18 @@
 
 # Working Functionalities
   - User Management
+    - Registration: Users may register their accounts as stall holders or market organizers.
+    - Login: Users can log into the system using their email and password.
+    - User authentication: To keep our users safe when booking, organizers need to get approval from the administrator to activate their account.
   - Stall Management
+    - Addition: Market organizers can add stalls to their venue.
   - Venue Management
+    - Update information: Organizers can edit their venue information. Administrators can edit all venues' information.
   - Booking Management
+    - Addition: Stall holders can reserve available stalls.
+    - Cancellation: Stall holders can cancel their bookings. 
+    - Management: Administrators can manage all bookings.
+    - Booking History: Stall holders can review their past bookings. Administrators can review all past bookings.
 
 # Quick Guide on How to Run the Application
   1. Make sure you have MySQL installed and running.
