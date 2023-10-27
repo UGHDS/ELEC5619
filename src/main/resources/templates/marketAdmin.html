@@ -47,22 +47,32 @@
 
     <div class="blackLayer" v-show="showFormLayer"></div>
 
-    <div class="reviewM-popup" v-show="showReviewForm">
+    <div class="reviewA-popup" v-show="showReviewForm">
         <button type="button" class="btn cancel" @click="closeREForm">x</button>
-        <br><span>Venue #{{ currentMarket.id }}</span><br>
-        <span>Venue name: {{ currentMarket.name }}</span><br>
-        <span>Venue address: {{ currentMarket.address }}</span><br>
-        <span>Venue suburb: {{ currentMarket.suburb }}</span><br>
-        <span>Total Stall: {{ currentMarket.stall }}</span>
+        <br><label>Venue #{{ currentMarket.id }}</label><br>
+        <label>Venue name:
+            <input type="text" v-model="updatedInfo.name" name="venueName" id="venueName"  />
+        </label><br>
+        <label>Venue street:
+            <input type="text" v-model="updatedInfo.street" name="venueStreet" id="venueStreet"  />
+        </label><br>
+        <label>Venue suburb:
+            <input type="text" v-model="updatedInfo.suburb" name="venueSuburb" id="venueSuburb"  />
+        </label><br>
+        <label>Venue state:
+            <input type="text" v-model="updatedInfo.state" name="venueState" id="venueState"  />
+        </label><br>
+        <label>Venue image:
+            <input type="text" v-model="updatedInfo.image" name="venueImage" id="venueImage"  />
+        </label><br>
+        <label>Total Stall: {{ currentMarket.stall }}</label>
+        <button type="submit" class="updateButton" @click="updateMarketInformation" style="width:120px;position: absolute;left:40%">UPDATE</button>
     </div>
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>
 
 <script>
-    function initMap() {
-
-    }
 
     function setMapBounds(map, markers) {
         var bounds = new google.maps.LatLngBounds();
@@ -82,6 +92,8 @@
             currentMarket: {},
             showReviewForm: false,
             showFormLayer: false,
+            updatedInfo: {}
+
         },
         methods: {
             changeTab(tabName) {
@@ -127,10 +139,46 @@
             closeREForm: function() {
                 this.showReviewForm = false;
                 this.showFormLayer = false;
+            },
+            updateMarketInformation: function() {
+                // Step 1: Capture Form Data
+                const venueId = this.currentMarket.id;
+                const latitude = this.currentMarket.latitude;
+                const longitude = this.currentMarket.longitude;
+                const description = this.currentMarket.description;
+                const picture = this.updatedInfo.image;
+                const state = this.updatedInfo.state;
+                const street = this.updatedInfo.street;
+                const suburb = this.updatedInfo.suburb;
+                const venueName = this.updatedInfo.name;
+
+                // Step 2: Construct API URL
+                const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
+
+                // Step 3: Make API Call
+                axios.put(apiUrl)
+                    .then(response => {
+                        // Handle success
+                        alert('Venue information updated successfully!');
+                    })
+                    .catch(error => {
+                        // Handle error
+                        console.error('Error updating venue information:', error);
+                        alert('Error updating venue information!');
+
+                    });
             }
         },
         mounted() {
             this.getMarkets();
+        },
+        watch: {
+            currentMarket: {
+                immediate: true,  // Run the handler immediately after the watcher is created
+                handler: function(newVal) {
+                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));  // Deep copy
+                }
+            }
         }
     });
 </script>

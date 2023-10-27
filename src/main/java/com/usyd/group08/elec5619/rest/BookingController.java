@@ -64,6 +64,7 @@ public class BookingController {
         if (bookingOptional.isPresent() && user.getType().equals("admin") || bookingOptional.get().getUser().getId().equals(user.getId())) {
             Booking booking = bookingOptional.get();
             booking.setStatus("Cancelled");
+            booking.getStallDate().setStatus("Available");
             bookingRepository.save(booking);
             return true;
         }

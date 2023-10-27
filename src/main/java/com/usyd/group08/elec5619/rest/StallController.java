@@ -54,6 +54,7 @@ public class StallController {
                         Map<String, Object> response = new HashMap<>();
                         response.put("stallId", stall.getId());
                         response.put("stallName", stall.getStallId());
+                        response.put("stallPrice", stall.getPrice());
                         response.put("dateSlot", stallDate.getVenueDate().getDateSlot());
                         responses.add(response);
                     }

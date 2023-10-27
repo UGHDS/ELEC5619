@@ -521,7 +521,7 @@ body {
     /*position: absolute;*/
     margin-top: 10px;
     width:100%;
-    height:20%;
+    height:25%;
 }
 
 .bookingItem, .bookingHistoryItem {
@@ -612,9 +612,9 @@ body {
 .bookingHistoryItem{
     border: none;
     /*position: absolute;*/
-    margin-top: 10px;
+    margin-top: 20px;
     width:100%;
-    height:20%;
+    height:25%;
 }
 
 .priceHistory{
@@ -767,6 +767,11 @@ body {
     margin-top: 50px;
     font-size: 18px;
 }
+.reviewM-popup label{
+    margin-left: 50px;
+    margin-top: 20px;
+    font-size: 18px;
+}
 
 .reviewM-popup .cancel {
     color: black;
@@ -783,6 +788,46 @@ body {
     color:red;
 }
 
+.reviewA-popup {
+    width:50%;
+    height:60%;
+    /*display: none;*/
+    position: absolute;
+    top:25%;
+    left:25%;
+    background-color: white;
+    border: none;
+}
+
+.reviewA-popup input{
+    width:400px;
+}
+
+.reviewA-popup span{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 18px;
+}
+.reviewA-popup label{
+    margin-left: 50px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.reviewA-popup .cancel {
+    color: black;
+    font-size: 50px;
+
+    width: 30px;
+    right: 3%;
+    top: -5%;
+    position: absolute;
+    border: none;
+}
+
+.reviewA-popup .cancel:hover{
+    color:red;
+}
 .review-popup {
     width:70%;
     height:60%;
@@ -1375,7 +1420,7 @@ body {
     border: 3px red;
 }
 .stall-form {
-    top:20%;
+    top:10%;
     left: 0%;
     width:40%;
     position: absolute;
@@ -1425,4 +1470,28 @@ body {
     position: absolute;
     top:25%;
     left:5%;
+}
+
+.overflowContainer{
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    top:12%;
+    bottom:0%;
+    overflow-y: auto;
+}
+
+.stallFrame{
+    position: absolute;
+    right:10%;
+    top:15%;
+    height:80%;
+    overflow-y: auto;
+}
+
+.stallFrame th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    width:120px;
 }

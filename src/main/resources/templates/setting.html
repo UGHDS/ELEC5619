@@ -59,7 +59,7 @@
         <div class="pswForm-setting" v-show="pswForm">
             <form action="#" class="psw-form">
                 <label><b>New Password</b></label>
-                <input type="password" placeholder="Enter your new password" name="psw" onChange="onChange()" required>
+                <input type="password" placeholder="Enter your new password"  name="psw" onChange="onChange()" required>
 
                 <label><b>Confirmed Password</b></label>
                 <input type="password" placeholder="Confirm your password" name="psw2" onChange="onChange()" required>
@@ -109,6 +109,7 @@
                     .then(response => {
                         // Handle success
                         alert('User information updated successfully! You may need to re-login to see the changes.');
+                        this.getUserInfo();
                     })
                     .catch(error => {
                         // Handle error
@@ -120,25 +121,26 @@
 
             },
             closePswForm: function() {
-                // const newPassword = document.querySelector('input[name=psw]').value;
-                // const confirmPassword = document.querySelector('input[name=psw2]').value;
-                //
-                // if (newPassword === confirmPassword) {
-                //     axios.put('/api/users', {
-                //         id: this.userInfo.id,
-                //         password: newPassword // Make sure to encrypt this before sending
-                //     })
-                //         .then(response => {
-                //             // Handle success
-                //             alert('Password updated successfully');
-                //         })
-                //         .catch(error => {
-                //             // Handle error
-                //             console.error('Error updating password:', error);
-                //         });
-                // } else {
-                //     alert('Confirm password is not the same as the new password');
-                // }
+                const newPassword = document.querySelector('input[name=psw]').value;
+                const confirmPassword = document.querySelector('input[name=psw2]').value;
+                const userId = this.userInfo.userId;
+
+
+                const apiUrl = `/api/users/password?userId=${userId}&password=${newPassword}`;
+
+                if (newPassword === confirmPassword) {
+                    axios.put(apiUrl)
+                        .then(response => {
+                            // Handle success
+                            alert('Password updated successfully!');
+                        })
+                        .catch(error => {
+                            // Handle error
+                            console.error('Error updating password:', error);
+                        });
+                } else {
+                    alert('Confirm password is not the same as the new password');
+                }
                 this.pswForm = false;
             }
         },
@@ -156,23 +158,6 @@
             }
         }
     });
-    // function onChange() {
-    //     const password = document.querySelector('input[name=psw]');
-    //     const confirm = document.querySelector('input[name=psw2]');
-    //     if (confirm.value === password.value) {
-    //         confirm.setCustomValidity('');
-    //     } else {
-    //         confirm.setCustomValidity('Passwords do not match');
-    //     }
-    // }
-
-    // function openPswForm() {
-    //     document.getElementById("pswForm").style.display = "block";
-    // }
-    // function closePswForm() {
-    //     document.getElementById("pswForm").style.display = "none";
-    // }
-
 </script>
 
 </body>
