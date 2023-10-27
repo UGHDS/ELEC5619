@@ -97,18 +97,26 @@ public class UserController {
     @PutMapping ("organisers/approve")
     @ValidateUserType(type = "admin")
     @Operation(summary = "Approve the organiser by userID",description = "Pass in userID, and return")
-    public User approveOrganiser(@RequestParam String userID){
+    public boolean approveOrganiser(@RequestParam String userID){
         Optional<User> optionalUser = userRepository.findById(userID);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setStatus("active");
 //            List<Venue> venues = new ArrayList<>();
-            VenueController venueController = new VenueController();
-            venueController.addVenue(userID);
+
+            Venue venue = new Venue();
+            venue.setVenueName("");
+            venue.setState("");
+            venue.setStreet("");
+            venue.setSuburb("");
+            venue.setDescription("");
+            venue.setPicture("");
+            venue.setUser(user);
+            venueRepository.save(venue);
             userRepository.save(user);
-            return user;
+            return true;
         }
-        return null;
+        return false;
     }
 
     @PostMapping("register")
