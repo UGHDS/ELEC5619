@@ -1377,7 +1377,9 @@ body {
     background-color: white;
     border: none;
 }
-
+.payment-popup input{
+    height:20px;
+}
 .paymentContainer {
     padding-top: 10px;
     width:80%;
@@ -1390,6 +1392,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     text-align: left;
+    width:200px;
 }
 .paymentContainer label {
     font-weight: bold;

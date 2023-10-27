@@ -257,10 +257,7 @@
                         // 使用响应数据来更新Vue实例的数据
                         this.stallInfo = response.data;
 
-                        this.optionsStall = this.stallInfo.map(stall => ({
-                            value: stall.stallId,
-                            text: stall.stallName
-                        }));
+                        this.updateOptionsStallBasedOnDate();
                     })
                     .catch(error => {
                         console.error("Error fetching data:", error);
@@ -287,6 +284,14 @@
                     .catch(error => {
                         console.error("Error fetching data:", error);
                     });
+            },
+            updateOptionsStallBasedOnDate() {
+                const selectedDate = this.selectedOptionDate.value;
+                const filteredStalls = this.stallInfo.filter(stall => stall.dateSlot === selectedDate);
+                this.optionsStall = filteredStalls.map(stall => ({
+                    value: stall.stallId,
+                    text: stall.stallName
+                }));
             },
             fetchStallDates() {
                 const id = this.selectedOptionStall.value;
@@ -361,6 +366,8 @@
                 if (selected) {
                     this.selectedOptionDate.text = selected.text;
                 }
+                this.updateOptionsStallBasedOnDate();
+
             }
         },
         mounted() {
