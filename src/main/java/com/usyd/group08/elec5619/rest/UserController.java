@@ -6,6 +6,7 @@ import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
 import com.usyd.group08.elec5619.repositries.UserRepository;
+import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.*;
 public class UserController {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    VenueRepository venueRepository;
 
     @Autowired
     HttpSession httpSession;
@@ -98,6 +102,9 @@ public class UserController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setStatus("active");
+//            List<Venue> venues = new ArrayList<>();
+            VenueController venueController = new VenueController();
+            venueController.addVenue(userID);
             userRepository.save(user);
             return user;
         }
