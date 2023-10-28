@@ -2,7 +2,6 @@ package com.usyd.group08.elec5619.rest;
 
 
 import com.usyd.group08.elec5619.aop.ValidateUserType;
-import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
 import com.usyd.group08.elec5619.repositries.UserRepository;
@@ -56,7 +55,6 @@ public class UserController {
     }
 
     @GetMapping("organisers")
-//    @ValidateUserType(type = "admin") //有bug
     @Operation(summary = "Find all organisers",description = "Pass user list, and will return organisers list")
     public List<Map<String, Object>> getOrganisers() {
         User user = new User();
@@ -103,7 +101,6 @@ public class UserController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setStatus("active");
-//            List<Venue> venues = new ArrayList<>();
 
             Venue venue = new Venue();
             venue.setVenueName("");
@@ -175,7 +172,6 @@ public class UserController {
     }
 
     @PutMapping("/password")
-//    @ValidateUserType
     @Operation(summary = "Update user info", description = "Pass the updated user object, and will return the updated user object.")
     public boolean updatePassword(@RequestParam String userId, String password){
         Optional<User> optionalUser = userRepository.findById(String.valueOf(userId));

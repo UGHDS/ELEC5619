@@ -14,10 +14,11 @@ public class Stall {
     private int id;
 
     private String stallId;
+
     @Column(name="venue_id")
     private int venueId;
-    private Double price;
 
+    private Double price;
 
     public int getId() {
         return id;

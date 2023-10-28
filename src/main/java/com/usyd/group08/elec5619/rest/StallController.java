@@ -9,10 +9,8 @@ import com.usyd.group08.elec5619.repositries.StallDateRepository;
 import com.usyd.group08.elec5619.repositries.StallRepository;
 import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.persistence.Id;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
@@ -65,29 +63,24 @@ public class StallController {
     }
 
     @PostMapping
-//    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add stalls into venue by id", description = "Pass a list of stalls in post body and a " +
             "venue id in the query. venue_id must from current user. [NOTES] venue_id in 'Request body' can skip and will be ignored")
     public boolean addStalls(@RequestParam String venueId, String price, String stallName) {
-//        User user = (User) httpSession.getAttribute("currentUser");
-        Optional<Venue> venue = venueRepository.findById(Integer.valueOf(venueId));
-//        if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
-//            for (Stall stall : stalls) {
-        Stall newStall = new Stall();
-        newStall.setVenueId(Integer.valueOf(venueId));
-        newStall.setPrice(Double.valueOf(price));
-        newStall.setStallId(stallName);
-        stallRepository.save(newStall);
-//            }
-        return true;
-//        }
-//        return false;
+        try{
+            Stall newStall = new Stall();
+            newStall.setVenueId(Integer.valueOf(venueId));
+            newStall.setPrice(Double.valueOf(price));
+            newStall.setStallId(stallName);
+            stallRepository.save(newStall);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     @DeleteMapping
-    @ValidateUserType(type = "admin,organiser")
     @Operation(summary = "Delete stall by venue id and stall id", description = "Pass venue id and stall id, stall will be deleted")
-    public boolean deleteStalls(@RequestParam int venueId, @RequestParam String stallId) {
+    public boolean deleteStall(@RequestParam int venueId, @RequestParam String stallId) {
         User user = (User) httpSession.getAttribute("currentUser");
         Optional<Venue> venue = venueRepository.findById(venueId);
         if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
@@ -124,5 +117,4 @@ public class StallController {
     public List<StallDate> getStallDates(@PathVariable int id) {
         return stallDateRepository.getStallDateByStallId(id);
     }
-
 }

@@ -13,9 +13,12 @@ public class Payment {
 
     @Column(name = "booking_id")
     private int bookingId;
+
     private String paymentItem;
+
     private double amount;
-    private java.sql.Timestamp paymentDate;
+
+    private Timestamp paymentDate;
 
     public Long getId() {
         return id;

@@ -16,7 +16,7 @@ public class VenueDate {
 
     @Id
     @Column(name = "date_slot")
-    private java.sql.Date dateSlot;
+    private Date dateSlot;
 
     public int getVenueId() {
         return venueId;

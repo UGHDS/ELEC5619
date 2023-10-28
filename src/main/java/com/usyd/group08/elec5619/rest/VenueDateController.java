@@ -87,10 +87,4 @@ public class VenueDateController {
         return true;
     }
 
-
-
-
-
-
-
 }

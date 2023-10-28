@@ -1,7 +1,6 @@
 package com.usyd.group08.elec5619.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -9,46 +8,47 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes({"currentUser"})
 public class HomeController {
     @GetMapping("/")
-    public String index(Model model) {
+    public String index() {
         return "index";
     }
 
     @GetMapping("/uhome")
-    public String uhome(Model model) {
+    public String uhome() {
         return "userhome";
     }
 
     @GetMapping("/ohome")
-    public String ohome(Model model) {
+    public String ohome() {
         return "userhomeOrganizer";
     }
 
     @GetMapping("/ahome")
-    public String ahome(Model model) {
+    public String ahome() {
         return "userhomeAdmin";
     }
 
-/////////////
     @GetMapping("/marketAdmin")
-    public String marketAdmin(Model model) {
+    public String marketAdmin() {
         return "marketAdmin";
     }
+
     @GetMapping("/marketInfo")
-    public String marketInfo(Model model) {
+    public String marketInfo() {
         return "marketInfo";
     }
 
     @GetMapping("/marketList")
-    public String marketList(Model model) {
+    public String marketList() {
         return "marketList";
     }
+
     @GetMapping("/setting")
-    public String setting(Model model) {
+    public String setting() {
         return "setting";
     }
 
     @GetMapping("/registerSuccess")
-    public String registerSuccess(Model model) {
+    public String registerSuccess() {
         return "registerSuccess";
     }
 

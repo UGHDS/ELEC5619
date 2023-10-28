@@ -44,6 +44,7 @@ public class BookingController {
             Booking booking = new Booking();
             booking.setStallDate(stallDate);
             booking.setUser(user);
+
             //获取当前现实生活中的时间
             booking.setBookingTime(Timestamp.valueOf(LocalDateTime.now()));
             booking.setStatus("Booked");
@@ -76,12 +77,15 @@ public class BookingController {
     @Operation(summary = "Find all booking history", description = "get all booking history")
     public List<List<Map<String, Object>>> bookingHistory() {
         List<Booking> bookingList = bookingRepository.findAll();
+
         List<List<Map<String, Object>>> responses = new ArrayList<>();
+
         List<Map<String, Object>> responseBooked = new ArrayList<>();
         List<Map<String, Object>> responseElse = new ArrayList<>();
 
         for (Booking booking: bookingList) {
             Map<String, Object> response = new HashMap<>();
+
             int bookingId = booking.getId();
             String stallId = booking.getStallDate().getStall().getStallId();
             int venueId = booking.getStallDate().getVenueDate().getVenueId();
@@ -95,6 +99,7 @@ public class BookingController {
 
             Date dateSlot= booking.getStallDate().getVenueDate().getDateSlot();
             String status = booking.getStatus();
+
             double totalPrice = booking.getStallDate().getStall().getPrice();
 
             List<Payment> paymentList= booking.getPayments();

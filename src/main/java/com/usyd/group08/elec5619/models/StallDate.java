@@ -20,6 +20,7 @@ public class StallDate {
             @JoinColumn(name="venue_id", referencedColumnName = "venue_id")
     })
     private VenueDate venueDate;
+
     private String status;
 
     public Long getId() {

@@ -18,7 +18,6 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @OneToOne
     @ManyToOne
     @JoinColumn(name="stall_date_id", nullable = false)
     private StallDate stallDate;
@@ -27,7 +26,7 @@ public class Booking {
     @JoinColumn(name="booking_id")
     private List<Payment> payments;
 
-    private java.sql.Timestamp bookingTime;
+    private Timestamp bookingTime;
 
     private String status;
 

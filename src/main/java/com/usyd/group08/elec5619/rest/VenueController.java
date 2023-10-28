@@ -161,26 +161,24 @@ public class VenueController {
     }
 
 
-    @PostMapping
-//    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
-    @Operation(summary = "Add a new venue", description = "Pass in a venue without venueID")
-    public boolean addVenue(String userId) {
-//        User user = (User) httpSession.getAttribute("currentUser");
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()){
-            Venue venue = new Venue();
-            venue.setVenueName("");
-            venue.setState("");
-            venue.setStreet("");
-            venue.setSuburb("");
-            venue.setDescription("");
-            venue.setPicture("");
-            venue.setUser(user.get());
-            venueRepository.save(venue);
-            return true;
-        }
-        return false;
-    }
+//    @PostMapping
+//    @Operation(summary = "Add a new venue", description = "Pass in a venue without venueID")
+//    public boolean addVenue(String userId) {
+//        Optional<User> user = userRepository.findById(userId);
+//        if (user.isPresent()){
+//            Venue venue = new Venue();
+//            venue.setVenueName("");
+//            venue.setState("");
+//            venue.setStreet("");
+//            venue.setSuburb("");
+//            venue.setDescription("");
+//            venue.setPicture("");
+//            venue.setUser(user.get());
+//            venueRepository.save(venue);
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * Delete venue
@@ -206,139 +204,23 @@ public class VenueController {
     }
 
     @PutMapping
-//    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
     @Operation(summary = "Update venue info", description = "Pass the updated venue object, and will return the updated venue object.")
     public boolean updateVenue(@RequestParam String venueId, String latitude, String longitude, String description, String picture, String state, String street, String suburb, String venueName) {
-//        User user = (User) httpSession.getAttribute("currentUser");
         Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueId));
         if (optionalVenue.isPresent()) {
             Venue venue = optionalVenue.get();
-//            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
-                venue.setStreet(street);
-                venue.setSuburb(suburb);
-                venue.setState(state);
-                venue.setDescription(description);
-                venue.setPicture(picture);
-                venue.setLongitude(Double.valueOf(longitude));
-                venue.setLatitude(Double.valueOf(latitude));
-                venue.setVenueName(venueName);
-                venueRepository.save(venue);
-                return true;
-//            }
+            venue.setStreet(street);
+            venue.setSuburb(suburb);
+            venue.setState(state);
+            venue.setDescription(description);
+            venue.setPicture(picture);
+            venue.setLongitude(Double.valueOf(longitude));
+            venue.setLatitude(Double.valueOf(latitude));
+            venue.setVenueName(venueName);
+            venueRepository.save(venue);
+            return true;
         }
         return false;
     }
-//
-//    @PutMapping("/address")
-////    @ValidateUserType(type = "admin,organiser") // 只允许登陆的用户中的： admin 和 organiser执行此次操作
-//    @Operation(summary = "Update venue info", description = "Pass the updated venue object, and will return the updated venue object.")
-//    public boolean updateVenueUseAddress(@RequestParam String venueId, String latitude, String longitude, String description, String picture, String address, String venueName) {
-////        User user = (User) httpSession.getAttribute("currentUser");
-//        Optional<Venue> optionalVenue = venueRepository.findById(Integer.valueOf(venueId));
-//        if (optionalVenue.isPresent()) {
-//            Venue venue = optionalVenue.get();
-////            if (venue.getUser().getId().equals(user.getId()) || user.getType().equals("admin")) {
-//            address.
-//            venue.setStreet(street);
-//            venue.setSuburb(suburb);
-//            venue.setState(state);
-//            venue.setDescription(description);
-//            venue.setPicture(picture);
-//            venue.setLongitude(Double.valueOf(longitude));
-//            venue.setLatitude(Double.valueOf(latitude));
-//            venue.setVenueName(venueName);
-//            venueRepository.save(venue);
-//            return true;
-////            }
-//        }
-//        return false;
-//    }
-
-
-    //自制一个只有我需要的  venue信息  的class
-    private static class VenueWrapper {
-        private int venueId;
-        private String venueName;
-        private String street;
-        private String suburb;
-        private String state;
-        private String description;
-        private String picture;
-        private double longitude;
-        private double latitude;
-
-        public int getVenueId() {
-            return venueId;
-        }
-
-        public void setVenueId(int venueId) {
-            this.venueId = venueId;
-        }
-
-        public String getStreet() {
-            return street;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
-        }
-
-        public String getSuburb() {
-            return suburb;
-        }
-
-        public void setSuburb(String suburb) {
-            this.suburb = suburb;
-        }
-
-        public String getState() {
-            return state;
-        }
-
-        public void setState(String state) {
-            this.state = state;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getPicture() {
-            return picture;
-        }
-
-        public void setPicture(String picture) {
-            this.picture = picture;
-        }
-
-        public double getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(double longitude) {
-            this.longitude = longitude;
-        }
-
-        public double getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(double latitude) {
-            this.latitude = latitude;
-        }
-
-        public String getVenueName() {
-            return venueName;
-        }
-
-        public void setVenueName(String venueName) {
-            this.venueName = venueName;
-        }
-    }
-
 
 }
