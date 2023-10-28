@@ -26,7 +26,7 @@
 
             <div class="marketItemDiv">
 
-                <div class="marketListItem" v-for="market in filteredMarkets" :key="market.id" @click="goToMarketInfo(market.id)">
+                <div class="marketListItem" v-for="market in filteredMarkets" :key="market.id" @click="goToMarketInfo(market.id)" style="cursor: pointer">
                     <div class="marketListName">{{ market.name }}</div>
                     <div class="marketListSuburb">Suburb: {{ market.suburb }}</div>
                     <div class="marketListAddress">{{ market.address }}</div>
