@@ -48,7 +48,6 @@ body {
 }
 
 
-/* Slideshow container */
 .slideshow-container1 {
     width: 100%;
     height: 100%;
@@ -61,7 +60,6 @@ body {
 
 
 
-/* The dots/bullets/indicators */
 .dot1 {
     height: 15px;
     width: 15px;
@@ -76,7 +74,6 @@ body {
     background-color: #717171;
 }
 
-/* Fading animation */
 .fade {
     animation-name: fade;
     animation-duration: 8s;
@@ -87,7 +84,6 @@ body {
     to {opacity: .8}
 }
 
-/* On smaller screens, decrease text size */
 @media only screen and (max-width: 300px) {
     .text {font-size: 11px}
 }
@@ -179,7 +175,6 @@ body {
     background-color: white;
     border: none;
 }
-/* Add styles to the form container */
 
 .popup {
     width:70%;
@@ -202,7 +197,6 @@ body {
     background-color: white;
 }
 
-/* Full-width input fields */
 .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 5px;
@@ -216,17 +210,14 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .form-container input[type=text]:focus, .form-container input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }
 
-/* Set a style for the submit/login button */
 .form-container .btn {
     background-color: #04AA6D;
     color: white;
-    /*padding: 16px 20px;*/
     border: none;
     cursor: pointer;
     width: 20%;
@@ -237,7 +228,6 @@ body {
     font-weight: bold;
 }
 
-/* Add a red background color to the cancel button */
 .SHform-popup .cancel {
     color: black;
     font-size: 50px;
@@ -267,7 +257,6 @@ body {
 .MOform-popup .cancel:hover{
     color:red;
 }
-/* Add some hover effects to buttons */
 .form-container .btn:hover, .open-button:hover {
     opacity: 1;
 }
@@ -348,7 +337,6 @@ body {
     position: absolute;
 }
 
-/* Full-width input fields */
 .setting-form label{
     font-weight: 500;
     margin-right: 3px;
@@ -367,7 +355,6 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .setting-form input[type=text]:focus, .setting-form input[type=password]:focus {
     background-color: rgba(233,239,255,1);
     outline: none;
@@ -407,7 +394,6 @@ body {
     border:none;
     background-color: #BEBEBE;
     color: black;
-    /*position: absolute;*/
     margin-top: 0px;
     margin-bottom: 5px;
     margin-left: 500px;
@@ -421,7 +407,6 @@ body {
     border:none;
     background-color: #BEBEBE;
     color: black;
-    /*position: absolute;*/
     margin-left: 300px;
     margin-top: 10px;
     width:15%;
@@ -457,7 +442,6 @@ body {
     position: absolute;
 }
 
-/* Full-width input fields */
 .psw-form label{
     font-weight: 500;
     margin-right: 3px;
@@ -472,7 +456,6 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .psw-form input[type=text]:focus, .setting-form input[type=password]:focus {
     background-color: rgba(233,239,255,1);
     outline: none;
@@ -511,7 +494,6 @@ body {
     border: none;
 }
 
-/* Style the buttons inside the tab */
 .tab button {
     background-color: #6C6C6C;
     color: white;
@@ -526,18 +508,15 @@ body {
 }
 
 
-/* Change background color of buttons on hover */
 .tab button:hover {
     background-color: #ddd;
 }
 
-/* Create an active/current tablink class */
 .tab button.active {
     background-color: white;
     color: black;
 }
 
-/* Style the tab content */
 .tabcontent {
     display: block;
     width:100%;
@@ -556,7 +535,6 @@ body {
 
 .bookingItem{
     border: none;
-    /*position: absolute;*/
     margin-top: 10px;
     width:100%;
     height:25%;
@@ -564,17 +542,15 @@ body {
 
 .bookingItem, .bookingHistoryItem {
     display: flex;
-    flex-direction: column;  /* stack children vertically */
-    align-items: start;      /* align children to the start (left) */
-    justify-content: space-between;  /* distribute space between children evenly */
-    /* ... other styles ... */
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
 }
 
 .orderNum{
     font-size: 15px;
     font-weight: lighter;
     margin-left: 20px;
-    /*position: absolute;*/
     color:black;
     top:5%;
     left:3%;
@@ -583,7 +559,6 @@ body {
     font-size: 20px;
     font-weight: 600;
     margin-left: 20px;
-    /*position: absolute;*/
     color: black;
     top:25%;
     left:3%;
@@ -592,7 +567,6 @@ body {
     font-size: 18px;
     font-weight: 500;
     margin-left: 20px;
-    /*position: absolute;*/
     color: black;
     top:50%;
     left:3%;
@@ -600,7 +574,6 @@ body {
 .price{
     font-size: 20px;
     font-weight: 600;
-    /*position: absolute;*/
     color: black;
     margin-left: 670px;
     margin-top: -50px;
@@ -609,7 +582,6 @@ body {
     height:2px;
     width:100%;
     background-color: #BBBBBB;
-    /*position: absolute;*/
     margin-top: 10px;
 }
 
@@ -619,7 +591,6 @@ body {
     color: white;
     margin-left: 900px;
     margin-top: -35px;
-    /*position: absolute;*/
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -634,7 +605,6 @@ body {
     border:none;
     background-color: #A95B5B;
     color: white;
-    /*position: absolute;*/
     margin-left: 1100px;
     margin-top: -42px;
     height: 40px;
@@ -649,7 +619,6 @@ body {
 
 .bookingHistoryItem{
     border: none;
-    /*position: absolute;*/
     margin-top: 20px;
     width:100%;
     height:25%;
@@ -658,7 +627,6 @@ body {
 .priceHistory{
     font-size: 20px;
     font-weight: 600;
-    /*position: absolute;*/
     color: black;
     margin-left: 670px;
     margin-top: -60px;
@@ -669,7 +637,6 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
-    /*position: absolute;*/
     margin-left: 900px;
     margin-top: -35px;
     width:15%;
@@ -688,8 +655,7 @@ body {
     border:none;
     background-color: darkgray;
     color: white;
-    /*position: absolute;*/
-    margin-left: 600px;
+    margin-left: 800px;
     margin-top: -55px;
     width:20%;
     height: 40px;
@@ -707,7 +673,6 @@ body {
     border:none;
     background-color: darkgray;
     color: white;
-    /*position: absolute;*/
     margin-left: 972px;
     margin-top: -35px;
     width:20%;
@@ -727,8 +692,8 @@ body {
     background-color: #9BB692;
     color: white;
     position: absolute;
-    margin-left: 950px;
-    margin-top: 15px;
+    margin-left: 1100px;
+    margin-top: 18px;
     width:10%;
     height: 38px;
     border-radius: 4px;
@@ -792,7 +757,6 @@ body {
 .reviewM-popup {
     width:50%;
     height:35%;
-    /*display: none;*/
     position: absolute;
     top:35%;
     left:25%;
@@ -829,7 +793,6 @@ body {
 .reviewA-popup {
     width:50%;
     height:60%;
-    /*display: none;*/
     position: absolute;
     top:25%;
     left:25%;
@@ -871,7 +834,6 @@ body {
 .reviewB-popup {
     width:50%;
     height:60%;
-    /*display: none;*/
     position: absolute;
     top:25%;
     left:25%;
@@ -912,7 +874,6 @@ body {
 .review-popup {
     width:70%;
     height:60%;
-    /*display: none;*/
     position: absolute;
     top:15%;
     left:15%;
@@ -1035,7 +996,6 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .stallNum:focus {
     background-color: rgba(233,239,255,1);
     outline: none;
@@ -1073,7 +1033,6 @@ body {
     background-color: white;
 }
 
-/* Full-width input fields */
 .marketForm input[type=text], .marketForm input[type=date], .marketForm input[type=time], .marketForm textarea {
     width: 100%;
     padding: 8px;
@@ -1085,7 +1044,6 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .marketForm input[type=text]:focus, .marketForm input[type=date]:focus, .marketForm input[type=time]:focus, .marketForm textarea:focus{
     background: rgba(233,239,255,1);
     outline: none;
@@ -1094,8 +1052,6 @@ body {
 
 /*marketAdmin.html*/
 .marketItem{
-    /*border: none;*/
-    /*position: absolute;*/
     margin-top: 20px;
     width:100%;
 }
@@ -1104,7 +1060,6 @@ body {
     border:none;
     background-color: #9BB692;
     color: white;
-    /*position: absolute;*/
     margin-top: -40px;
     margin-left: 900px;
     width:20%;
@@ -1144,7 +1099,6 @@ body {
 }
 
 .marketItemDiv2{
-    /*display: flex;*/
     flex-wrap: wrap;
     justify-content: space-between;
     width:100%;
@@ -1236,7 +1190,6 @@ body {
     background-color: white;
 }
 
-/* Full-width input fields */
 .loginForm input[type=email] {
     width: 60%;
     height:10%;
@@ -1259,13 +1212,11 @@ body {
     background: #f1f1f1;
 }
 
-/* When the inputs get focus, do something */
 .loginForm input[type=text]:focus, .loginForm input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }
 
-/* Set a style for the submit/login button */
 .loginForm .btn {
     background-color: darkseagreen;
     color: white;
@@ -1510,7 +1461,6 @@ body {
     position: absolute;
 }
 
-/* Full-width input fields */
 .stall-form label{
     font-weight: 500;
     margin-right: 3px;
@@ -1525,7 +1475,6 @@ body {
 }
 
 
-/* When the inputs get focus, do something */
 .stall-form input[type=text]:focus, .setting-form input[type=password]:focus {
     background-color: rgba(233,239,255,1);
     outline: none;

@@ -35,10 +35,8 @@
                         <template v-if="organiser.status === 'pending'">
                             <button type="button" id="review" class="reviewBtn" @click="openREOneForm(organiser)">View Registration Detail</button>
                             <button type="button" id="approve" class="approveBtn" @click="approveOrganiser(organiser.organiserId)">Approve</button>
-                            <button type="button" id="deny" class="denyBtn" @click="denyClick">Deny</button>
                         </template>
 
-                        <button v-if="organiser.status === 'deny'" type="button" id="deny2" class="denyBtn2" @click="denyClick">Denied</button>
                         <br><div class="userline"></div>
                     </div>
                 </div>
