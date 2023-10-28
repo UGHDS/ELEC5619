@@ -8,6 +8,7 @@
     <title>Market Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-QTHpG5rvbPs5uE2QE7ucfGeXbU1g_hE&callback=initMap"></script>
 
 </head>
 
@@ -18,44 +19,103 @@
     <span class="userHomeTitle">Market list</span>
 
     <div class="frameContainerR">
-        <div class="marketItem" v-for="market in markets" :key="market.id">
-            <div class="orderNum">Venue #{{ market.id }}</div>
-            <div class="marketStall">{{ market.name }}</div>
-<!--            <div class="dateAddress">Crown St, Surry Hills NSW 2010 </div>-->
-            <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
-            <br>
-            <div class="userline"></div>
+        <div class="tab">
+            <button class="tablinks" :class="{ active: currentTab === 'listView' }" @click="changeTab('listView')" style="border-radius: 20px 0px 0px 0px">View by List</button>
+            <button class="tablinks" :class="{ active: currentTab === 'mapView' }" @click="changeTab('mapView')" style="border-radius: 0px 20px 0px 0px">View by Map</button>
+        </div>
+
+        <div v-show="currentTab === 'listView'" class="tabcontent">
+            <div class="marketItemDiv2" style="top:10%;">
+                <div class="marketItem" v-for="market in markets" :key="market.id">
+                    <div class="orderNum">Venue #{{ market.id }}</div>
+                    <div class="marketStall">{{ market.name }}</div>
+                    <button type="button" class="marketReview" @click="openREForm(market)">View or Edit Market Detail</button>
+                    <br>
+                    <div class="userline"></div>
+                </div>
+            </div>
+
+        </div>
+        <div v-show="currentTab === 'mapView'" class="tabcontent">
+
+            <div id="map" style="height: 420px;"></div>
         </div>
     </div>
 
     <div class="blackLayer" v-show="showFormLayer"></div>
 
-    <div class="reviewM-popup" v-show="showReviewForm">
+    <div class="reviewA-popup" v-show="showReviewForm">
         <button type="button" class="btn cancel" @click="closeREForm">x</button>
-        <br><span>Venue #{{ currentMarket.id }}</span><br>
-        <span>Venue name: {{ currentMarket.name }}</span><br>
-        <span>Venue address: {{ currentMarket.address }}</span><br>
-        <span>Venue suburb: {{ currentMarket.suburb }}</span><br>
-        <span>Total Stall: {{ currentMarket.stall }}</span>
+        <br><label>Venue #{{ currentMarket.id }}</label><br>
+        <label>Venue name:
+            <input type="text" v-model="updatedInfo.name" name="venueName" id="venueName"  />
+        </label><br>
+        <label>Venue street:
+            <input type="text" v-model="updatedInfo.street" name="venueStreet" id="venueStreet"  />
+        </label><br>
+        <label>Venue suburb:
+            <input type="text" v-model="updatedInfo.suburb" name="venueSuburb" id="venueSuburb"  />
+        </label><br>
+        <label>Venue state:
+            <input type="text" v-model="updatedInfo.state" name="venueState" id="venueState"  />
+        </label><br>
+        <label>Venue image:
+            <input type="text" v-model="updatedInfo.image" name="venueImage" id="venueImage"  />
+        </label><br>
+        <label>Total Stall: {{ currentMarket.stall }}</label>
+        <button type="submit" class="updateButton" @click="updateMarketInformation" style="width:120px;position: absolute;left:40%">UPDATE</button>
     </div>
 </div>
 
 <div th:replace="fragments/footer :: footer"></div>
 
 <script>
+
+    function setMapBounds(map, markers) {
+        var bounds = new google.maps.LatLngBounds();
+
+        markers.forEach(function(marker) {
+            bounds.extend(marker.position);
+        });
+
+        map.fitBounds(bounds);
+    }
+
     new Vue({
         el: '#app',
         data: {
+            currentTab: 'listView',
             markets:[],
             currentMarket: {},
             showReviewForm: false,
             showFormLayer: false,
+            updatedInfo: {}
+
         },
         methods: {
+            changeTab(tabName) {
+                this.currentTab = tabName;
+            },
             getMarkets() {
-                axios.get('/api/venues') // Make sure the URL is correct
+                axios.get('/api/venues')
                     .then(response => {
                         this.markets = response.data;
+                        let marks = [];
+                        let map;
+                        for(let i=0; i<this.markets.length; i++){
+                            if(i===0){
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                    zoom: 20
+                                });
+                            }
+                            marks.push(new google.maps.Marker({
+                                position: {lat: this.markets[i].latitude, lng:  this.markets[i].longitude},
+                                map: map,
+                                title: this.markets[i].name,
+                            }));
+                        }
+                        setMapBounds(map, marks);
                     })
                     .catch(error => {
                         if (error.response) {
@@ -64,18 +124,52 @@
                         console.error("Error fetching data:", error);
                     });
             },
-            openREForm: function(market) {  // 添加参数
-                this.currentMarket = market;  // 保存当前的market
+            goToMarketInfo(marketId) {
+                window.location.href = `/marketInfo?id=${marketId}`;
+            },
+            openREForm: function(market) {
+                this.currentMarket = market;
                 this.showReviewForm = true;
                 this.showFormLayer = true;
             },
             closeREForm: function() {
                 this.showReviewForm = false;
                 this.showFormLayer = false;
+            },
+            updateMarketInformation: function() {
+                const venueId = this.currentMarket.id;
+                const latitude = this.currentMarket.latitude;
+                const longitude = this.currentMarket.longitude;
+                const description = this.currentMarket.description;
+                const picture = this.updatedInfo.image;
+                const state = this.updatedInfo.state;
+                const street = this.updatedInfo.street;
+                const suburb = this.updatedInfo.suburb;
+                const venueName = this.updatedInfo.name;
+
+                const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
+
+                axios.put(apiUrl)
+                    .then(response => {
+                        alert('Venue information updated successfully!');
+                    })
+                    .catch(error => {
+                        console.error('Error updating venue information:', error);
+                        alert('Error updating venue information!');
+
+                    });
             }
         },
         mounted() {
             this.getMarkets();
+        },
+        watch: {
+            currentMarket: {
+                immediate: true,
+                handler: function(newVal) {
+                    this.updatedInfo = JSON.parse(JSON.stringify(newVal));
+                }
+            }
         }
     });
 </script>

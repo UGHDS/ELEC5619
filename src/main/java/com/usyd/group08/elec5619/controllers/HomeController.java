@@ -47,6 +47,10 @@ public class HomeController {
         return "setting";
     }
 
+    @GetMapping("/registerSuccess")
+    public String registerSuccess(Model model) {
+        return "registerSuccess";
+    }
 
 
 }

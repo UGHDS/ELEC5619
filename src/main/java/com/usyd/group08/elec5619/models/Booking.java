@@ -18,7 +18,8 @@ public class Booking {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
+//    @OneToOne
+    @ManyToOne
     @JoinColumn(name="stall_date_id", nullable = false)
     private StallDate stallDate;
 

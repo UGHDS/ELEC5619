@@ -6,11 +6,13 @@ import com.usyd.group08.elec5619.models.Stall;
 import com.usyd.group08.elec5619.models.User;
 import com.usyd.group08.elec5619.models.Venue;
 import com.usyd.group08.elec5619.repositries.UserRepository;
+import com.usyd.group08.elec5619.repositries.VenueRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
@@ -19,6 +21,9 @@ import java.util.*;
 public class UserController {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    VenueRepository venueRepository;
 
     @Autowired
     HttpSession httpSession;
@@ -93,26 +98,50 @@ public class UserController {
     @PutMapping ("organisers/approve")
     @ValidateUserType(type = "admin")
     @Operation(summary = "Approve the organiser by userID",description = "Pass in userID, and return")
-    public User approveOrganiser(@RequestParam String userID){
+    public boolean approveOrganiser(@RequestParam String userID){
         Optional<User> optionalUser = userRepository.findById(userID);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             user.setStatus("active");
+//            List<Venue> venues = new ArrayList<>();
+
+            Venue venue = new Venue();
+            venue.setVenueName("");
+            venue.setState("");
+            venue.setStreet("");
+            venue.setSuburb("");
+            venue.setDescription("");
+            venue.setPicture("");
+            venue.setUser(user);
+            venueRepository.save(venue);
             userRepository.save(user);
-            return user;
+            return true;
         }
-        return null;
+        return false;
     }
 
     @PostMapping("register")
     @Operation(summary = "Register new owner or organiser",description = "Pass in a user without userID")
-    public User register(@RequestBody User user) {
-        if(user.getType().equals("owner")){
-            user.setStatus("active");
-        }else {
-            user.setStatus("pending");
+    public RedirectView register(@RequestParam String firstName, String lastName, String phone, String email, String password, String type) {
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setPhone(phone);
+        newUser.setPassword(password);
+        newUser.setType(type);
+
+        if (type == null){
+            return new RedirectView("/registerSuccess");
         }
-        return userRepository.save(user);
+
+        if(type.equals("owner")){
+            newUser.setStatus("active");
+        }else {
+            newUser.setStatus("pending");
+        }
+        userRepository.save(newUser);
+        return new RedirectView("/registerSuccess");  // Redirect to a success page or any other URL after registration
     }
 
     @DeleteMapping
@@ -129,22 +158,33 @@ public class UserController {
     }
 
     @PutMapping
-    @ValidateUserType(type = "admin")
+    @ValidateUserType
     @Operation(summary = "Update user info", description = "Pass the updated user object, and will return the updated user object.")
-    public User updateUser(@RequestParam User pendingUpdateUser){
-        Optional<User> optionalUser = userRepository.findById(String.valueOf(pendingUpdateUser.getId()));
+    public boolean updateUser(@RequestParam String firstName, String lastName, String phone, String email, String userId){
+        Optional<User> optionalUser = userRepository.findById(String.valueOf(userId));
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            user.setEmail(pendingUpdateUser.getEmail());
-            user.setFirstName(pendingUpdateUser.getFirstName());
-            user.setLastName(pendingUpdateUser.getLastName());
-            user.setPassword(pendingUpdateUser.getPassword());
-            user.setPhone(pendingUpdateUser.getPhone());
-            return user;
+            user.setEmail(email);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhone(phone);
+            userRepository.save(user);  // 保存更改到数据库
+            return true;
         }
-        return null;
+        return false;
     }
 
-
-
+    @PutMapping("/password")
+//    @ValidateUserType
+    @Operation(summary = "Update user info", description = "Pass the updated user object, and will return the updated user object.")
+    public boolean updatePassword(@RequestParam String userId, String password){
+        Optional<User> optionalUser = userRepository.findById(String.valueOf(userId));
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setPassword(password);
+            userRepository.save(user);  // 保存更改到数据库
+            return true;
+        }
+        return false;
+    }
 }

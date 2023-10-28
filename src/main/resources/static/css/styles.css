@@ -160,9 +160,9 @@ body {
 
 .SHform-popup {
     width:70%;
-    height:78%;
+    height:60%;
     position: absolute;
-    top:12%;
+    top:20%;
     left:15%;
     right: 15px;
     background-color: white;
@@ -171,9 +171,9 @@ body {
 
 .MOform-popup {
     width:70%;
-    height:78%;
+    height:60%;
     position: absolute;
-    top:12%;
+    top:20%;
     left:15%;
     right: 15px;
     background-color: white;
@@ -206,7 +206,7 @@ body {
 .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 5px;
-    margin: 5px 0 5px 0;
+    margin: 10px 0 5px 0;
     border: none;
     background: #f1f1f1;
 }
@@ -232,7 +232,7 @@ body {
     width: 20%;
     left:40%;
     position: absolute;
-    bottom: -8%;
+    bottom: -18%;
     opacity: 0.8;
     font-weight: bold;
 }
@@ -398,12 +398,50 @@ body {
     font-weight: bold;
 }
 
-.pswChangeBtn:hover,.updateButton:hover{
+.pswChangeBtn:hover,.updateButton:hover, .updateButton1:hover, .updateButton2:hover, .updateButton3:hover{
     background-color: dimgray;
     color:white;
 }
 
+.updateButton1{
+    border:none;
+    background-color: #BEBEBE;
+    color: black;
+    /*position: absolute;*/
+    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 500px;
+    width:15%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
 
+.updateButton2{
+    border:none;
+    background-color: #BEBEBE;
+    color: black;
+    /*position: absolute;*/
+    margin-left: 300px;
+    margin-top: 10px;
+    width:15%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.updateButton3{
+    border:none;
+    background-color: #BEBEBE;
+    color: black;
+    position: absolute;
+    top:90%;
+    left:40%;
+    width:15%;
+    height: 40px;
+    border-radius: 4px;
+    font-weight: bold;
+}
 .pswForm-setting{
     width:90%;
     height:80%;
@@ -465,7 +503,7 @@ body {
     text-align: left;
     position: absolute;
     left: 5%;
-    top: 15%;
+    top: 12%;
 }
 
 .tab {
@@ -508,12 +546,20 @@ body {
     border: none;
 }
 
+.frame{
+    overflow-y: auto;
+    position: absolute;
+    width:100%;
+    height:85%;
+    top:12%;
+}
+
 .bookingItem{
     border: none;
     /*position: absolute;*/
     margin-top: 10px;
     width:100%;
-    height:20%;
+    height:25%;
 }
 
 .bookingItem, .bookingHistoryItem {
@@ -590,7 +636,7 @@ body {
     color: white;
     /*position: absolute;*/
     margin-left: 1100px;
-    margin-top: -40px;
+    margin-top: -42px;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -604,9 +650,9 @@ body {
 .bookingHistoryItem{
     border: none;
     /*position: absolute;*/
-    margin-top: 10px;
+    margin-top: 20px;
     width:100%;
-    height:20%;
+    height:25%;
 }
 
 .priceHistory{
@@ -643,9 +689,9 @@ body {
     background-color: darkgray;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    left:48%;
-    width:15%;
+    margin-left: 600px;
+    margin-top: -55px;
+    width:20%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -661,14 +707,14 @@ body {
     border:none;
     background-color: darkgray;
     color: white;
-    position: absolute;
-    top:20%;
-    right:5%;
-    width:15%;
+    /*position: absolute;*/
+    margin-left: 972px;
+    margin-top: -35px;
+    width:20%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
-    display: none;
+    display: block;
 }
 
 .reviewBtn2:hover{
@@ -681,10 +727,10 @@ body {
     background-color: #9BB692;
     color: white;
     position: absolute;
-    top:20%;
-    left:72%;
+    margin-left: 950px;
+    margin-top: 15px;
     width:10%;
-    height: 40px;
+    height: 38px;
     border-radius: 4px;
     font-weight: bold;
     display: block;
@@ -700,10 +746,10 @@ body {
     background-color: #A95B5B;
     color: white;
     position: absolute;
-    top:20%;
-    right:5%;
+    margin-left: 1100px;
+    margin-top: 15px;
     width:10%;
-    height: 40px;
+    height: 38px;
     border-radius: 4px;
     font-weight: bold;
     display: block;
@@ -745,7 +791,7 @@ body {
 }
 .reviewM-popup {
     width:50%;
-    height:30%;
+    height:35%;
     /*display: none;*/
     position: absolute;
     top:35%;
@@ -757,6 +803,11 @@ body {
 .reviewM-popup span{
     margin-left: 50px;
     margin-top: 50px;
+    font-size: 18px;
+}
+.reviewM-popup label{
+    margin-left: 50px;
+    margin-top: 20px;
     font-size: 18px;
 }
 
@@ -772,6 +823,89 @@ body {
 }
 
 .reviewM-popup .cancel:hover{
+    color:red;
+}
+
+.reviewA-popup {
+    width:50%;
+    height:60%;
+    /*display: none;*/
+    position: absolute;
+    top:25%;
+    left:25%;
+    background-color: white;
+    border: none;
+}
+
+.reviewA-popup input{
+    width:400px;
+}
+
+.reviewA-popup span{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 18px;
+}
+.reviewA-popup label{
+    margin-left: 50px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.reviewA-popup .cancel {
+    color: black;
+    font-size: 50px;
+
+    width: 30px;
+    right: 3%;
+    top: -5%;
+    position: absolute;
+    border: none;
+}
+
+.reviewA-popup .cancel:hover{
+    color:red;
+}
+
+
+.reviewB-popup {
+    width:50%;
+    height:60%;
+    /*display: none;*/
+    position: absolute;
+    top:25%;
+    left:25%;
+    background-color: white;
+    border: none;
+}
+
+.reviewB-popup input{
+    width:400px;
+}
+
+.reviewB-popup span{
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 18px;
+}
+.reviewB-popup label{
+    margin-left: 10px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.reviewB-popup .cancel {
+    color: black;
+    font-size: 50px;
+
+    width: 30px;
+    right: 3%;
+    top: -5%;
+    position: absolute;
+    border: none;
+}
+
+.reviewB-popup .cancel:hover{
     color:red;
 }
 
@@ -960,11 +1094,10 @@ body {
 
 /*marketAdmin.html*/
 .marketItem{
-    border: none;
+    /*border: none;*/
     /*position: absolute;*/
     margin-top: 20px;
     width:100%;
-    height:20%;
 }
 
 .marketReview{
@@ -972,9 +1105,9 @@ body {
     background-color: #9BB692;
     color: white;
     /*position: absolute;*/
-    top:20%;
-    right:5%;
-    width:15%;
+    margin-top: -40px;
+    margin-left: 900px;
+    width:20%;
     height: 40px;
     border-radius: 4px;
     font-weight: bold;
@@ -995,12 +1128,23 @@ body {
     height:65%;
     bottom:10%;
     left:5%;
-    overflow-y: auto;
 }
 
 /*marketList.html*/
 .marketItemDiv{
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width:100%;
+    height: 85%;
+    position: absolute;
+    top:15%;
+    left:0%;
+    overflow-y: auto;
+}
+
+.marketItemDiv2{
+    /*display: flex;*/
     flex-wrap: wrap;
     justify-content: space-between;
     width:100%;
@@ -1054,10 +1198,10 @@ body {
 }
 
 .marketListImage{
-    max-width: 155px;
-    max-height:160px;
-    margin-top: -165px;
-    margin-left: 383px;
+    width: 165px;
+    height:152px;
+    margin-top: -160px;
+    margin-left: 386px;
     border-radius: 6px;
 }
 
@@ -1066,9 +1210,9 @@ body {
     color:white;
     position: absolute;
     top:15%;
-    right:5%;
+    right:4%;
     border-radius: 6px;
-    height:40px;
+    height:30px;
     font-size: 18px;
 }
 
@@ -1170,7 +1314,7 @@ body {
 }
 
 .signupMOLogin{
-    width:32%;
+    width:35%;
     height:50px;
     bottom:5%;
     right:15%;
@@ -1194,6 +1338,8 @@ body {
     margin-left: 50px;
     margin-top: 10px;
     font-size: 18px;
+    text-align: justify;
+    width:92%;
 }
 
 .venueAddress{
@@ -1224,7 +1370,7 @@ body {
     position: absolute;
     width:80%;
     height:80%;
-    left:10%;
+    left:25%;
     top:15%;
     background-repeat: no-repeat;
     background-size: contain;
@@ -1312,7 +1458,9 @@ body {
     background-color: white;
     border: none;
 }
-
+.payment-popup input{
+    height:20px;
+}
 .paymentContainer {
     padding-top: 10px;
     width:80%;
@@ -1325,6 +1473,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     text-align: left;
+    width:200px;
 }
 .paymentContainer label {
     font-weight: bold;
@@ -1355,7 +1504,7 @@ body {
     border: 3px red;
 }
 .stall-form {
-    top:20%;
+    top:10%;
     left: 0%;
     width:40%;
     position: absolute;
@@ -1398,4 +1547,46 @@ body {
 .confirmAddStall:hover{
     background-color: darkgreen;
     color:white;
+}
+
+.photoLink{
+    width: 800px;
+    position: absolute;
+    top:25%;
+    left:5%;
+}
+
+.overflowContainer{
+    position: absolute;
+    width: 100%;
+    height: 80%;
+    top:12%;
+    bottom:0%;
+    overflow-y: auto;
+}
+
+.stallFrame{
+    position: absolute;
+    right:10%;
+    top:15%;
+    height:80%;
+    overflow-y: auto;
+}
+
+.stallFrame th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    width:120px;
+}
+
+.RStext{
+    font-size: 20px;
+    text-align: justify;
+
+    position: absolute;
+    top:15%;
+    left:7%;
+    width:750px;
+
 }

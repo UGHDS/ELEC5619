@@ -12,28 +12,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .custom-link {
+            cursor: pointer;
+            color:black;
+        }
 
+        .custom-link:hover {
+            color: coral;
+        }
+
+    </style>
 </head>
-<style>
-    .collapse navbar-collapse{
-        position: absolute;
-        top:0%;
-        left:0%;
 
-
-</style>
 <body>
 <nav class="navbar navbar-expand-lg bg-light" style="position: absolute;top:0%;
         left:0%; z-index: 1; width:100%" th:fragment="navbar">
     <div class="container-lg">
 
         <a class="navbar-brand" href="#"><img class="logo" src="image/logo1.png"/></a>
-<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"-->
-<!--                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--            <span class="navbar-toggler-icon">-->
 
-<!--            </span>-->
-<!--        </button>-->
         <div class="collapse navbar-collapse" style="position: absolute;right:5%" id="navbarSupportedContent">
 
             <ul class="nav justify-content-end">
@@ -47,21 +45,19 @@
                     <a class="nav-link" href="/setting">PROFILE</a>
                 </li>
                 <li class="nav-item">
-<!--                    <a class="nav-link" href="/login" @click.prevent="handleLogout" style="color:black">LOGOUT</a>-->
-                    <a class="nav-link" href="/"  style="color:black">LOGOUT</a>
+                    <a class="nav-link custom-link" @click="handleLogout" >LOGOUT</a>
                 </li>
-                <!--      <li class="nav-item">-->
-                <!--        <a class="nav-link disabled" aria-disabled="true">Disabled</a>-->
-                <!--      </li>-->
+
             </ul>
-<!--            <div>Hello, <span th:text="${currentUser?.firstName}"></span></div>-->
         </div>
     </div>
-    <script>
+
+
+<script>
         new Vue({
-            el: '.navbar',  // 使用 '.navbar' 选择器来定位您的导航条元素
+            el: '.navbar',
             data: {
-                userType:''  // 这里是示例值，您应该根据实际情况从服务器或其他来源获取它
+                userType:''
             },
             computed: {
                 homeLink() {
@@ -86,32 +82,16 @@
                 }
             },
             created() {
-                // 当 Vue 实例被创建后，立即调用此函数
                 this.fetchUserInfo();
             },
             methods: {
                 handleLogout: function() {
-                    axios.post('/logout')  // 这里更改为你的注销 API 的实际路径
-                        .then((response) => {
-                            let data = response.data;
-                            if (data === false) {
-                                // 如果返回false，重定向到 '/home'
-                                window.location.href = "/";
-                            } else {
-                                // 如果返回的不是false，你可以根据返回的数据来决定做什么，或者直接重定向到默认的注销页面
-                                window.location.href = "/login";
-                            }
-                        })
-                        .catch((error) => {
-                            window.location.href = "/login"
-                            // console.error("Error during logout:", error);
-                            // alert("There was an error during logout");
-                        });
+                    alert("Are you sure you want to logout?")
+                    window.location.href = "/";
                 },
                 fetchUserInfo() {
                     axios.get('/api/users/getCurrentUserInfo')
                         .then(response => {
-                            // 设置 userType 的值
                             this.userType = response.data.type;
                         })
                         .catch(error => {
@@ -122,6 +102,5 @@
         });
     </script>
 </nav>
-
 </body>
 </html>

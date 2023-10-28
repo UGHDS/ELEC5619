@@ -16,9 +16,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/stalls")
@@ -41,31 +39,49 @@ public class StallController {
      * @return
      */
     @GetMapping
-    @ValidateUserType
+//    @ValidateUserType
     @Operation(summary = "Find all stalls in current venue", description = "Pass venue ID, and will return stalls list in this specific venue")
-    public List<Stall> getStallsByVenueId(@RequestParam String venueID) {
+    public List<Map<String, Object>> getStallsByVenueId(@RequestParam String venueID) {
+        List<Map<String, Object>> responses = new ArrayList<>();
         Optional<Venue> venue = venueRepository.findById(Integer.parseInt(venueID));
         if (venue.isPresent()) {
-            return venue.get().getStalls();
+            List<Stall> stallList = venue.get().getStalls();
+
+            for (Stall stall: stallList) {
+                List<StallDate> stallDateList = stallDateRepository.getStallDateByStallId(stall.getId());
+                for (StallDate stallDate: stallDateList) {
+                    if (stallDate.getStatus().equals("Available")){
+                        Map<String, Object> response = new HashMap<>();
+                        response.put("stallId", stall.getId());
+                        response.put("stallName", stall.getStallId());
+                        response.put("stallPrice", stall.getPrice());
+                        response.put("dateSlot", stallDate.getVenueDate().getDateSlot());
+                        responses.add(response);
+                    }
+                }
+            }
         }
-        return null;
+        return responses;
     }
 
     @PostMapping
-    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
+//    @ValidateUserType(type = "admin,organiser") // 允许 admin 和 organiser
     @Operation(summary = "Add stalls into venue by id", description = "Pass a list of stalls in post body and a " +
             "venue id in the query. venue_id must from current user. [NOTES] venue_id in 'Request body' can skip and will be ignored")
-    public boolean addStalls(@RequestParam int venueId, @RequestBody List<Stall> stalls) {
-        User user = (User) httpSession.getAttribute("currentUser");
-        Optional<Venue> venue = venueRepository.findById(venueId);
-        if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
-            for (Stall stall : stalls) {
-                stall.setVenueId(venueId);
-                stallRepository.save(stall);
-            }
-            return true;
-        }
-        return false;
+    public boolean addStalls(@RequestParam String venueId, String price, String stallName) {
+//        User user = (User) httpSession.getAttribute("currentUser");
+        Optional<Venue> venue = venueRepository.findById(Integer.valueOf(venueId));
+//        if (user.getType().equals("admin") || venue.isPresent() && venue.get().getUser().getId().equals(user.getId())) {
+//            for (Stall stall : stalls) {
+        Stall newStall = new Stall();
+        newStall.setVenueId(Integer.valueOf(venueId));
+        newStall.setPrice(Double.valueOf(price));
+        newStall.setStallId(stallName);
+        stallRepository.save(newStall);
+//            }
+        return true;
+//        }
+//        return false;
     }
 
     @DeleteMapping

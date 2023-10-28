@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <head th:include="fragments/header :: head"></head>
+    <link href="../css/styles.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register Success Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.4/dist/axios.min.js"></script>
+
+    <style>
+        body {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+<nav th:replace="fragments/header :: navbar"></nav>
+
+<div id="app">
+    <div class="indexContent">
+    </div>
+    <div class="loginFormDiv" style="top:28%">
+        <div class="loginForm">
+            <span class="RStext">Thank you for registering in our website! If you are registered as stall holder, you may login to your account now! If you are registed as marker organizer, there will be an approval process to confirm your given information to keep our customers safe. The approximate time of approval will be 1-5 business days. A notification will be sent to you if your registration gets approved.  Thank you for your collaboration!</span>
+
+            <button class="btn" @click="goToLogin" style="top:80%">OK</button>
+        </div>
+
+
+
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+
+
+<script>
+    new Vue({
+        el: '#app',
+        methods: {
+            goToLogin() {
+                window.location.href = '/login';
+            }
+        }
+    });
+</script>
+</body>
+</html>
