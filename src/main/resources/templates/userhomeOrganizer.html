@@ -26,33 +26,25 @@
 
         <div v-show="currentTab === 'VenueInformation'" class="tabcontent">
 
-            <form action="#" class="marketForm" >
+            <div class="marketForm" >
                 <label>Venue Name:</label>
                 <input type="text" v-model="updatedInfo.name" name="venueName" id="venueName" style="width:87.8%; margin-left: 10px" required />
 
                 <label>Address: </label>
                 <input type="text" id="addressInput" v-model="updatedInfo.address" placeholder="Enter an address" name="addressM" />
 
-                <label>Start Date:</label>
-                <input type="date" v-model="startDate" style="width:12%; margin-left: 10px" required>
 
-                <label>- End Date:</label>
-                <input type="date" v-model="endDate" style="width:12%; margin-left: 10px" required>
 
-                <label style="margin-left: 50px"><input type="checkbox"  v-model="selectedWeekdays" value="Monday"> Mon</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Tuesday"> Tue</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Wednesday"> Wed</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Thursday"> Thu</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Friday"> Fri</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Saturday" checked> Sat</label>
-                <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Sunday"> Sun</label>
 
                 <br><label>Brief introduction of the Venue:</label>
                 <textarea name="venueInfo" v-model="updatedInfo.description" id="venueInfo" style="height:120px;white-space: pre-wrap;" required>
                       </textarea>
-            </form>
 
-            <button type="button" class="updateButton" @click="updateMarketInformation();getVenueData()">UPDATE</button>
+                <button type="button" class="updateButton1" @click="updateMarketInformation()">UPDATE INFO</button>
+
+            </div>
+
+
         </div>
 
         <div v-show="currentTab === 'PhotoGallery'" class="tabcontent">
@@ -87,6 +79,8 @@
                     </table>
 
                 </div>
+                <button type="button" class="updateButton3" @click="showTimeForm">UPDATE TIME</button>
+
             </div>
 
         </div>
@@ -94,6 +88,27 @@
 
 
     </div>
+    <div class="blackLayer" v-show="showFormLayer"></div>
+    <div class="reviewB-popup"  v-show="showTimeChange">
+        <button type="button" class="btn cancel" @click="closeTimeForm()">x</button>
+
+        <br><label style="margin-left: 50px">Start Date:</label>
+        <input type="date" v-model="startDate" style="width:20%; margin-left: 10px" required>
+
+        <label>- End Date:</label>
+        <input type="date" v-model="endDate" style="width:20%; margin-left: 10px" required>
+
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Monday"> Mon</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Tuesday"> Tue</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Wednesday"> Wed</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Thursday"> Thu</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Friday"> Fri</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Saturday" checked> Sat</label>
+        <label style="margin-left: 5px"><input type="checkbox"  v-model="selectedWeekdays" value="Sunday"> Sun</label>
+        <br><button type="button" class="updateButton2" @click="getVenueData();closeTimeForm()">Confirm</button>
+
+    </div>
+
 </div>
 
 
@@ -110,7 +125,9 @@
             updatedInfo: {},
             startDate: '2023-10-10',
             endDate: '2023-10-17',
-            selectedWeekdays: []
+            selectedWeekdays: [],
+            showTimeChange: false,
+            showFormLayer:false
         },
         methods: {
             changeTab(tabName) {
@@ -125,6 +142,14 @@
                         this.error = "Error fetching welcome message.";
                         console.error("Error fetching welcome message:", error);
                     });
+            },
+            showTimeForm:function(){
+                this.showTimeChange=true;
+                this.showFormLayer=true;
+            },
+            closeTimeForm: function(){
+                this.showTimeChange=false;
+                this.showFormLayer=false;
             },
             getMarketInfo() {
                 axios.get('/api/venues/venueByCurrentUser')
@@ -191,14 +216,16 @@
             },
             updateMarketInformation: function() {
                 const venueId = this.marketInfo.id;
-                const latitude = venue.latitude;
-                const longitude = venue.longitude;
                 const description = this.updatedInfo.description;
                 const picture = this.updatedInfo.image;
-                const state = venue.state;
-                const street = venue.street;
-                const suburb = venue.suburb;
                 const venueName = this.updatedInfo.name;
+
+                const latitude = venue.latitude != null? venue.latitude:this.marketInfo.latitude;
+                const longitude = venue.longitude != null? venue.longitude:this.marketInfo.longitude;
+                const state = venue.state != null? venue.state:this.marketInfo.state;
+                const street = venue.street != null? venue.street:this.marketInfo.street;
+                const suburb = venue.suburb != null? venue.suburb:this.marketInfo.suburb;
+
                 console.log('venue:',venue);
 
                 const apiUrl = `/api/venues?venueId=${venueId}&latitude=${latitude}&longitude=${longitude}&description=${description}&picture=${picture}&state=${state}&street=${street}&suburb=${suburb}&venueName=${venueName}`;
@@ -220,6 +247,8 @@
                 try {
                     const response = await axios.post(`/api/venueDate?venueId=${venueId}`, requestBody);
                     console.log("API Response:", response.data);
+                    alert('Venue time updated successfully!');
+
                 } catch (error) {
                     console.log("API Error:", error);
                 }

@@ -162,10 +162,15 @@
             },
             handleLogin: function() {
                 let formData = new FormData(document.querySelector('.loginForm'));
-
                 axios.post('/login', formData)
                     .then((response) => {
                         let data = response.data;
+
+                        if (data.status && data.status === "pending") {
+                            alert("Your account hasn't been activated.");
+                            return;
+                        }
+
                         if (data.status && data.status === "error") {
                             alert("Invalid username or password");
                             return;
