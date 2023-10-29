@@ -27,7 +27,8 @@
 
 # Quick Guide on How to Run the Application
   1. Make sure you have MySQL installed and running.
-  2. Update the application.properties file with your MySQL credentials.
-  3. Make sure you have a schema name 'elec5619' in your localhost.
-  4. Run the Spring Boot application 'Elec5619Application.java'.
-  5. Open your browser and navigate to our [Home page](http://localhost:8080).
+  2. Make sure the port 8080 on your computer is not in use.
+  3. Update the application.properties file with your MySQL credentials.
+  4. Make sure you have a schema name 'elec5619' in your localhost.
+  5. Run the Spring Boot application 'Elec5619Application.java'.
+  6. Open your browser and navigate to our [Home page](http://localhost:8080).
