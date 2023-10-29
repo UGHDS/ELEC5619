@@ -29,4 +29,4 @@
   1. Make sure you have MySQL installed and running.
   2. Update the application.properties file with your MySQL credentials.
   3. Run the Spring Boot application 'Elec5619Application.java'.
-  4. Open your browser and navigate to our [Home page](http://localhost:8080').
+  4. Open your browser and navigate to our [Home page](http://localhost:8080).
